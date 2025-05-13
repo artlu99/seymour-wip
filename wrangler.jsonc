@@ -1,0 +1,18 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "free-feeds",
+	"main": "./src/backend/index.ts",
+	"compatibility_date": "2025-04-05",
+	"compatibility_flags": ["nodejs_compat"],
+	"vars": {
+		"NAME": "Free Feeds",
+	},
+	"observability": {
+		"enabled": true
+	},
+	"upload_source_maps": true,
+	"assets": {
+		"not_found_handling": "single-page-application",
+		"directory": "public"
+	}
+}

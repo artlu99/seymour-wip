@@ -1,0 +1,18 @@
+{
+	"accountAssociation": {
+		"header": "eyJmaWQiOjY1NDYsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHgyMWNBOUYwRjdDMGI1OWY2MTZiMUQ5NjMyNWQ1NUI2MmM5NjYxRDZkIn0",
+		"payload": "eyJkb21haW4iOiJzcGEtbWluaS1hcHAtc3RhcnRlci5hcnRsdS53b3JrZXJzLmRldiJ9",
+		"signature": "MHgyNjcwMzg0MWFlN2M2MmNhMjExNTcwM2M3ZjVmYzJjNGFkY2Q5MjM2Y2JkMzA1YTllYTE1ZWE1NjA4ZTZiMDhhNzk3ZTYxMjgzMmFlOWVhOWZlOTZjNjQ1YzgxOWE1MDYzNmM3N2FmNzkzMGFiNGMxYWU0ZjAxMmM4ZmFiNDU0NzFi"
+	},
+	"frame": {
+		"version": "0.0.1",
+		"name": "Free Feeds",
+		"iconUrl": "https://free-feeds.artlu.workers.dev/favicon.png",
+		"homeUrl": "https://free-feeds.artlu.workers.dev",
+		"imageUrl": "https://free-feeds.artlu.workers.dev/favicon.png",
+		"buttonTitle": "Launch Mini App ⚡️",
+		"splashImageUrl": "https://free-feeds.artlu.workers.dev/favicon.png",
+		"splashBackgroundColor": "#000000",
+		"webhookUrl": "https://free-feeds.artlu.workers.dev/api/webhook"
+	}
+}
