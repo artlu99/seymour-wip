@@ -26,6 +26,32 @@ export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 	const isReply = !!cast.parentCastId;
 	const verb = isReply ? "replied" : "casted";
 
+	const rawText = cast.text;
+
+	// inject mentions
+	const textInBytes = new TextEncoder().encode(rawText ?? "");
+	let processedBytes = textInBytes;
+
+	// Process mentions in reverse order to maintain correct indices
+	const mentionsPositions = cast.mentionsPositions;
+	for (let i = mentionsPositions.length - 1; i >= 0; i -= 2) {
+		const idx = mentionsPositions[i];
+		const mention = cast.mentions[i];
+
+		// Get the mention text and encode it
+		const mentionText = `[@${mention}]`;
+		const mentionBytes = new TextEncoder().encode(mentionText);
+
+		// Replace the original text with the mention
+		processedBytes = new Uint8Array([
+			...Array.from(processedBytes.slice(0, idx)),
+			...Array.from(mentionBytes),
+			...Array.from(processedBytes.slice(idx)),
+		]);
+	}
+
+	const castText = new TextDecoder().decode(processedBytes);
+
 	return showCardView || showCard ? (
 		<CastOrReply cast={cast} />
 	) : (
@@ -38,7 +64,7 @@ export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 						title={cast.user.displayName ?? "display name"}
 						width="48"
 						height="48"
-						className="max-w-full rounded-full"
+						className="max-w-full rounded-full aspect-square"
 					/>
 				</span>
 				<h4 className="flex flex-col items-start text-base font-medium leading-6 text-slate-700 md:flex-row lg:items-center">
@@ -61,9 +87,9 @@ export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 					</span>
 				</h4>
 				<p className="text-sm text-slate-500 whitespace-pre-wrap">
-					{cast.text?.length && cast.text.length > 320
-						? `${cast.text?.slice(0, 320)}...`
-						: cast.text}
+					{castText?.length && castText.length > 320
+						? `${castText?.slice(0, 320)}...`
+						: castText}
 				</p>
 				{cast.embeds.length > 0 && (
 					<button
