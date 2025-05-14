@@ -1,4 +1,4 @@
-import { ThemeSelectorDropdown } from "./ThemeSelectorDropdown";
+import { ThemeSelectorToggle } from "./ThemeSelectorDropdown";
 
 export const Dock = () => {
 	return (
@@ -14,7 +14,7 @@ export const Dock = () => {
 			</button>
 
 			<button type="button">
-				<ThemeSelectorDropdown />
+				<ThemeSelectorToggle />
 				<span className="dock-label">Theme</span>
 			</button>
 
