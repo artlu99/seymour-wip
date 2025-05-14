@@ -1,5 +1,5 @@
 import { FeedTimeLine } from "../components/FeedTimeLine";
-import { RefreshFeedStatus } from "../components/RefreshFeedButton";
+import { RefreshFeedStatus } from "../components/RefreshFeedStatus";
 import { useKeccersFeed } from "../hooks/queries/useShimQuery";
 import { useFrameSDK } from "../hooks/use-frame-sdk";
 import { useThemes } from "../hooks/use-themes";
@@ -35,7 +35,7 @@ const Landing = () => {
 						<span className="loading loading-spinner loading-lg" />
 					) : null}
 				</div>
-				
+
 				{keccersFeedQuery.isLoading ? (
 					<div className="skeleton w-3/4 h-96 mx-auto" />
 				) : keccersFeedQuery.data ? (

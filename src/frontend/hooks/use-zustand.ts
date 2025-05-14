@@ -25,10 +25,12 @@ export const useLocalStorageZustand = create(
 					227242, 273442, 528, 628100, 279477, 269694, 265108, 526510, 834812,
 				] as number[],
 				themeName: null as string | null,
+				showCardView: true as boolean,
 			},
 			(set) => ({
 				setThemeName: (themeName: string | null) => set({ themeName }),
 				setFids: (fids: number[]) => set({ fids }),
+				setShowCardView: (showCardView: boolean) => set({ showCardView }),
 			}),
 		),
 		{
