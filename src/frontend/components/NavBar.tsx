@@ -1,5 +1,4 @@
 import { useMemo } from "preact/hooks";
-import { useLocation } from "wouter";
 import {
 	useRefreshFeed,
 	useUsernameQuery,
@@ -9,8 +8,6 @@ import { useThemes } from "../hooks/use-themes";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
 
 const NavBar = () => {
-	const [location] = useLocation();
-	const isActive = (path: string) => location === path;
 	const { name } = useThemes();
 
 	const { viewProfile } = useFrameSDK();
@@ -24,13 +21,13 @@ const NavBar = () => {
 		if (fids.length === 1) {
 			return "all ";
 		}
-		return "the ";
+		return "";
 	}, [fids]);
 	const tagline = useMemo(() => {
 		if (fids.length === 1) {
 			return ", all the time";
 		}
-		return ` and ${fids.length - 1} frens feed`;
+		return ` + ${fids.length - 1} frens`;
 	}, [fids]);
 
 	return (
@@ -43,7 +40,7 @@ const NavBar = () => {
 						className="link no-underline"
 						onClick={() => viewProfile(fids[0])}
 					>
-						@{username}
+						@{username?.replace(".eth", "")}
 					</button>
 					{tagline}
 				</div>
@@ -55,7 +52,7 @@ const NavBar = () => {
 					onClick={() => mutation.mutate({ fids })}
 					disabled={mutation.isPending}
 				>
-					{mutation.isPending ? "Refreshing Feed..." : "🪴 Feed Me, Seymour"}
+					{mutation.isPending ? "Refreshing Feed..." : "Feed Me, Seymour 🪴"}
 				</button>
 			</div>
 		</div>

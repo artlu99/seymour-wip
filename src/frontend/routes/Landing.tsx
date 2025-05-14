@@ -13,7 +13,7 @@ const Landing = () => {
 	const keccersFeedQuery = useKeccersFeed(fids);
 
 	return (
-		<div className="flex flex-col text-center gap-4" data-theme={name}>
+		<div className="flex flex-col text-center gap-4 pb-128" data-theme={name}>
 			<article className="prose dark:prose-invert">
 				{contextFid ? (
 					<div className="p-4 text-sm">

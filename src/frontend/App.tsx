@@ -4,6 +4,7 @@ import { Dock } from "./components/Dock";
 import NavBar from "./components/NavBar";
 import { FrameSDKProvider } from "./providers/FrameSDKContext";
 import { ThemesProvider } from "./providers/ThemesProvider";
+import Feeds from "./routes/Feeds";
 import Landing from "./routes/Landing";
 
 const queryClient = new QueryClient();
@@ -18,6 +19,7 @@ function App() {
 						<main className="flex-grow pb-16">
 							<Switch>
 								<Route path="/" component={Landing} />
+								<Route path="/feeds" component={Feeds} />
 								<Route>404: Not Found</Route>
 							</Switch>
 						</main>
