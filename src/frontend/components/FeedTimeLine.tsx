@@ -4,7 +4,7 @@ import SpringTransition from "./effects/SpringTransition";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
 
 export const FeedTimeLine = (data: { casts: HydratedCast[] }) => {
-	const { fids, showCardView } = useLocalStorageZustand();
+	const { showCardView } = useLocalStorageZustand();
 
 	return (
 		<SpringTransition isActive={true}>

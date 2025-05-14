@@ -8,8 +8,8 @@ export const RefreshFeedStatus = () => {
 			{mutation.isError ? "Error" : null}
 			{mutation.isSuccess ? (
 				<span className="text-success text-sm">
-					Refreshed: {mutation.data.totalFids} fids, {mutation.data.totalCasts}{" "}
-					casts
+					Refreshed: {mutation.data.totalFids} fids,{" "}
+					{mutation.data.totalNewCasts} new casts
 				</span>
 			) : null}
 		</div>

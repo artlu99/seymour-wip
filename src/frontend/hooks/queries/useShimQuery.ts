@@ -57,6 +57,7 @@ export const useRefreshFeed = () => {
 				message: string;
 				stats: {
 					totalFids: number;
+					totalNewCasts: number;
 					totalCasts: number;
 				};
 			}>("/refresh", body);
