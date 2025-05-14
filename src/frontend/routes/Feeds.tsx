@@ -1,72 +1,18 @@
 import { navigate } from "wouter/use-browser-location";
 import { RefreshFeedStatus } from "../components/RefreshFeedStatus";
+import { useRefreshFeed } from "../hooks/queries/useShimQuery";
 import { useFrameSDK } from "../hooks/use-frame-sdk";
 import { useThemes } from "../hooks/use-themes";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
-import { artluFollowersFromHubble } from "../static";
+import { knownFeeds } from "../static";
 import { pluralize } from "../utils";
 
-const knownFeeds = [
-	{
-		name: "Kenny",
-		fids: [
-			2210, 475488, 527771, 4407, 814040, 528, 273442, 9933, 15983, 199989,
-			6546, 243139, 6945, 4513, 12048, 4163, 4895, 2802, 10144, 270504, 284324,
-			9166, 10174, 192702, 276562, 2210, 2904, 440352, 14364, 5708, 227242,
-			535389, 2441, 356241, 327165, 3, 644823,
-		],
-		description: "Kenny was right",
-		image:
-			"https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/e6f1d0c9-26ff-4701-4bc5-f748256ab900/rectcrop3",
-	},
-	{
-		name: "Keccers",
-		fids: [4407],
-		description:
-			"The Keccers are a group of people who are interested in the Keccer project.",
-		image: "https://i.imgur.com/kynnpYw.jpg",
-	},
-	{
-		name: "Artlu",
-		fids: artluFollowersFromHubble.messages.map(
-			(m) => m.data.linkBody.targetFid,
-		),
-		description: "most liked Fartcasters",
-		image:
-			"https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/52ee3c12-a238-406f-d008-798d1ad78900/original",
-	},
-	{
-		name: "the homies",
-		fids: [533, 617, 1355, 1356, 4163],
-		description: "right more often than not",
-		image:
-			"https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/2e5e22a8-d9f6-45b8-3b28-caab1e513f00/original",
-	},
-	{
-		name: "europoooors",
-		fids: [233242, 8004, 5701, 5708, 11124, 13089],
-		description: "funny frenchies, silly slovak, a brit und ze german",
-		image: "https://i.imgur.com/NycQEZt.png",
-	},
-	{
-		name: "web3 is jittery",
-		fids: [880],
-		description: "accountless",
-		image:
-			"https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/44e49270-1953-433a-b1e3-c13fe823f100/original",
-	},
-	{
-		name: "🫵 🤣",
-		fids: [6596],
-		description: "This account has been banned",
-		image:
-			"https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/820a167b-b030-4505-37d7-bacdfe5db100/original",
-	},
-];
 const Feeds = () => {
 	const { contextName, contextFid, viewProfile } = useFrameSDK();
 	const { name } = useThemes();
 	const { setFids } = useLocalStorageZustand();
+
+	const mutation = useRefreshFeed();
 
 	return (
 		<div className="flex flex-col text-center pb-32" data-theme={name}>
@@ -120,6 +66,7 @@ const Feeds = () => {
 								className="btn btn-square btn-ghost"
 								onClick={() => {
 									setFids(feed.fids);
+									mutation.mutate({ fids: feed.fids });
 									navigate("/");
 								}}
 							>
