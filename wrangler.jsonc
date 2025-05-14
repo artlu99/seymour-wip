@@ -7,9 +7,13 @@
 	"vars": {
 		"NAME": "Feed Me, Seymour",
 	},
-	"observability": {
-		"enabled": true
-	},
+	"kv_namespaces": [
+		{
+			"binding": "KV",
+			"id": "bfe33da2d4494af5bcca86337b85adfe",
+			"preview_id": "51f978bf262642a980321a3aa1bb4c71"
+		}
+	],
 	"upload_source_maps": true,
 	"assets": {
 		"not_found_handling": "single-page-application",

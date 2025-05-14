@@ -19,21 +19,29 @@ export const CastOrReply = ({ cast }: { cast: HydratedCast }) => {
 						username={usernameQuery.data}
 						hash={cast.parentCastId.hash}
 					/>
-					<FarcasterEmbed username={cast.username} hash={cast.hash} />
+					<FarcasterEmbed
+						username={cast.user.username ?? undefined}
+						hash={cast.hash}
+					/>
 				</>
 			);
 		}
-		return <FarcasterEmbed username={cast.username} hash={cast.hash} />;
+		return (
+			<FarcasterEmbed
+				username={cast.user.username ?? undefined}
+				hash={cast.hash}
+			/>
+		);
 	}, [
 		isReply,
 		usernameQuery.data,
 		cast.parentCastId?.hash,
-		cast.username,
+		cast.user.username,
 		cast.hash,
 	]);
 
 	return (
-		<div className="card card-border bg-base-100 w-3/4 my-4 mx-auto">
+		<div className="card card-border bg-base-100 w-full ml-2 my-4 mx-auto">
 			<div className="card-body text-left">{content}</div>
 		</div>
 	);

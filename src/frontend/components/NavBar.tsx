@@ -1,6 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { useThemes } from "../hooks/use-themes";
 import { ThemeSelectorDropdown } from "./ThemeSelectorDropdown";
+
 const NavBar = () => {
 	const [location] = useLocation();
 	const isActive = (path: string) => location === path;

@@ -1,4 +1,6 @@
-export interface Cast {
+import type { Channel } from "./../backend/lib/warpcast";
+
+interface Cast {
 	fid: number;
 	hash: `0x${string}`;
 	text: string | null;
@@ -19,7 +21,14 @@ export interface Cast {
 	timestamp: number;
 }
 
+interface User {
+	fid: number;
+	username: string | null;
+	displayName: string | null;
+	pfpUrl: string | null;
+}
+
 export interface HydratedCast extends Cast {
-	username: string;
-	channelId?: string;
+	user: User;
+	channel?: Channel;
 }
