@@ -5,7 +5,6 @@ import NavBar from "./components/NavBar";
 import { FrameSDKProvider } from "./providers/FrameSDKContext";
 import { ThemesProvider } from "./providers/ThemesProvider";
 import Landing from "./routes/Landing";
-import Uses from "./routes/Uses";
 
 const queryClient = new QueryClient();
 
@@ -19,7 +18,6 @@ function App() {
 						<main className="flex-grow pb-16">
 							<Switch>
 								<Route path="/" component={Landing} />
-								<Route path="/uses" component={Uses} />
 								<Route>404: Not Found</Route>
 							</Switch>
 						</main>
