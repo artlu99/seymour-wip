@@ -1,34 +1,18 @@
-import { Link } from "wouter";
-import { useNameQuery, useTimeQuery } from "../hooks/queries/useOpenQuery";
+import { FeedTimeLine } from "../components/FeedTimeLine";
+import { useKeccersFeed, useRefreshFeed } from "../hooks/queries/useShimQuery";
 import { useFrameSDK } from "../hooks/use-frame-sdk";
 import { useThemes } from "../hooks/use-themes";
-import { useZustand } from "../hooks/use-zustand";
 
 const Landing = () => {
-	const { count, increase } = useZustand();
 	const { contextName, contextFid, viewProfile } = useFrameSDK();
 	const { name } = useThemes();
 
-	const nameQuery = useNameQuery();
-	const timeQuery = useTimeQuery();
+	const keccersFeedQuery = useKeccersFeed();
+	const mutation = useRefreshFeed();
 
 	return (
 		<div className="flex flex-col text-center gap-4" data-theme={name}>
 			<article className="prose dark:prose-invert">
-				<div className="p-4">
-					<Link href="/uses">
-						<div className="text-2xl font-bold">SPA Mini App Starter</div>
-					</Link>
-					this Mini App belongs to{" "}
-					<button
-						type="button"
-						className="btn btn-link"
-						onClick={() => viewProfile(6546)}
-					>
-						@artlu (FID: 6546)
-					</button>
-				</div>
-
 				{contextFid ? (
 					<div className="p-4 text-sm">
 						GM,
@@ -39,58 +23,53 @@ const Landing = () => {
 						>
 							{contextName}
 						</button>
-						<br />
-						with seamless signin
 					</div>
 				) : null}
 
 				<div className="p-4">
-					✓ share state across routes
-					<br /> don't persist or reveal to server
-					<br />
+					<div className="text-xl font-bold">Keccers Feed</div>
+					all{" "}
 					<button
-						className="btn btn-primary btn-soft"
 						type="button"
-						onClick={() => increase()}
-						aria-label="increment"
+						className="btn btn-link"
+						onClick={() => viewProfile(4407)}
 					>
-						<i className="ri-heart-add-line" />
-						increment: {count}
+						@keccers.eth
 					</button>
-					<p className="text-sm italic">
-						Edit <code>src/frontend/App.tsx</code> to see HMR ⚡️
-					</p>
+					, all the time
 				</div>
 
 				<div className="p-4">
-					✓ expose backend information
-					<br />
 					<button
-						className="btn btn-info btn-soft btn-wide"
 						type="button"
-						onClick={() => nameQuery.refetch()}
-						aria-label="get name"
+						onClick={() => mutation.mutate({ fids: [4407] })}
+						disabled={mutation.isPending}
+						className="btn btn-primary"
 					>
-						<span className={nameQuery.isLoading ? "animate-spin" : ""}>
-							<i className="ri-refresh-line" />
+						{mutation.isPending ? "Sending..." : "Refresh"}
+					</button>
+				</div>
+
+				<div className="p-4">
+					{mutation.isError ? "Error" : null}
+					{mutation.isSuccess ? (
+						<span className="text-success text-sm">
+							Refreshed: {mutation.data.totalFids} fids,{" "}
+							{mutation.data.totalCasts} casts
 						</span>
-						{nameQuery.data?.name || "Loading..."}
-					</button>
-					<p className="text-sm italic">
-						Edit <code>wrangler.jsonc</code> to change the deployed value
-					</p>
+					) : null}
+				</div>
+				<div className="p-4">
+					{keccersFeedQuery.isRefetching ? (
+						<span className="loading loading-spinner loading-lg" />
+					) : null}
 				</div>
 
-				<div className="p-4">
-					✓ delightful data fetching by TanStack Query
-					<br />
-					<div className="btn btn-outline btn-wide">
-						{timeQuery.data?.time || "Loading..."}
-					</div>
-					<p className="text-sm italic">
-						polls the server every <code>5 seconds</code>.
-					</p>
-				</div>
+				{keccersFeedQuery.isLoading ? (
+					<div className="skeleton w-3/4 h-96 mx-auto" />
+				) : keccersFeedQuery.data ? (
+					<FeedTimeLine casts={keccersFeedQuery.data} />
+				) : null}
 			</article>
 		</div>
 	);

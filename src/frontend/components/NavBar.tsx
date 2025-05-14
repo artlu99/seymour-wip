@@ -10,7 +10,7 @@ const NavBar = () => {
 			<div className="navbar-start">
 				<Link href="/">
 					<div className="btn btn-block btn-ghost text-md">
-						SPA Mini App Starter
+						Free Feeds
 					</div>
 				</Link>
 			</div>

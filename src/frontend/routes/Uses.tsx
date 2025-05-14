@@ -4,6 +4,7 @@ import SpringTransition from "../components/effects/SpringTransition";
 import { useFrameSDK } from "../hooks/use-frame-sdk";
 import { useThemes } from "../hooks/use-themes";
 import { useZustand } from "../hooks/use-zustand";
+import { FarcasterEmbed } from "react-farcaster-embed/dist/client";
 
 const Uses = () => {
 	const [isMatch] = useRoute("/uses");
@@ -17,6 +18,7 @@ const Uses = () => {
 			<SpringTransition isActive={isMatch}>
 				<article className="prose dark:prose-invert">
 					<Logos />
+					<FarcasterEmbed url="https://warpcast.com/pugson/0x4294c797" />
 					<div className="p-4">
 						✓ sharing state across routes
 						<br />

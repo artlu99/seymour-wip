@@ -3,6 +3,7 @@ import { StrictMode } from "preact/compat";
 import "remixicon/fonts/remixicon.css";
 import App from "./App.tsx";
 import "./index.css";
+import "react-farcaster-embed/dist/styles.css";
 
 const root = document.getElementById("root");
 if (root) {

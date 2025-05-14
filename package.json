@@ -11,6 +11,7 @@
 		"hono": "4.7.5",
 		"itty-fetcher": "^0.9.4",
 		"preact": "^10.26.6",
+		"react-farcaster-embed": "^1.8.9",
 		"remixicon": "^4.6.0",
 		"tailwindcss": "^4.1.6",
 		"tiny-invariant": "^1.3.3",
