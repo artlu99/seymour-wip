@@ -1,4 +1,4 @@
-import { ThemeSelectorToggle } from "./ThemeSelectorDropdown";
+import { ThemeSelectorToggle } from "./ThemeToggleButton";
 
 export const Dock = () => {
 	return (
