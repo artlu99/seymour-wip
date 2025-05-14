@@ -1,6 +1,12 @@
-import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
+import {
+	keepPreviousData,
+	useMutation,
+	useQuery,
+	useQueryClient,
+} from "@tanstack/react-query";
 import { fetcher } from "itty-fetcher";
 import type { HydratedCast } from "../../types";
+import { useLocalStorageZustand } from "../use-zustand";
 
 export const api = fetcher({ base: "https://shim.artlu.workers.dev" });
 
@@ -38,6 +44,9 @@ export const useUsernameQuery = (fid: number | undefined) => {
 };
 
 export const useRefreshFeed = () => {
+	const queryClient = useQueryClient();
+	const { fids } = useLocalStorageZustand();
+
 	return useMutation({
 		mutationFn: async (body: {
 			username?: string;
@@ -57,6 +66,11 @@ export const useRefreshFeed = () => {
 			}
 
 			return response.stats;
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["keccers-feed", fids],
+			});
 		},
 	});
 };
