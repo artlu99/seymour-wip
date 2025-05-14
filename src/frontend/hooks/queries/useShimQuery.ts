@@ -14,14 +14,13 @@ export const useKeccersFeed = (fids: number[]) => {
 	return useQuery({
 		queryKey: ["keccers-feed", fids],
 		queryFn: async () => {
-			const fidsString = fids.join(",");
-			const res = await api.get<{
+			const res = await api.post<{
 				success: boolean;
 				feed: HydratedCast[];
-			}>(`/reverse-chron?fids=${fidsString}&limit=25`);
+			}>("/reverse-chron", { fids, limit: 25 });
 			return res.feed;
 		},
-		refetchInterval: 30 * 1000, // Auto-refresh every 30 seconds
+		refetchInterval: 60 * 1000, // Auto-refresh every 60 seconds
 		placeholderData: keepPreviousData,
 	});
 };
