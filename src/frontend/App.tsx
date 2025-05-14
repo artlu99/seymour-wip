@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Route, Switch } from "wouter";
-import { Footer } from "./components/Footer";
+import { Dock } from "./components/Dock";
 import NavBar from "./components/NavBar";
 import { FrameSDKProvider } from "./providers/FrameSDKContext";
 import { ThemesProvider } from "./providers/ThemesProvider";
@@ -23,7 +23,7 @@ function App() {
 								<Route>404: Not Found</Route>
 							</Switch>
 						</main>
-						<Footer />
+						<Dock />
 					</FrameSDKProvider>
 				</ThemesProvider>
 			</QueryClientProvider>

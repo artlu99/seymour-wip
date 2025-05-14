@@ -1,4 +1,5 @@
 import { FeedTimeLine } from "../components/FeedTimeLine";
+import { RefreshFeedButton } from "../components/RefreshFeedButton";
 import { useKeccersFeed } from "../hooks/queries/useShimQuery";
 import { useFrameSDK } from "../hooks/use-frame-sdk";
 import { useThemes } from "../hooks/use-themes";
@@ -26,6 +27,8 @@ const Landing = () => {
 						</button>
 					</div>
 				) : null}
+
+				<RefreshFeedButton />
 
 				<div className="p-4">
 					{keccersFeedQuery.isRefetching ? (
