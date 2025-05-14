@@ -1,5 +1,3 @@
-import type { Channel } from "./../backend/lib/warpcast";
-
 interface Cast {
 	fid: number;
 	hash: `0x${string}`;
@@ -26,6 +24,13 @@ interface User {
 	username: string | null;
 	displayName: string | null;
 	pfpUrl: string | null;
+}
+
+export interface Channel {
+	id: string;
+	url: string;
+	name: string;
+	imageUrl?: string;
 }
 
 export interface HydratedCast extends Cast {

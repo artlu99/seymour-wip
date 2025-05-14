@@ -771,7 +771,7 @@ export const knownFeeds = [
 	},
 	{
 		name: "the homies",
-		fids: [533, 617, 1355, 1356, 4163],
+		fids: [1355, 533, 528, 617, 1356, 4163],
 		description: "right more often than not",
 		image:
 			"https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/2e5e22a8-d9f6-45b8-3b28-caab1e513f00/original",

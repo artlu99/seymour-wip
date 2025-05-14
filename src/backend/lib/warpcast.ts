@@ -3,27 +3,6 @@ import { z } from "zod";
 
 const warpcastApi = fetcher({ base: "https://api.warpcast.com" });
 
-export interface Channel {
-	id: string;
-	url: string;
-	name: string;
-	description: string;
-	descriptionMentions: number[];
-	descriptionMentionsPositions: number[];
-	imageUrl?: string;
-	headerImageUrl?: string;
-	leadFid: number;
-	moderatorFids: number[];
-	createdAt: number;
-	followerCount: number;
-	memberCount: number;
-	pinnedCastHash?: string;
-	publicCasting: boolean;
-	externalLink?: {
-		title: string;
-		url: string;
-	};
-}
 const VerificationSchema = z.object({
   fid: z.number(),
   platform: z.literal("x"),
