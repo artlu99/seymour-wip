@@ -43,6 +43,19 @@ export const useUsernameQuery = (fid: number | undefined) => {
 	});
 };
 
+export const useCastQuery = (hash: `0x${string}`, username?: string | null) => {
+	return useQuery({
+		queryKey: ["cast", username, hash],
+		queryFn: async () => {
+			const res = await api.get<{ success: boolean; cast: HydratedCast }>(
+				`/${username}/${hash.slice(0, 10)}`,
+			);
+			return res.cast;
+		},
+		enabled: !!username && !!hash,
+	});
+};
+
 export const useRefreshFeed = () => {
 	const queryClient = useQueryClient();
 	const { fids } = useLocalStorageZustand();
