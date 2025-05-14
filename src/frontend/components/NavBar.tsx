@@ -1,5 +1,5 @@
-import { useThemes } from "../hooks/use-themes";
 import { Link, useLocation } from "wouter";
+import { useThemes } from "../hooks/use-themes";
 import { ThemeSelectorDropdown } from "./ThemeSelectorDropdown";
 const NavBar = () => {
 	const [location] = useLocation();
@@ -10,7 +10,7 @@ const NavBar = () => {
 			<div className="navbar-start">
 				<Link href="/">
 					<div className="btn btn-block btn-ghost text-md">
-						Free Feeds
+						🪴 Feed Me, Seymour
 					</div>
 				</Link>
 			</div>

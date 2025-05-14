@@ -1,14 +1,36 @@
+import { useMemo } from "preact/hooks";
 import { FeedTimeLine } from "../components/FeedTimeLine";
-import { useKeccersFeed, useRefreshFeed } from "../hooks/queries/useShimQuery";
+import {
+	useKeccersFeed,
+	useRefreshFeed,
+	useUsernameQuery,
+} from "../hooks/queries/useShimQuery";
 import { useFrameSDK } from "../hooks/use-frame-sdk";
 import { useThemes } from "../hooks/use-themes";
+import { useLocalStorageZustand } from "../hooks/use-zustand";
 
 const Landing = () => {
 	const { contextName, contextFid, viewProfile } = useFrameSDK();
 	const { name } = useThemes();
+	const { fids } = useLocalStorageZustand();
 
-	const keccersFeedQuery = useKeccersFeed();
+	const usernameQuery = useUsernameQuery(fids[0]);
+	const keccersFeedQuery = useKeccersFeed(fids);
 	const mutation = useRefreshFeed();
+
+	const username = useMemo(() => usernameQuery.data, [usernameQuery.data]);
+	const preTagline = useMemo(() => {
+		if (fids.length === 1) {
+			return "all ";
+		}
+		return "the ";
+	}, [fids]);
+	const tagline = useMemo(() => {
+		if (fids.length === 1) {
+			return ", all the time";
+		}
+		return ` and ${fids.length - 1} frens feed`;
+	}, [fids]);
 
 	return (
 		<div className="flex flex-col text-center gap-4" data-theme={name}>
@@ -27,22 +49,24 @@ const Landing = () => {
 				) : null}
 
 				<div className="p-4">
-					<div className="text-xl font-bold">Keccers Feed</div>
-					all{" "}
+					<div className="text-xl font-bold">
+						The {username?.replace(".eth", "")} Feed
+					</div>
+					{preTagline}
 					<button
 						type="button"
 						className="btn btn-link"
-						onClick={() => viewProfile(4407)}
+						onClick={() => viewProfile(fids[0])}
 					>
-						@keccers.eth
+						@{username}
 					</button>
-					, all the time
+					{tagline}
 				</div>
 
 				<div className="p-4">
 					<button
 						type="button"
-						onClick={() => mutation.mutate({ fids: [4407] })}
+						onClick={() => mutation.mutate({ fids })}
 						disabled={mutation.isPending}
 						className="btn btn-primary"
 					>

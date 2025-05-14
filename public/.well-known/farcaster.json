@@ -6,13 +6,13 @@
 	},
 	"frame": {
 		"version": "0.0.1",
-		"name": "Free Feeds",
-		"iconUrl": "https://free-feeds.artlu.workers.dev/favicon.png",
-		"homeUrl": "https://free-feeds.artlu.workers.dev",
-		"imageUrl": "https://free-feeds.artlu.workers.dev/favicon.png",
+		"name": "Seymour",
+		"iconUrl": "https://seymour.artlu.workers.dev/favicon.png",
+		"homeUrl": "https://seymour.artlu.workers.dev",
+		"imageUrl": "https://seymour.artlu.workers.dev/favicon.png",
 		"buttonTitle": "Launch Mini App ⚡️",
-		"splashImageUrl": "https://free-feeds.artlu.workers.dev/favicon.png",
+		"splashImageUrl": "https://seymour.artlu.workers.dev/favicon.png",
 		"splashBackgroundColor": "#000000",
-		"webhookUrl": "https://free-feeds.artlu.workers.dev/api/webhook"
+		"webhookUrl": "https://seymour.artlu.workers.dev/api/webhook"
 	}
 }

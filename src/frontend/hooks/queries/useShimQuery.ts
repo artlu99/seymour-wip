@@ -4,14 +4,15 @@ import type { HydratedCast } from "../../types";
 
 export const api = fetcher({ base: "https://shim.artlu.workers.dev" });
 
-export const useKeccersFeed = () => {
+export const useKeccersFeed = (fids: number[]) => {
 	return useQuery({
-		queryKey: ["keccers-feed"],
+		queryKey: ["keccers-feed", fids],
 		queryFn: async () => {
+			const fidsString = fids.join(",");
 			const res = await api.get<{
 				success: boolean;
 				feed: HydratedCast[];
-			}>("/reverse-chron?fids=4407");
+			}>(`/reverse-chron?fids=${fidsString}`);
 			return res.feed;
 		},
 		refetchInterval: 30 * 1000, // Auto-refresh every 30 seconds

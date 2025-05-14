@@ -1,11 +1,11 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "free-feeds",
+	"name": "seymour",
 	"main": "./src/backend/index.ts",
 	"compatibility_date": "2025-04-05",
 	"compatibility_flags": ["nodejs_compat"],
 	"vars": {
-		"NAME": "Free Feeds",
+		"NAME": "Feed Me, Seymour",
 	},
 	"observability": {
 		"enabled": true

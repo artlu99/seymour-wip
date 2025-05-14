@@ -1,6 +1,6 @@
 {
-	"name": "free-feeds",
-	"description": "my feeds my way",
+	"name": "seymour",
+	"description": "Feed Me, Seymour",
 	"version": "0.0.1",
 	"dependencies": {
 		"@farcaster/frame-sdk": "^0.0.41",
