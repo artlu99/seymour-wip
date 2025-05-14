@@ -13,10 +13,10 @@ export const Dock = () => {
 				<span className="dock-label">Feeds</span>
 			</div>
 
-			<button type="button">
+			<div>
 				<ThemeSelectorToggle />
 				<span className="dock-label">Theme</span>
-			</button>
+			</div>
 
 			<button type="button">
 				<i class="ri-settings-5-line text-xl" />
