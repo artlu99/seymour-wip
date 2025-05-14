@@ -1,7 +1,9 @@
 import { useThemes } from "../hooks/use-themes";
 
-const DARK_THEMES = ["abyss", "dim", "forest", "midnight","night"];
-const LIGHT_THEMES = ["acid", "corporate", "emerald", "pastel", "winter"];
+// const DARK_THEMES = ["abyss", "dim", "forest", "midnight", "night"];
+// const LIGHT_THEMES = ["acid", "corporate", "emerald", "pastel", "winter"];
+const DARK_THEMES = ["night"];
+const LIGHT_THEMES = ["corporate"];
 
 export const ThemeSelectorDropdown = () => {
 	const { name, setTheme } = useThemes();
@@ -9,17 +11,14 @@ export const ThemeSelectorDropdown = () => {
 	return (
 		<details className="dropdown">
 			<summary className="btn btn-square btn-ghost m-1">
-				<img
-					src="/colorful_palette.svg"
-					alt="palette"
-				/>
+				<img src="/colorful_palette.svg" alt="palette" />
 			</summary>
-			<ul className="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+			<ul className="menu dropup-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
 				{DARK_THEMES.map((theme) => (
 					<li key={theme}>
 						<input
 							type="radio"
-							name="theme-dropdown"
+							name="theme-dropup"
 							className={`theme-controller btn btn-ghost btn-sm btn-block justify-start ${
 								name === theme ? "border-primary" : ""
 							}`}
@@ -35,7 +34,7 @@ export const ThemeSelectorDropdown = () => {
 					<li key={theme}>
 						<input
 							type="radio"
-							name="theme-dropdown"
+							name="theme-dropup"
 							className={`theme-controller btn btn-ghost btn-sm btn-block justify-start ${
 								name === theme ? "border-b-2 border-primary" : ""
 							}`}

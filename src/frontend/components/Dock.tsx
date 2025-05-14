@@ -1,14 +1,21 @@
+import { ThemeSelectorDropdown } from "./ThemeSelectorDropdown";
+
 export const Dock = () => {
 	return (
 		<div className="dock dock-xl">
-			<button type="button">
+			<button type="button" className="dock-active">
 				<i class="ri-home-4-line text-xl" />
 				<span className="dock-label">Home</span>
 			</button>
 
-			<button type="button" className="dock-active">
+			<button type="button">
 				<i class="ri-inbox-line text-xl" />
 				<span className="dock-label">Feeds</span>
+			</button>
+
+			<button type="button">
+				<ThemeSelectorDropdown />
+				<span className="dock-label">Theme</span>
 			</button>
 
 			<button type="button">

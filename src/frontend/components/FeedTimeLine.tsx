@@ -1,12 +1,13 @@
 import type { HydratedCast } from "../types";
 import { CastOrReply } from "./CastOrReply";
+import SpringTransition from "./effects/SpringTransition";
 
 export const FeedTimeLine = (data: { casts: HydratedCast[] }) => {
 	return (
-		<div className="py-4">
+		<SpringTransition isActive={true}>
 			{data.casts.map((cast) => (
 				<CastOrReply key={cast.hash} cast={cast} />
 			))}
-		</div>
+		</SpringTransition>
 	);
 };
