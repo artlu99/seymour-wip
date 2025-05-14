@@ -1,11 +1,11 @@
 import { formatDistanceToNow } from "date-fns";
-import { useState } from "preact/hooks";
+import { useZustand } from "../hooks/use-zustand";
 
 export const ClickableDateSpan = ({ timestamp }: { timestamp: number }) => {
-	const [isRelative, setIsRelative] = useState(true);
+	const { isRelative, setIsRelative } = useZustand();
 
 	const date = new Date(timestamp * 1000);
-	const dateString = date.toLocaleDateString();
+	const dateString = date.toLocaleString();
 	const relativeDateString = formatDistanceToNow(date, {
 		addSuffix: true,
 	});
