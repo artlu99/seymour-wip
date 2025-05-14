@@ -1,5 +1,5 @@
 import { FeedTimeLine } from "../components/FeedTimeLine";
-import { RefreshFeedButton } from "../components/RefreshFeedButton";
+import { RefreshFeedStatus } from "../components/RefreshFeedButton";
 import { useKeccersFeed } from "../hooks/queries/useShimQuery";
 import { useFrameSDK } from "../hooks/use-frame-sdk";
 import { useThemes } from "../hooks/use-themes";
@@ -28,19 +28,25 @@ const Landing = () => {
 					</div>
 				) : null}
 
-				<RefreshFeedButton />
+				<RefreshFeedStatus />
 
 				<div className="p-4">
 					{keccersFeedQuery.isRefetching ? (
 						<span className="loading loading-spinner loading-lg" />
 					) : null}
 				</div>
-
+				
 				{keccersFeedQuery.isLoading ? (
 					<div className="skeleton w-3/4 h-96 mx-auto" />
 				) : keccersFeedQuery.data ? (
 					<FeedTimeLine casts={keccersFeedQuery.data} />
 				) : null}
+
+				<div className="p-4">
+					{keccersFeedQuery.isRefetching ? (
+						<span className="loading loading-spinner loading-lg" />
+					) : null}
+				</div>
 			</article>
 		</div>
 	);

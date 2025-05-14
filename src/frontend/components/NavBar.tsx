@@ -1,6 +1,9 @@
 import { useMemo } from "preact/hooks";
 import { useLocation } from "wouter";
-import { useUsernameQuery } from "../hooks/queries/useShimQuery";
+import {
+	useRefreshFeed,
+	useUsernameQuery,
+} from "../hooks/queries/useShimQuery";
 import { useFrameSDK } from "../hooks/use-frame-sdk";
 import { useThemes } from "../hooks/use-themes";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
@@ -12,6 +15,7 @@ const NavBar = () => {
 
 	const { viewProfile } = useFrameSDK();
 	const { fids } = useLocalStorageZustand();
+	const mutation = useRefreshFeed();
 
 	const usernameQuery = useUsernameQuery(fids[0]);
 
@@ -47,10 +51,11 @@ const NavBar = () => {
 			<div className="navbar-end">
 				<button
 					type="button"
-					className="btn btn-block btn-ghost text-md"
-					disabled={false}
+					className="btn btn-outline border-info/20 text-md"
+					onClick={() => mutation.mutate({ fids })}
+					disabled={mutation.isPending}
 				>
-					🪴 Feed Me, Seymour
+					{mutation.isPending ? "Refreshing Feed..." : "🪴 Feed Me, Seymour"}
 				</button>
 			</div>
 		</div>

@@ -8,10 +8,10 @@ export const Dock = () => {
 				<span className="dock-label">Home</span>
 			</button>
 
-			<button type="button">
+			<div>
 				<i class="ri-inbox-line text-xl" />
 				<span className="dock-label">Feeds</span>
-			</button>
+			</div>
 
 			<button type="button">
 				<ThemeSelectorToggle />
