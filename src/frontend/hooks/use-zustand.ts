@@ -3,9 +3,10 @@ import { combine, createJSONStorage, persist } from "zustand/middleware";
 
 export const useZustand = create(
 	persist(
-		combine({ count: 0 }, (set) => ({
+		combine({ count: 0, isSettingsOpen: false }, (set) => ({
 			increase: (by = 1) => set((state) => ({ count: state.count + by })),
 			reset: () => set({ count: 0 }),
+			setIsSettingsOpen: (isSettingsOpen: boolean) => set({ isSettingsOpen }),
 		})),
 		{
 			name: "zustand-store",

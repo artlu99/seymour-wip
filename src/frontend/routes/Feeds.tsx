@@ -3,7 +3,7 @@ import { RefreshFeedStatus } from "../components/RefreshFeedStatus";
 import { useRefreshFeed } from "../hooks/queries/useShimQuery";
 import { useFrameSDK } from "../hooks/use-frame-sdk";
 import { useThemes } from "../hooks/use-themes";
-import { useLocalStorageZustand } from "../hooks/use-zustand";
+import { useLocalStorageZustand, useZustand } from "../hooks/use-zustand";
 import { knownFeeds } from "../static";
 import { pluralize } from "../utils";
 
@@ -11,24 +11,33 @@ const Feeds = () => {
 	const { contextName, contextFid, viewProfile } = useFrameSDK();
 	const { name } = useThemes();
 	const { setFids } = useLocalStorageZustand();
-
 	const mutation = useRefreshFeed();
+	const { setIsSettingsOpen } = useZustand();
 
 	return (
 		<div className="flex flex-col text-center pb-32" data-theme={name}>
 			<article className="prose dark:prose-invert">
-				{contextFid ? (
-					<div className="p-4 text-sm">
-						GM,
-						<button
-							type="button"
-							className="btn btn-link"
-							onClick={() => viewProfile(contextFid)}
-						>
-							{contextName}
-						</button>
-					</div>
-				) : null}
+				<div className="flex justify-between items-center p-4">
+					{contextFid ? (
+						<div className="text-sm">
+							GM,
+							<button
+								type="button"
+								className="btn btn-link"
+								onClick={() => viewProfile(contextFid)}
+							>
+								{contextName}
+							</button>
+						</div>
+					) : null}
+					<button
+						type="button"
+						className="btn btn-ghost btn-circle"
+						onClick={() => setIsSettingsOpen(true)}
+					>
+						<i class="ri-settings-3-line text-xl" />
+					</button>
+				</div>
 
 				<RefreshFeedStatus />
 
