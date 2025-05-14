@@ -1,4 +1,5 @@
 import { useState } from "preact/hooks";
+import { useFrameSDK } from "../hooks/use-frame-sdk";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
 import type { HydratedCast } from "../types";
 import { CastOrReply } from "./CastOrReply";
@@ -14,18 +15,7 @@ const replyWrapper = (cast: HydratedCast) => (
 	</li>
 );
 
-interface SimpleCastViewProps {
-	cast: HydratedCast;
-}
-
-export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
-	const [showCard, setShowCard] = useState(false);
-
-	const { showCardView } = useLocalStorageZustand();
-
-	const isReply = !!cast.parentCastId;
-	const verb = isReply ? "replied" : "casted";
-
+const injectMentions = (cast: HydratedCast) => {
 	const rawText = cast.text;
 
 	// inject mentions
@@ -50,7 +40,23 @@ export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 		]);
 	}
 
-	const castText = new TextDecoder().decode(processedBytes);
+	return new TextDecoder().decode(processedBytes);
+};
+
+interface SimpleCastViewProps {
+	cast: HydratedCast;
+}
+
+export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
+	const [showCard, setShowCard] = useState(false);
+
+	const { showCardView } = useLocalStorageZustand();
+	const { openUrl, viewProfile } = useFrameSDK();
+
+	const castText = injectMentions(cast);
+
+	const isReply = !!cast.parentCastId;
+	const verb = isReply ? "replied" : "casted";
 
 	return showCardView || showCard ? (
 		<CastOrReply cast={cast} />
@@ -65,28 +71,55 @@ export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 						width="48"
 						height="48"
 						className="max-w-full rounded-full aspect-square"
+						onClick={() => viewProfile(cast.user.fid)}
+						onKeyDown={(e) => {
+							if (e.key === "Enter") {
+								viewProfile(cast.user.fid);
+							}
+						}}
 					/>
 				</span>
-				<h4 className="flex flex-col items-start text-base font-medium leading-6 text-slate-700 md:flex-row lg:items-center">
+				<h4 className="flex flex-col items-start text-sm font-normal text-slate-500 md:flex-row lg:items-center">
 					<span className="flex-1">
-						{cast.user.displayName ?? "display name"}
-						<span className="text-sm font-normal text-slate-500">
-							{" "}
-							{verb} {cast.channel ? ` in ${cast.channel.name}` : ""}
-							{cast.channel ? (
-								<img
-									src={cast.channel.imageUrl ?? fallbackPfp}
-									alt={cast.channel.name ?? "channel name"}
-									className="w-4 h-4 rounded-sm inline align-text-bottom mx-1 translate-y-7 opacity-50"
-								/>
-							) : null}
-						</span>
+						<span
+							className="text-base font-medium leading-6 text-slate-700"
+							onClick={() => viewProfile(cast.user.fid)}
+							onKeyDown={(e) => {
+								if (e.key === "Enter") {
+									viewProfile(cast.user.fid);
+								}
+							}}
+						>
+							{cast.user.displayName ?? "display name"}
+						</span>{" "}
+						{verb} {cast.channel ? ` in ${cast.channel.name}` : ""}
+						{cast.channel ? (
+							<img
+								src={cast.channel.imageUrl ?? fallbackPfp}
+								alt={cast.channel.name ?? "channel name"}
+								className="w-4 h-4 rounded-sm inline align-text-bottom mx-1 translate-y-7 opacity-50"
+							/>
+						) : null}
 					</span>
 					<span className="text-xs font-normal text-slate-400">
 						<ClickableDateSpan timestamp={cast.timestamp} />
 					</span>
 				</h4>
-				<p className="text-sm text-slate-500 whitespace-pre-wrap">
+				<p
+					className="text-sm text-slate-500 whitespace-pre-wrap"
+					onClick={() =>
+						openUrl(
+							`https://warpcast.com/${cast.user.username}/${cast.hash.slice(0, 10)}`,
+						)
+					}
+					onKeyDown={(e) => {
+						if (e.key === "Enter") {
+							openUrl(
+								`https://warpcast.com/${cast.user.username}/${cast.hash.slice(0, 10)}`,
+							);
+						}
+					}}
+				>
 					{castText?.length && castText.length > 320
 						? `${castText?.slice(0, 320)}...`
 						: castText}
