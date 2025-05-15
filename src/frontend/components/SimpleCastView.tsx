@@ -23,12 +23,12 @@ export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 	const { data: parentCast } = useCastQuery(cast?.parentCastId?.hash, username);
 
 	const firstCast = parentCast ?? cast;
-	const isReply = !!firstCast.parentCastId;
+	const isReply = !!cast.parentCastId;
 	const verb = isReply ? "replied" : "wrote";
 
 	const castText = injectMentions(firstCast);
 	const replyText = injectMentions(cast);
-	const readyToRenderReply = isReply && parentCast;
+	const readyToRenderReply = isReply && !!parentCast;
 
 	if (showCardView || showCard) {
 		return <CastOrReply cast={cast} />;
