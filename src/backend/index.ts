@@ -39,7 +39,7 @@ const routes = app
 		zValidator(
 			"json",
 			z.object({
-				fid: z.string().transform((val) => Number(val)),
+				fid: z.number(),
 				context: FrameContextSchema,
 			}),
 		),
