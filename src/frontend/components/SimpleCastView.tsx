@@ -1,5 +1,5 @@
 import { useState } from "preact/hooks";
-import { useCastQuery, useUsernameQuery } from "../hooks/queries/useShimQuery";
+import { useCastIdQuery } from "../hooks/queries/useShimQuery";
 import { useFrameSDK } from "../hooks/use-frame-sdk";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
 import type { HydratedCast } from "../types";
@@ -18,8 +18,10 @@ export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 	const { showCardView } = useLocalStorageZustand();
 	const { openUrl, viewProfile } = useFrameSDK();
 
-	const { data: username } = useUsernameQuery(cast?.parentCastId?.fid);
-	const { data: parentCast } = useCastQuery(cast?.parentCastId?.hash, username);
+	const { data: parentCast } = useCastIdQuery(
+		cast?.parentCastId?.fid,
+		cast?.parentCastId?.hash,
+	);
 
 	const firstCast = parentCast ?? cast;
 	const isReply = !!cast.parentCastId;

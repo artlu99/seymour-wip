@@ -71,6 +71,19 @@ export const useCastQuery = (hash: `0x${string}`, username?: string | null) => {
 	});
 };
 
+export const useCastIdQuery = (fid: number, hash: `0x${string}`) => {
+	return useQuery({
+		queryKey: ["cast-id", fid, hash],
+		queryFn: async () => {
+			const res = await api.get<{ success: boolean; cast: HydratedCast }>(
+				`/i/${fid}/${hash}`,
+			);
+			return res.cast ?? null;
+		},
+		enabled: !!fid && !!hash,
+	});
+};
+
 export const useRefreshFeed = () => {
 	const queryClient = useQueryClient();
 	const { fids } = useLocalStorageZustand();

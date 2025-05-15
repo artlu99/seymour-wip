@@ -2,7 +2,7 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "seymour",
 	"main": "./src/backend/index.ts",
-	"compatibility_date": "2025-04-05",
+	"compatibility_date": "2025-04-15",
 	"compatibility_flags": ["nodejs_compat"],
 	"vars": {
 		"NAME": "Feed Me, Seymour",
