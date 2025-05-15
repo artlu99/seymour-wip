@@ -30,8 +30,16 @@ const NavBar = () => {
 		return ` + ${fids.length - 1} frens`;
 	}, [fids]);
 
+	const handleRefresh = () => {
+		mutation.mutate({ fids });
+		window.scrollTo({ top: 0, behavior: "smooth" });
+	};
+
 	return (
-		<div className="navbar bg-base-100" data-theme={name}>
+		<div
+			className="sticky top-0 z-50 navbar bg-base-100 border-b border-base-200"
+			data-theme={name}
+		>
 			<div className="navbar-start">
 				<div className="text-sm">
 					{preTagline}
@@ -49,7 +57,7 @@ const NavBar = () => {
 				<button
 					type="button"
 					className="btn btn-outline border-info/20 text-md"
-					onClick={() => mutation.mutate({ fids })}
+					onClick={handleRefresh}
 					disabled={mutation.isPending}
 				>
 					{mutation.isPending ? "Refreshing Feed..." : "Feed Me, Seymour 🪴"}

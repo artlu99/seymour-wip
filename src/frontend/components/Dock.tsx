@@ -11,7 +11,7 @@ export const Dock = () => {
 
 	return (
 		<>
-			<div className="dock dock-xl">
+			<div className="dock dock-xl z-50">
 				<button type="button" className={isActive("/") ? "dock-active" : ""}>
 					<Link to="/">
 						<i class="ri-home-4-line text-xl" />
