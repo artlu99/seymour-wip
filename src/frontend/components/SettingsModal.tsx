@@ -18,6 +18,12 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 	return (
 		<Transition appear show={isOpen} as={Fragment}>
 			<Dialog as="div" className="modal modal-open" onClose={onClose}>
+				<div
+					className="modal-backdrop backdrop-blur-sm"
+					onClick={onClose}
+					onKeyDown={(e) => e.key === "Escape" && onClose()}
+					role="presentation"
+				/>
 				<TransitionChild
 					as={Fragment}
 					enter="ease-out duration-300"
@@ -27,34 +33,32 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 					leaveFrom="opacity-100"
 					leaveTo="opacity-0"
 				>
-					<div className="modal-backdrop backdrop-blur-sm" />
-				</TransitionChild>
+					<div className="modal-box">
+						<DialogTitle as="h3" className="text-lg font-medium leading-6">
+							Settings
+						</DialogTitle>
 
-				<div className="modal-box">
-					<DialogTitle as="h3" className="text-lg font-medium leading-6">
-						Settings
-					</DialogTitle>
+						<div className="mt-4">
+							<div className="form-control">
+								<label className="label cursor-pointer justify-start gap-4">
+									<span className="label-text">Show Card View</span>
+									<input
+										type="checkbox"
+										className="toggle toggle-primary"
+										checked={showCardView}
+										onChange={(e) => setShowCardView(e.currentTarget.checked)}
+									/>
+								</label>
+							</div>
+						</div>
 
-					<div className="mt-4">
-						<div className="form-control">
-							<label className="label cursor-pointer justify-start gap-4">
-								<span className="label-text">Show Card View</span>
-								<input
-									type="checkbox"
-									className="toggle toggle-primary"
-									checked={showCardView}
-									onChange={(e) => setShowCardView(e.currentTarget.checked)}
-								/>
-							</label>
+						<div className="modal-action">
+							<button type="button" className="btn btn-ghost" onClick={onClose}>
+								Close
+							</button>
 						</div>
 					</div>
-
-					<div className="modal-action">
-						<button type="button" className="btn btn-ghost" onClick={onClose}>
-							Close
-						</button>
-					</div>
-				</div>
+				</TransitionChild>
 			</Dialog>
 		</Transition>
 	);
