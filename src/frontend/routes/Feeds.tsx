@@ -75,7 +75,7 @@ const Feeds = () => {
 								className="btn btn-square btn-ghost"
 								onClick={() => {
 									setFids(feed.fids);
-									mutation.mutate({ fids: feed.fids });
+									// mutation.mutate({ fids: feed.fids });
 									navigate("/");
 								}}
 							>
