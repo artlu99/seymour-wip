@@ -8,7 +8,13 @@ import { fetcher } from "itty-fetcher";
 import type { HydratedCast } from "../../types";
 import { useLocalStorageZustand } from "../use-zustand";
 
-export const api = fetcher({ base: "https://shim.artlu.workers.dev" });
+const LOCAL_DEBUGGING = import.meta.env.DEV;
+
+export const api = fetcher({
+	base: LOCAL_DEBUGGING
+		? "http://localhost:8787"
+		: "https://shim.artlu.workers.dev",
+});
 
 export const useKeccersFeed = (fids: number[]) => {
 	return useInfiniteQuery({

@@ -13,7 +13,8 @@ interface SettingsModalProps {
 }
 
 export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
-	const { showCardView, setShowCardView } = useLocalStorageZustand();
+	const { showCardView, setShowCardView, showTipButtons, setShowTipButtons } =
+		useLocalStorageZustand();
 
 	return (
 		<Transition appear show={isOpen} as={Fragment}>
@@ -41,13 +42,27 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 						<div className="mt-4">
 							<div className="form-control">
 								<label className="label cursor-pointer justify-start gap-4">
-									<span className="label-text">Show Card View</span>
 									<input
 										type="checkbox"
 										className="toggle toggle-primary"
 										checked={showCardView}
 										onChange={(e) => setShowCardView(e.currentTarget.checked)}
 									/>
+									<span className="label-text">Show Card View</span>
+								</label>
+							</div>
+						</div>
+
+						<div className="mt-4">
+							<div className="form-control">
+								<label className="label cursor-pointer justify-start gap-4">
+									<input
+										type="checkbox"
+										className="toggle toggle-primary"
+										checked={showTipButtons}
+										onChange={(e) => setShowTipButtons(e.currentTarget.checked)}
+									/>
+									<span className="label-text">Show Tip Buttons</span>
 								</label>
 							</div>
 						</div>

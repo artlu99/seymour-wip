@@ -24,6 +24,7 @@ interface User {
 	username: string | null;
 	displayName: string | null;
 	pfpUrl: string | null;
+	primaryAddress: `0x${string}` | null;
 }
 
 export interface Channel {

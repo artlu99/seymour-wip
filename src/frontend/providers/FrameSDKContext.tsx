@@ -16,6 +16,8 @@ export interface FrameSDKContextType {
 	isInstalled: boolean;
 	openUrl: (url: string) => void;
 	viewProfile: (fid: number, username?: string) => void;
+	ethProvider: typeof sdk.wallet.ethProvider;
+	connectedWallet: () => Promise<`0x${string}`>;
 }
 
 export const FrameSDKContext = createContext<FrameSDKContextType | undefined>(
@@ -73,6 +75,16 @@ export function FrameSDKProvider({ children }: { children: ReactNode }) {
 		[context, isWarpcast],
 	);
 
+	const connectedWallet = useCallback(async () => {
+		if (!isWarpcast) {
+			return null;
+		}
+		const accounts = await sdk.wallet.ethProvider.request({
+			method: "eth_requestAccounts",
+		});
+		return accounts?.[0];
+	}, [isWarpcast]);
+
 	return (
 		<FrameSDKContext.Provider
 			value={{
@@ -86,6 +98,8 @@ export function FrameSDKProvider({ children }: { children: ReactNode }) {
 				isInstalled,
 				openUrl,
 				viewProfile,
+				ethProvider: sdk.wallet.ethProvider,
+				connectedWallet,
 			}}
 		>
 			{children}

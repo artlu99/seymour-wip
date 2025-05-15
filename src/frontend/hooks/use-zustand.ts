@@ -3,12 +3,18 @@ import { combine, createJSONStorage, persist } from "zustand/middleware";
 
 export const useZustand = create(
 	persist(
-		combine({ count: 0, isSettingsOpen: false, isRelative: true }, (set) => ({
-			increase: (by = 1) => set((state) => ({ count: state.count + by })),
-			reset: () => set({ count: 0 }),
-			setIsSettingsOpen: (isSettingsOpen: boolean) => set({ isSettingsOpen }),
-			setIsRelative: (isRelative: boolean) => set({ isRelative }),
-		})),
+		combine(
+			{
+				wallet: null as `0x${string}` | null,
+				isSettingsOpen: false,
+				isRelative: true,
+			},
+			(set) => ({
+				setWallet: (wallet: `0x${string}` | null) => set({ wallet }),
+				setIsSettingsOpen: (isSettingsOpen: boolean) => set({ isSettingsOpen }),
+				setIsRelative: (isRelative: boolean) => set({ isRelative }),
+			}),
+		),
 		{
 			name: "zustand-store",
 			storage: createJSONStorage(() => sessionStorage),
@@ -28,11 +34,13 @@ export const useLocalStorageZustand = create(
 				] as number[],
 				themeName: null as string | null,
 				showCardView: false as boolean,
+				showTipButtons: false as boolean,
 			},
 			(set) => ({
 				setThemeName: (themeName: string | null) => set({ themeName }),
 				setFids: (fids: number[]) => set({ fids }),
 				setShowCardView: (showCardView: boolean) => set({ showCardView }),
+				setShowTipButtons: (showTipButtons: boolean) => set({ showTipButtons }),
 			}),
 		),
 		{
