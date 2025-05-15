@@ -813,4 +813,11 @@ export const knownFeeds = [
 		image:
 			"https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/667cc265-a45f-4030-4aa0-a358dca76400/original",
 	},
+	{
+		name: "This week's tippers",
+		fids: [20258, 977233, 1356, 1725, 10215, 4407],
+		description: "Warpcast's weekly ritual",
+		image:
+			"https://media1.tenor.com/m/BpL-v3_7x38AAAAd/rhoc-meghan.gif",
+	},
 ];
