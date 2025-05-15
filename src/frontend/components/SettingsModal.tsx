@@ -5,7 +5,7 @@ import {
 	TransitionChild,
 } from "@headlessui/react";
 import { Fragment } from "preact/compat";
-import {  useFrameSDK } from "../hooks/use-frame-sdk";
+import { useFrameSDK } from "../hooks/use-frame-sdk";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
 interface SettingsModalProps {
 	isOpen: boolean;
@@ -77,6 +77,16 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 							<button type="button" className="btn btn-ghost" onClick={onClose}>
 								Close
 							</button>
+						</div>
+
+						<div className="mt-4">
+							<img
+								src={
+									"https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYWQ2YWRuN2g1aXVmZmhmbmV3Zml2OHpxZDRhM3N0NWtheDIwN2UxdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/fIJKug8WuncQV50F1j/giphy.gif"
+								}
+								alt="pull-to-refresh"
+								className="w-full"
+							/>
 						</div>
 					</div>
 				</TransitionChild>
