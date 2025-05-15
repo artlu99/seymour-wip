@@ -8,11 +8,13 @@ export const useZustand = create(
 				wallet: null as `0x${string}` | null,
 				isSettingsOpen: false,
 				isRelative: true,
+				isRefreshing: false,
 			},
 			(set) => ({
 				setWallet: (wallet: `0x${string}` | null) => set({ wallet }),
 				setIsSettingsOpen: (isSettingsOpen: boolean) => set({ isSettingsOpen }),
 				setIsRelative: (isRelative: boolean) => set({ isRelative }),
+				setIsRefreshing: (isRefreshing: boolean) => set({ isRefreshing }),
 			}),
 		),
 		{

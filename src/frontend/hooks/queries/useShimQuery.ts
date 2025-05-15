@@ -6,7 +6,7 @@ import {
 } from "@tanstack/react-query";
 import { fetcher } from "itty-fetcher";
 import type { HydratedCast } from "../../types";
-import { useLocalStorageZustand } from "../use-zustand";
+import { useLocalStorageZustand, useZustand } from "../use-zustand";
 
 const LOCAL_DEBUGGING = import.meta.env.DEV;
 
@@ -87,27 +87,34 @@ export const useCastIdQuery = (fid: number, hash: `0x${string}`) => {
 export const useRefreshFeed = () => {
 	const queryClient = useQueryClient();
 	const { fids } = useLocalStorageZustand();
+	const { setIsRefreshing } = useZustand();
 
 	return useMutation({
+		mutationKey: ["refresh-feed"],
 		mutationFn: async (body: {
 			username?: string;
 			fids: number[];
 		}) => {
-			const response = await api.post<{
-				success: boolean;
-				message: string;
-				stats: {
-					totalFids: number;
-					totalNewCasts: number;
-					totalCasts: number;
-				};
-			}>("/refresh", body);
+			setIsRefreshing(true);
+			try {
+				const response = await api.post<{
+					success: boolean;
+					message: string;
+					stats: {
+						totalFids: number;
+						totalNewCasts: number;
+						totalCasts: number;
+					};
+				}>("/refresh", body);
 
-			if (!response.success) {
-				throw new Error(response.message);
+				if (!response.success) {
+					throw new Error(response.message);
+				}
+
+				return response.stats;
+			} finally {
+				setIsRefreshing(false);
 			}
-
-			return response.stats;
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({

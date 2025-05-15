@@ -13,7 +13,7 @@ const NavBar = () => {
 
 	const { connectedWallet, viewProfile } = useFrameSDK();
 	const { fids } = useLocalStorageZustand();
-	const { wallet, setWallet } = useZustand();
+	const { wallet, setWallet, isRefreshing } = useZustand();
 
 	useEffect(() => {
 		connectedWallet().then((wallet) => {
@@ -75,9 +75,9 @@ const NavBar = () => {
 					type="button"
 					className="btn btn-outline border-info/20 text-md"
 					onClick={handleRefresh}
-					disabled={mutation.isPending}
+					disabled={isRefreshing}
 				>
-					{mutation.isPending ? "Refreshing Feed..." : "Feed Me, Seymour 🪴"}
+					{isRefreshing ? "Refreshing Feed..." : "Feed Me, Seymour 🪴"}
 				</button>
 			</div>
 		</div>
