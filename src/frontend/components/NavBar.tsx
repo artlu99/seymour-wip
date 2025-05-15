@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "preact/hooks";
+import { useMemo } from "preact/hooks";
 import {
 	useRefreshFeed,
 	useUsernameQuery,
@@ -6,20 +6,13 @@ import {
 import { useFrameSDK } from "../hooks/use-frame-sdk";
 import { useThemes } from "../hooks/use-themes";
 import { useLocalStorageZustand, useZustand } from "../hooks/use-zustand";
-import { formatAddress } from "../utils";
 
 const NavBar = () => {
 	const { name } = useThemes();
 
-	const { connectedWallet, viewProfile } = useFrameSDK();
+	const { viewProfile } = useFrameSDK();
 	const { fids } = useLocalStorageZustand();
-	const { wallet, setWallet, isRefreshing } = useZustand();
-
-	useEffect(() => {
-		connectedWallet().then((wallet) => {
-			setWallet(wallet);
-		});
-	}, [connectedWallet, setWallet]);
+	const { isRefreshing } = useZustand();
 
 	const mutation = useRefreshFeed();
 
@@ -64,13 +57,6 @@ const NavBar = () => {
 			</div>
 
 			<div className="navbar-end">
-				<button
-					type="button"
-					className="btn btn-sm btn-soft mx-2"
-					disabled={!wallet}
-				>
-					{wallet ? formatAddress(wallet, 2) : <i className="ri-wallet-line" />}
-				</button>
 				<button
 					type="button"
 					className="btn btn-outline border-info/20 text-md"
