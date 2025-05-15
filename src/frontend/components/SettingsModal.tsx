@@ -5,8 +5,8 @@ import {
 	TransitionChild,
 } from "@headlessui/react";
 import { Fragment } from "preact/compat";
+import {  useFrameSDK } from "../hooks/use-frame-sdk";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
-
 interface SettingsModalProps {
 	isOpen: boolean;
 	onClose: () => void;
@@ -15,6 +15,8 @@ interface SettingsModalProps {
 export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 	const { showCardView, setShowCardView, showTipButtons, setShowTipButtons } =
 		useLocalStorageZustand();
+
+	const { contextFid } = useFrameSDK();
 
 	return (
 		<Transition appear show={isOpen} as={Fragment}>
@@ -53,19 +55,23 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 							</div>
 						</div>
 
-						<div className="mt-4">
-							<div className="form-control">
-								<label className="label cursor-pointer justify-start gap-4">
-									<input
-										type="checkbox"
-										className="toggle toggle-primary"
-										checked={showTipButtons}
-										onChange={(e) => setShowTipButtons(e.currentTarget.checked)}
-									/>
-									<span className="label-text">Show Tip Buttons</span>
-								</label>
+						{contextFid ? (
+							<div className="mt-4">
+								<div className="form-control">
+									<label className="label cursor-pointer justify-start gap-4">
+										<input
+											type="checkbox"
+											className="toggle toggle-primary"
+											checked={showTipButtons}
+											onChange={(e) =>
+												setShowTipButtons(e.currentTarget.checked)
+											}
+										/>
+										<span className="label-text">Show Tip Buttons</span>
+									</label>
+								</div>
 							</div>
-						</div>
+						) : null}
 
 						<div className="modal-action">
 							<button type="button" className="btn btn-ghost" onClick={onClose}>
