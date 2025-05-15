@@ -49,7 +49,7 @@ export const useCastQuery = (hash: `0x${string}`, username?: string | null) => {
 			const res = await api.get<{ success: boolean; cast: HydratedCast }>(
 				`/${username}/${hash.slice(0, 10)}`,
 			);
-			return res.cast;
+			return res.cast ?? null;
 		},
 		enabled: !!username && !!hash,
 	});
