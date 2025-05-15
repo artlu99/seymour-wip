@@ -17,7 +17,7 @@ export const useKeccersFeed = (fids: number[]) => {
 			const res = await api.post<{
 				success: boolean;
 				feed: HydratedCast[];
-			}>("/reverse-chron", { fids, limit: 25 });
+			}>("/reverse-chron", { fids });
 			return res.feed;
 		},
 		refetchInterval: 60 * 1000, // Auto-refresh every 60 seconds
