@@ -36,8 +36,8 @@ export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 
 	const renderCast = (cast: HydratedCast, text: string, verb: string) => (
 		<li className="relative pl-6">
-			<article className="flex flex-col flex-1 gap-2">
-				<span className="absolute z-10 inline-flex items-center justify-center w-6 h-6 text-white rounded-full -left-3 ring-2 ring-white">
+			<article className="flex flex-col flex-1 gap-2 text-base-content">
+				<span className="absolute z-10 inline-flex items-center justify-center w-6 h-6 text-base-content rounded-full -left-3 ring-2 ring-base-100">
 					<img
 						src={cast.user.pfpUrl ?? fallbackPfp}
 						alt={cast.user.username ?? "user name"}
@@ -71,7 +71,7 @@ export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 			{renderCast(firstCast, castText, verb)}
 			{readyToRenderReply && (
 				<li className="relative pl-6">
-					<ul className="relative flex flex-col gap-12 py-12 pl-6 before:absolute before:top-6 before:left-6 before:bottom-6 before:-translate-x-1/2 before:border before:border-dashed before:border-slate-200 after:absolute after:top-12 after:left-6 after:bottom-12 after:-translate-x-1/2 after:border after:border-slate-200 list-none">
+					<ul className="relative flex flex-col gap-12 py-12 pl-6 before:absolute before:top-6 before:left-6 before:bottom-6 before:-translate-x-1/2 before:border before:border-dashed before:border-base-content/10 after:absolute after:top-12 after:left-6 after:bottom-12 after:-translate-x-1/2 after:border after:border-base-content/10 list-none">
 						{renderCast(cast, replyText, "replied")}
 					</ul>
 				</li>

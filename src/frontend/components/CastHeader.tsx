@@ -10,10 +10,10 @@ interface CastHeaderProps {
 }
 
 export const CastHeader = ({ cast, verb, onProfileClick }: CastHeaderProps) => (
-	<h4 className="flex flex-col items-start text-sm font-normal text-slate-500 md:flex-row lg:items-center">
+	<h4 className="flex flex-col items-start text-sm font-normal text-base-content/80 md:flex-row lg:items-center">
 		<span className="flex-1">
 			<span
-				className="text-base font-medium leading-6 text-slate-700"
+				className="text-base font-medium leading-6 text-base-content/90"
 				onClick={() => onProfileClick(cast.user.fid)}
 				onKeyDown={(e) => {
 					if (e.key === "Enter") {
@@ -32,7 +32,7 @@ export const CastHeader = ({ cast, verb, onProfileClick }: CastHeaderProps) => (
 				/>
 			)}
 		</span>
-		<span className="text-xs font-normal text-slate-400">
+		<span className="text-xs font-normal text-base-content/50">
 			<ClickableDateSpan timestamp={cast.timestamp} />
 		</span>
 	</h4>

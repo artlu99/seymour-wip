@@ -15,7 +15,7 @@ export const CastContent = ({
 }: CastContentProps) => (
 	<>
 		<p
-			className="text-sm text-slate-500 whitespace-pre-wrap"
+			className="text-sm text-base-content whitespace-pre-wrap"
 			onClick={() =>
 				onUrlClick(
 					`https://warpcast.com/${cast.user.username}/${cast.hash.slice(0, 10)}`,
