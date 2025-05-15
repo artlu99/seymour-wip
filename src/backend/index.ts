@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { csrf } from "hono/csrf";
 import { secureHeaders } from "hono/secure-headers";
+import { getStarterPackMembers } from "./lib/warpcast";
 
 const app = new Hono<{ Bindings: Cloudflare.Env }>().basePath("/api");
 
@@ -16,7 +17,12 @@ const routes = app
 	.use(csrf())
 	.use(secureHeaders())
 	.get("/name", (c) => c.json({ name: c.env.NAME }))
-	.get("/time", (c) => c.json({ time: new Date().toISOString() }));
+	.get("/time", (c) => c.json({ time: new Date().toISOString() }))
+	.get("/starter-pack/:id", async (c) => {
+		const id = c.req.param("id");
+		const members = await getStarterPackMembers(id);
+		return c.json(members);
+	});
 
 export type AppType = typeof routes;
 
