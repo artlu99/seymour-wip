@@ -7,12 +7,13 @@
 	"frame": {
 		"version": "0.0.1",
 		"name": "Seymour",
-		"iconUrl": "https://seymour.artlu.workers.dev/favicon.png",
-		"homeUrl": "https://seymour.artlu.workers.dev",
-		"imageUrl": "https://seymour.artlu.workers.dev/favicon.png",
-		"buttonTitle": "Launch Mini App ⚡️",
-		"splashImageUrl": "https://seymour.artlu.workers.dev/favicon.png",
-		"splashBackgroundColor": "#000000",
-		"webhookUrl": "https://seymour.artlu.workers.dev/api/webhook"
+		"iconUrl": "https://seymour.artlu.xyz/favicon.png",
+		"homeUrl": "https://seymour.artlu.xyz",
+		"imageUrl": "https://seymour.artlu.xyz/cat-meme.gif",
+		"aspectRatio": "3:2",
+		"buttonTitle": "🪴 Seymour Me Feed",
+		"splashImageUrl": "https://seymour.artlu.xyz/hidden.gif",
+		"splashBackgroundColor": "#403D39",
+		"webhookUrl": "https://seymour.artlu.xyz/api/webhook"
 	}
 }

@@ -1,4 +1,4 @@
-# Preact SPA + Vite + Hono + Cloudflare Workers
+# Feed Me, Seymour 🪴
 
 ## a state-of-the-artlu Mini Apps full-stack starter
 
