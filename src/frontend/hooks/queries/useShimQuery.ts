@@ -36,7 +36,7 @@ export const useUsernameQuery = (fid: number | undefined) => {
 				success: boolean;
 				username: string;
 			}>(`/u/${fid}`);
-			return res.username;
+			return res.username ?? null;
 		},
 		enabled: !!fid,
 	});
