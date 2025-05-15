@@ -1,5 +1,5 @@
 import {
-	keepPreviousData,
+	useInfiniteQuery,
 	useMutation,
 	useQuery,
 	useQueryClient,
@@ -11,17 +11,27 @@ import { useLocalStorageZustand } from "../use-zustand";
 export const api = fetcher({ base: "https://shim.artlu.workers.dev" });
 
 export const useKeccersFeed = (fids: number[]) => {
-	return useQuery({
+	return useInfiniteQuery({
 		queryKey: ["keccers-feed", fids],
-		queryFn: async () => {
+		queryFn: async ({ pageParam = "" }) => {
 			const res = await api.post<{
 				success: boolean;
-				feed: HydratedCast[];
-			}>("/reverse-chron", { fids, limit: 10 });
-			return res.feed;
+				casts: HydratedCast[];
+				cursor: string;
+			}>("/reverse-chron", {
+				fids,
+				limit: 10,
+				cursor: pageParam,
+			});
+			return {
+				casts: res.casts ?? [],
+				nextCursor: res.cursor,
+			};
 		},
+		initialPageParam: "",
+		getNextPageParam: (lastPage) => lastPage.nextCursor || undefined,
 		refetchInterval: 60 * 1000, // Auto-refresh every 60 seconds
-		placeholderData: keepPreviousData,
+		placeholderData: (previousData) => previousData,
 	});
 };
 
