@@ -12,8 +12,8 @@ const LOCAL_DEBUGGING = import.meta.env.DEV;
 
 export const api = fetcher({
 	base: LOCAL_DEBUGGING
-		? "http://localhost:8787"
-		: "https://shim.artlu.workers.dev",
+		? "http://localhost:3000"
+		: "https://elysia-shim.onrender.com",
 });
 
 export const useKeccersFeed = (fids: number[]) => {
@@ -55,19 +55,6 @@ export const useUsernameQuery = (fid: number | undefined) => {
 			return res.username ?? null;
 		},
 		enabled: !!fid,
-	});
-};
-
-export const useCastQuery = (hash: `0x${string}`, username?: string | null) => {
-	return useQuery({
-		queryKey: ["cast", username, hash],
-		queryFn: async () => {
-			const res = await api.get<{ success: boolean; cast: HydratedCast }>(
-				`/${username}/${hash.slice(0, 10)}`,
-			);
-			return res.cast ?? null;
-		},
-		enabled: !!username && !!hash,
 	});
 };
 
