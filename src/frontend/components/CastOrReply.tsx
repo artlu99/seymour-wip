@@ -20,10 +20,12 @@ export const CastOrReply = ({ cast }: CastOrReplyProps) => {
 					<FarcasterEmbed
 						username={usernameQuery.data}
 						hash={cast.parentCastId.hash}
+						options = {{silentError: true}}
 					/>
 					<FarcasterEmbed
 						username={cast.user.username ?? undefined}
 						hash={cast.hash}
+						options = {{silentError: true}}
 					/>
 				</>
 			);
@@ -32,6 +34,7 @@ export const CastOrReply = ({ cast }: CastOrReplyProps) => {
 			<FarcasterEmbed
 				username={cast.user.username ?? undefined}
 				hash={cast.hash}
+				options = {{silentError: true}}
 			/>
 		);
 	}, [
