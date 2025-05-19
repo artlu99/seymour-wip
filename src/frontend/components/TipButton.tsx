@@ -84,6 +84,9 @@ export function TipButton({
 			try {
 				await fetch("https://picosub.artlu.xyz/api/log-transaction", {
 					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
 					body: JSON.stringify({
 						idempotencyKey: txHash,
 						senderFid: contextFid,
