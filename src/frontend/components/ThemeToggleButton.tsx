@@ -23,10 +23,7 @@ export const ThemeSelectorToggle = ({
 			type="button"
 			className="btn btn-square btn-ghost m-1 transition-all duration-300"
 			onClick={() => toggleTheme()}
-			style={{
-				opacity: isScrollingUp ? 1 : 0.15,
-				filter: isScrollingUp ? "blur(0.5px)" : "none",
-			}}
+			style={{ opacity: isScrollingUp ? 1 : 0.15 }}
 		>
 			<img src="/colorful_palette.svg" alt="palette" />
 		</button>
