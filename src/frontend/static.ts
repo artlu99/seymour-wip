@@ -818,7 +818,7 @@ export const knownFeeds = [
 export const individualFeeds = {
 	"6546": [
 		{
-			name: "podcast hosts",
+			name: "podcast yappers",
 			fids: [4167, 5818, 6806, 6945, 10174, 15850, 20270],
 			description: "christin, rey, al, nounishprof, adrienne, heavygweit",
 			image:
