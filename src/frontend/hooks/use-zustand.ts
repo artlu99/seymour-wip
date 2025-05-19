@@ -36,12 +36,15 @@ export const useLocalStorageZustand = create(
 				] as number[],
 				themeName: null as string | null,
 				showCardView: false as boolean,
+				showNavigationCaptions: false as boolean,
 				showTipButtons: false as boolean,
 			},
 			(set) => ({
 				setThemeName: (themeName: string | null) => set({ themeName }),
 				setFids: (fids: number[]) => set({ fids }),
 				setShowCardView: (showCardView: boolean) => set({ showCardView }),
+				setShowNavigationCaptions: (showNavigationCaptions: boolean) =>
+					set({ showNavigationCaptions }),
 				setShowTipButtons: (showTipButtons: boolean) => set({ showTipButtons }),
 			}),
 		),

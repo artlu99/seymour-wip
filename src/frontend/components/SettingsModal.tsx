@@ -13,8 +13,14 @@ interface SettingsModalProps {
 }
 
 export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
-	const { showCardView, setShowCardView, showTipButtons, setShowTipButtons } =
-		useLocalStorageZustand();
+	const {
+		showCardView,
+		setShowCardView,
+		showTipButtons,
+		setShowTipButtons,
+		showNavigationCaptions,
+		setShowNavigationCaptions,
+	} = useLocalStorageZustand();
 
 	const { contextFid } = useFrameSDK();
 
@@ -72,6 +78,20 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 								</div>
 							</div>
 						) : null}
+
+						<div className="mt-4">
+							<div className="form-control">
+								<label className="label cursor-pointer justify-start gap-4">
+									<input
+										type="checkbox"
+										className="toggle toggle-primary"
+										checked={showNavigationCaptions}
+										onChange={(e) => setShowNavigationCaptions(e.currentTarget.checked)}
+									/>
+									<span className="label-text">Show Navigation Labels</span>
+								</label>
+							</div>
+						</div>
 
 						<div className="modal-action">
 							<button type="button" className="btn btn-ghost" onClick={onClose}>
