@@ -9,7 +9,7 @@ import {
 	insertFrameContext,
 	listLastNFrameContextEvents,
 } from "./lib/postgres";
-import { getStarterPackMembers } from "./lib/warpcast";
+import { getBlocks, getStarterPackMembers } from "./lib/warpcast";
 
 const app = new Hono<{ Bindings: Cloudflare.Env }>().basePath("/api");
 
@@ -25,6 +25,20 @@ const routes = app
 	.use(secureHeaders())
 	.get("/name", (c) => c.json({ name: c.env.NAME }))
 	.get("/time", (c) => c.json({ time: new Date().toISOString() }))
+	.get(
+		"/blocks/:fid",
+		zValidator(
+			"param",
+			z.object({
+				fid: z.string().transform((s) => Number(s)),
+			}),
+		),
+		async (c) => {
+			const { fid } = c.req.valid("param");
+			const response = await getBlocks(fid);
+			return c.json(response);
+		},
+	)
 	.get("/starter-pack/:id", async (c) => {
 		const id = c.req.param("id");
 		const members = await getStarterPackMembers(id);

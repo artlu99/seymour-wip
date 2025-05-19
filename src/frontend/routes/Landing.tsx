@@ -1,10 +1,17 @@
-import { useCallback, useEffect, useRef, useState } from "preact/hooks";
+import {
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "preact/hooks";
 import { FeedTimeLine } from "../components/FeedTimeLine";
 import { RefreshFeedStatus } from "../components/RefreshFeedStatus";
+import { useBlocksQuery } from "../hooks/queries/useOpenQuery";
 import { useKeccersFeed, useRefreshFeed } from "../hooks/queries/useShimQuery";
 import { useFrameSDK } from "../hooks/use-frame-sdk";
 import { useThemes } from "../hooks/use-themes";
-import { useLocalStorageZustand , useZustand} from "../hooks/use-zustand";
+import { useLocalStorageZustand, useZustand } from "../hooks/use-zustand";
 
 const TOUCH_PULL_THRESHOLD = 60; // Standard pull-to-refresh threshold for touch
 const MOUSE_PULL_THRESHOLD = 10; // Lower threshold for mouse interactions
@@ -13,20 +20,23 @@ const Landing = () => {
 	const { contextName, contextFid, viewProfile } = useFrameSDK();
 	const { name } = useThemes();
 	const { fids } = useLocalStorageZustand();
+
 	const keccersFeedQuery = useKeccersFeed(fids);
+	const { data: blocks } = useBlocksQuery(contextFid);
 	const refreshMutation = useRefreshFeed();
+
 	const observerRef = useRef<IntersectionObserver | null>(null);
 	const [pullDistance, setPullDistance] = useState(0);
 	const [isPulling, setIsPulling] = useState(false);
 	const [isMouseInteraction, setIsMouseInteraction] = useState(false);
 	const startYRef = useRef<number | null>(null);
 
-	const { hasFirstLoadCompleted, setHasFirstLoadCompleted } = useZustand();
+	const { setHasFirstLoadCompleted } = useZustand();
+
 	useEffect(() => {
 		if (keccersFeedQuery.isFetchedAfterMount) {
 			setHasFirstLoadCompleted(true);
 		}
-
 	}, [keccersFeedQuery.isFetchedAfterMount, setHasFirstLoadCompleted]);
 
 	const loadMoreRef = useCallback(
@@ -145,8 +155,28 @@ const Landing = () => {
 		handleEnd,
 	]);
 
-	const allCasts =
+	const rawCasts =
 		keccersFeedQuery.data?.pages.flatMap((page) => page.casts) ?? [];
+
+	const allCasts = useMemo(() => {
+		return rawCasts.filter((c) => {
+			const isBlocked = (blocks?.blockedFids ?? []).includes(c.user.fid);
+			const repliesToBlockedUser =
+				c.parentCastId?.fid && blocks?.blockedFids.includes(c.parentCastId.fid);
+			const quotesBlockedUser =
+				c.embeds.filter(
+					(e) => e.castId?.fid && blocks?.blockedFids.includes(e.castId.fid),
+				).length > 0;
+			const mentionsBlockedUser =
+				c.mentions.filter((m) => blocks?.blockedFids.includes(m)).length > 0;
+			return (
+				!isBlocked &&
+				!repliesToBlockedUser &&
+				!quotesBlockedUser &&
+				!mentionsBlockedUser
+			);
+		});
+	}, [rawCasts, blocks]);
 
 	const threshold = isMouseInteraction
 		? MOUSE_PULL_THRESHOLD
