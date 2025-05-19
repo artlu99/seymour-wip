@@ -37,4 +37,5 @@ export interface Channel {
 export interface HydratedCast extends Cast {
 	user: User;
 	channel?: Channel;
+	sentBy?: string | null;
 }
