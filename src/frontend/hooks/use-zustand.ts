@@ -9,12 +9,16 @@ export const useZustand = create(
 				isSettingsOpen: false,
 				isRelative: true,
 				isRefreshing: false,
+				isScrollingUp: true,
+				lastScrollY: 0,
 			},
 			(set) => ({
 				setWallet: (wallet: `0x${string}` | null) => set({ wallet }),
 				setIsSettingsOpen: (isSettingsOpen: boolean) => set({ isSettingsOpen }),
 				setIsRelative: (isRelative: boolean) => set({ isRelative }),
 				setIsRefreshing: (isRefreshing: boolean) => set({ isRefreshing }),
+				setScrollState: (isScrollingUp: boolean, lastScrollY: number) =>
+					set({ isScrollingUp, lastScrollY }),
 			}),
 		),
 		{

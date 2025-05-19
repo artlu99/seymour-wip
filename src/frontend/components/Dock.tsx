@@ -1,4 +1,4 @@
-import { useEffect, useState } from "preact/hooks";
+import { useEffect } from "preact/hooks";
 import { Link, useLocation } from "wouter";
 import { useLocalStorageZustand, useZustand } from "../hooks/use-zustand";
 import { SettingsModal } from "./SettingsModal";
@@ -7,22 +7,25 @@ import { ThemeSelectorToggle } from "./ThemeToggleButton";
 export const Dock = () => {
 	const [location] = useLocation();
 	const isActive = (path: string) => location === path;
-	const [isScrollingUp, setIsScrollingUp] = useState(true);
-	const [lastScrollY, setLastScrollY] = useState(0);
 
-	const { isSettingsOpen, setIsSettingsOpen } = useZustand();
+	const {
+		isSettingsOpen,
+		setIsSettingsOpen,
+		isScrollingUp,
+		setScrollState,
+		lastScrollY,
+	} = useZustand();
 	const { showNavigationCaptions } = useLocalStorageZustand();
 
 	useEffect(() => {
 		const handleScroll = () => {
 			const currentScrollY = window.scrollY;
-			setIsScrollingUp(currentScrollY < lastScrollY);
-			setLastScrollY(currentScrollY);
+			setScrollState(currentScrollY < lastScrollY, currentScrollY);
 		};
 
 		window.addEventListener("scroll", handleScroll, { passive: true });
 		return () => window.removeEventListener("scroll", handleScroll);
-	}, [lastScrollY]);
+	}, [lastScrollY, setScrollState]);
 
 	return (
 		<>

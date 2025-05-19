@@ -12,7 +12,7 @@ const NavBar = () => {
 
 	const { viewProfile } = useFrameSDK();
 	const { fids } = useLocalStorageZustand();
-	const { isRefreshing } = useZustand();
+	const { isRefreshing, isScrollingUp } = useZustand();
 
 	const mutation = useRefreshFeed();
 
@@ -40,7 +40,10 @@ const NavBar = () => {
 	return (
 		<div
 			className="sticky top-0 z-50 navbar bg-base-100 border-b border-base-200"
-			data-theme={name}
+			style={{
+				transform: isScrollingUp ? "translateY(0)" : "translateY(-100%)",
+				transition: isScrollingUp ? "none" : "transform 300ms ease-out",
+			}}
 		>
 			<div className="navbar-start">
 				<div className="text-sm">
