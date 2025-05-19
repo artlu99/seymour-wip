@@ -864,4 +864,16 @@ export const individualFeeds = {
 		image:
 			"https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/e17526df-14b3-419c-4ed7-fc9f9c901b00/rectcrop3",
 	},
+	"234616": {
+		name: "most liked",
+		fids: [
+			4482, 195117, 408746, 236581, 597941, 226690, 602, 270138, 2480, 2904, 3,
+			539, 308536, 230238, 403090, 284679, 386444, 309242, 423036, 198629,
+			256829, 442770, 268608, 313283, 414955, 396484, 211159, 427349, 375727,
+			378285, 8332, 17356, 299853, 426167, 253127, 8152, 237884,
+		],
+		description: "pichi's most liked Fartcasters",
+		image:
+			"https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/38f78335-809a-4509-724a-c18c1ee64900/rectcrop3",
+	},
 };
