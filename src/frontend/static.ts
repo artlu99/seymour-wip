@@ -820,7 +820,8 @@ export const individualFeeds = {
 		{
 			name: "podcast yappers",
 			fids: [4167, 5818, 6546, 6806, 6945, 10174, 15850, 20270],
-			description: "christin, rey, al, nounishprof, adrienne, heavygweit, meeee",
+			description:
+				"christin, rey, al, nounishprof, adrienne, heavygweit, meeee",
 			image:
 				"https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/a0adeb3d-9b79-4ee0-9e86-2d6ea97d7e00/original",
 		},
@@ -851,4 +852,16 @@ export const individualFeeds = {
 			image: "https://arweave.net/7hFATkROyNx10j_d_VQJmMSX2-20k5WmcTikN0al5UU/",
 		},
 	],
+	"461523": {
+		name: "most liked",
+		fids: [
+			355738, 194372, 2211, 302556, 315256, 461523, 505385, 448502, 283144,
+			705349, 883432, 281836, 334357, 893249, 263264, 3, 412772, 883168, 234568,
+			7418, 15983, 618607, 351411, 229621, 471160, 280438, 602, 15949, 517425,
+			549686, 534280, 501640, 428498, 879968, 295653, 883509, 398355,
+		],
+		description: "Hyouka's most liked Fartcasters",
+		image:
+			"https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/e17526df-14b3-419c-4ed7-fc9f9c901b00/rectcrop3",
+	},
 };
