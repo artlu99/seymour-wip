@@ -814,3 +814,28 @@ export const knownFeeds = [
 			"https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/667cc265-a45f-4030-4aa0-a358dca76400/original",
 	},
 ];
+
+export const individualFeeds = {
+	"6546": [
+		{
+			name: "only Christin",
+			fids: [15850],
+			description: "only @christin",
+			image:
+				"https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/a0adeb3d-9b79-4ee0-9e86-2d6ea97d7e00/original",
+		},
+	],
+	"2728": [
+		{
+			name: "most liked",
+			fids: [
+				4823, 6023, 4407, 557, 3, 1355, 528, 617, 5620, 3895, 8, 1606, 347,
+				4409, 3854, 576, 451, 472, 5708, 1214, 2, 1325, 129, 303, 378, 758919,
+				239, 2745, 5587, 2904, 20591, 4163, 6806, 3621, 7237, 2455, 2134,
+			],
+			description: "matthias' most liked Fartcasters",
+			image:
+				"https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/6b9230cf-125d-456e-766e-0e569deef800/original",
+		},
+	],
+};

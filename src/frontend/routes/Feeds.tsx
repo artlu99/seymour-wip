@@ -1,18 +1,26 @@
+import { useMemo } from "preact/hooks";
 import { navigate } from "wouter/use-browser-location";
 import { RefreshFeedStatus } from "../components/RefreshFeedStatus";
-import { useRefreshFeed } from "../hooks/queries/useShimQuery";
 import { useFrameSDK } from "../hooks/use-frame-sdk";
 import { useThemes } from "../hooks/use-themes";
 import { useLocalStorageZustand, useZustand } from "../hooks/use-zustand";
-import { knownFeeds } from "../static";
+import { individualFeeds, knownFeeds } from "../static";
 import { pluralize } from "../utils";
 
 const Feeds = () => {
 	const { contextName, contextFid, viewProfile } = useFrameSDK();
 	const { name } = useThemes();
 	const { setFids } = useLocalStorageZustand();
-	const mutation = useRefreshFeed();
 	const { setIsSettingsOpen } = useZustand();
+
+	const primaryFeeds = useMemo(() => {
+		const contextFidStr = contextFid?.toString() ?? "";
+		return (
+			(individualFeeds as Record<string, (typeof individualFeeds)["6546"]>)[
+				contextFidStr
+			] ?? []
+		);
+	}, [contextFid]);
 
 	return (
 		<div className="flex flex-col text-center pb-32" data-theme={name}>
@@ -46,7 +54,7 @@ const Feeds = () => {
 						Pick a Feed
 					</li>
 
-					{knownFeeds.map((feed, idx) => (
+					{[...primaryFeeds, ...knownFeeds].map((feed, idx) => (
 						<li className="list-row" key={`${feed.name}-${idx}`}>
 							<div className="text-4xl font-thin opacity-30 tabular-nums">
 								{(idx + 1).toString().padStart(2, "0")}
