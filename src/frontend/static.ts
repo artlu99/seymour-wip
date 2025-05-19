@@ -819,8 +819,8 @@ export const individualFeeds = {
 	"6546": [
 		{
 			name: "podcast yappers",
-			fids: [4167, 5818, 6806, 6945, 10174, 15850, 20270],
-			description: "christin, rey, al, nounishprof, adrienne, heavygweit",
+			fids: [4167, 5818, 6546, 6806, 6945, 10174, 15850, 20270],
+			description: "christin, rey, al, nounishprof, adrienne, heavygweit, meeee",
 			image:
 				"https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/a0adeb3d-9b79-4ee0-9e86-2d6ea97d7e00/original",
 		},
