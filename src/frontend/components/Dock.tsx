@@ -30,7 +30,7 @@ export const Dock = () => {
 	return (
 		<>
 			<div
-				className="dock dock-xs z-50 transition-all duration-300"
+				className="dock dock-xl z-50 transition-all duration-300"
 				style={{
 					backgroundColor: isScrollingUp
 						? "rgba(0, 0, 0, 0.85)"

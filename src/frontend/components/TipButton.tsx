@@ -80,27 +80,27 @@ export function TipButton({
 			});
 
 			// post the log-transaction api
-			await fetch("https://picosub.artlu.xyz/api/log-transaction", {
-				method: "POST",
-				body: JSON.stringify({
-					idempotencyKey: txHash,
-					senderFid: contextFid,
-					recipientFid: fid,
-					amount: amountHex,
-					amountUsdCents: Math.round(tipAmount * dollarsPerUnit * 100),
-					tokenAddress: tokenAddress,
-					tokenSymbol: tokenSymbol,
-					timestamp: Date.now().toString(),
-					payload: {
-						username: context?.user?.username, // this is the sender's username
-						recipient: username, // this is the recipient's username
-						amount: amt.toString(),
-						symbol: tokenSymbol,
-						castHash,
-					},
-					txnHash: txHash,
-				}),
-			});
+			// await fetch("https://picosub.artlu.xyz/api/log-transaction", {
+			// 	method: "POST",
+			// 	body: JSON.stringify({
+			// 		idempotencyKey: txHash,
+			// 		senderFid: contextFid,
+			// 		recipientFid: fid,
+			// 		amount: amountHex,
+			// 		amountUsdCents: Math.round(tipAmount * dollarsPerUnit * 100),
+			// 		tokenAddress: tokenAddress,
+			// 		tokenSymbol: tokenSymbol,
+			// 		timestamp: Date.now().toString(),
+			// 		payload: {
+			// 			username: context?.user?.username, // this is the sender's username
+			// 			recipient: username, // this is the recipient's username
+			// 			amount: amt.toString(),
+			// 			symbol: tokenSymbol,
+			// 			castHash,
+			// 		},
+			// 		txnHash: txHash,
+			// 	}),
+			// });
 			return txHash;
 		} catch (error) {
 			throw new Error(

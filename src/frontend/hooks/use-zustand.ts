@@ -44,7 +44,7 @@ export const useLocalStorageZustand = create(
 				themeName: null as string | null,
 				showCardView: false as boolean,
 				showNavigationCaptions: false as boolean,
-				showTipButtons: false as boolean,
+				showTipButtons: true as boolean,
 			},
 			(set) => ({
 				setThemeName: (themeName: string | null) => set({ themeName }),
