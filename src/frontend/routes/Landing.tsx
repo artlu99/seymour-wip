@@ -19,7 +19,7 @@ const MOUSE_PULL_THRESHOLD = 10; // Lower threshold for mouse interactions
 const Landing = () => {
 	const { contextName, contextFid, viewProfile } = useFrameSDK();
 	const { name } = useThemes();
-	const { fids } = useLocalStorageZustand();
+	const { feedFids: fids } = useLocalStorageZustand();
 
 	const keccersFeedQuery = useKeccersFeed(fids);
 	const { data: blocks } = useBlocksQuery(contextFid);

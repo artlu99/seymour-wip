@@ -10,13 +10,13 @@ import { pluralize } from "../utils";
 const Feeds = () => {
 	const { contextName, contextFid, viewProfile } = useFrameSDK();
 	const { name } = useThemes();
-	const { setFids } = useLocalStorageZustand();
+	const { setFeedFids: setFids } = useLocalStorageZustand();
 	const { setIsSettingsOpen } = useZustand();
 
 	const primaryFeeds = useMemo(() => {
 		const contextFidStr = contextFid?.toString() ?? "";
 		return (
-			(individualFeeds as Record<string, (typeof individualFeeds)["6546"]>)[
+			(individualFeeds as unknown as Record<string, (typeof individualFeeds)["6546"]>)[
 				contextFidStr
 			] ?? []
 		);

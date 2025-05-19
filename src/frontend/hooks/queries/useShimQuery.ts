@@ -73,7 +73,7 @@ export const useCastIdQuery = (fid: number, hash: `0x${string}`) => {
 
 export const useRefreshFeed = () => {
 	const queryClient = useQueryClient();
-	const { fids } = useLocalStorageZustand();
+	const { feedFids: fids } = useLocalStorageZustand();
 	const { setIsRefreshing } = useZustand();
 
 	return useMutation({

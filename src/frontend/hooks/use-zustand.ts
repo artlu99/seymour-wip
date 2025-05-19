@@ -35,7 +35,7 @@ export const useLocalStorageZustand = create(
 	persist(
 		combine(
 			{
-				fids: [
+				feedFids: [
 					2210, 475488, 527771, 4407, 814040, 528, 273442, 9933, 15983, 199989,
 					6546, 243139, 6945, 4513, 12048, 4163, 4895, 2802, 10144, 270504,
 					284324, 9166, 10174, 192702, 276562, 2210, 2904, 440352, 14364, 5708,
@@ -48,7 +48,8 @@ export const useLocalStorageZustand = create(
 			},
 			(set) => ({
 				setThemeName: (themeName: string | null) => set({ themeName }),
-				setFids: (fids: number[]) => set({ fids }),
+				setFeedFids: (fids: number[]) =>
+					set({ feedFids: (fids ?? []).slice(0, 37) }),
 				setShowCardView: (showCardView: boolean) => set({ showCardView }),
 				setShowNavigationCaptions: (showNavigationCaptions: boolean) =>
 					set({ showNavigationCaptions }),

@@ -4,14 +4,11 @@ import {
 	useUsernameQuery,
 } from "../hooks/queries/useShimQuery";
 import { useFrameSDK } from "../hooks/use-frame-sdk";
-import { useThemes } from "../hooks/use-themes";
 import { useLocalStorageZustand, useZustand } from "../hooks/use-zustand";
 
 const NavBar = () => {
-	const { name } = useThemes();
-
 	const { viewProfile } = useFrameSDK();
-	const { fids } = useLocalStorageZustand();
+	const { feedFids: fids } = useLocalStorageZustand();
 	const { isRefreshing, isScrollingUp } = useZustand();
 
 	const mutation = useRefreshFeed();
