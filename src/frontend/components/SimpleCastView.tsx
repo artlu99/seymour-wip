@@ -4,6 +4,7 @@ import { useFrameSDK } from "../hooks/use-frame-sdk";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
 import type { HydratedCast } from "../types";
 import { CastContent } from "./CastContent";
+import { CastFooter } from "./CastFooter";
 import { CastHeader } from "./CastHeader";
 import { CastOrReply } from "./CastOrReply";
 
@@ -60,6 +61,7 @@ export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 					onUrlClick={openUrl}
 					onShowCardClick={() => setShowCard(true)}
 				/>
+				<CastFooter cast={cast} />
 			</article>
 		</li>
 	);

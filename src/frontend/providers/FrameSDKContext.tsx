@@ -18,7 +18,8 @@ export interface FrameSDKContextType {
 	openUrl: (url: string) => void;
 	viewProfile: (fid: number, username?: string) => void;
 	ethProvider: typeof sdk.wallet.ethProvider;
-	connectedWallet: () => Promise<`0x${string}`>;
+	connectedWallet: () => Promise<`0x${string}` | null>;
+	composeCast: (fid: number, hash: `0x${string}`) => void;
 }
 
 export const FrameSDKContext = createContext<FrameSDKContextType | undefined>(
@@ -88,6 +89,18 @@ export function FrameSDKProvider({ children }: { children: ReactNode }) {
 		return accounts?.[0];
 	}, [isWarpcast]);
 
+	const composeCast = useCallback(
+		async (fid: number, hash: `0x${string}`) => {
+			if (!isWarpcast) {
+				return openUrl(`https://warpcast.com/${fid}/${hash.slice(0, 10)}`);
+			}
+			await sdk.actions.composeCast({
+				parent: { type: "cast", hash },
+			});
+		},
+		[isWarpcast, openUrl],
+	);
+
 	return (
 		<FrameSDKContext.Provider
 			value={{
@@ -103,6 +116,7 @@ export function FrameSDKProvider({ children }: { children: ReactNode }) {
 				viewProfile,
 				ethProvider: sdk.wallet.ethProvider,
 				connectedWallet,
+				composeCast,
 			}}
 		>
 			{children}
