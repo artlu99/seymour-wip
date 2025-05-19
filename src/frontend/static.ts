@@ -818,9 +818,9 @@ export const knownFeeds = [
 export const individualFeeds = {
 	"6546": [
 		{
-			name: "only Christin",
-			fids: [15850],
-			description: "only @christin",
+			name: "podcast hosts",
+			fids: [4167, 5818, 6806, 6945, 10174, 15850, 20270],
+			description: "christin, rey, al, nounishprof, adrienne, heavygweit",
 			image:
 				"https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/a0adeb3d-9b79-4ee0-9e86-2d6ea97d7e00/original",
 		},
@@ -836,6 +836,19 @@ export const individualFeeds = {
 			description: "matthias' most liked Fartcasters",
 			image:
 				"https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/6b9230cf-125d-456e-766e-0e569deef800/original",
+		},
+	],
+	"838": [
+		{
+			name: "most liked",
+			fids: [
+				616, 472, 3, 10799, 355566, 99, 129, 528, 4461, 12, 347, 849960, 318473,
+				782184, 5818, 15211, 557, 576, 210648, 3854, 2210, 7143, 1407, 7479,
+				4085, 410789, 2, 2112, 3895, 739943, 16085, 8, 3621, 533, 2802, 326147,
+				280002,
+			],
+			description: "luciano's most liked Fartcasters",
+			image: "https://arweave.net/7hFATkROyNx10j_d_VQJmMSX2-20k5WmcTikN0al5UU/",
 		},
 	],
 };
