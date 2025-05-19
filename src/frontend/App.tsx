@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "react-hot-toast";
 import { Route, Switch } from "wouter";
 import { Dock } from "./components/Dock";
 import NavBar from "./components/NavBar";
@@ -27,6 +28,9 @@ function App() {
 					</FrameSDKProvider>
 				</ThemesProvider>
 			</QueryClientProvider>
+			<div>
+				<Toaster />
+			</div>
 		</div>
 	);
 }
