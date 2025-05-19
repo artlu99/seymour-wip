@@ -8,6 +8,7 @@ export const useZustand = create(
 				wallet: null as `0x${string}` | null,
 				isSettingsOpen: false,
 				isRelative: true,
+				hasFirstLoadCompleted: false,
 				isRefreshing: false,
 				isScrollingUp: true,
 				lastScrollY: 0,
@@ -16,6 +17,8 @@ export const useZustand = create(
 				setWallet: (wallet: `0x${string}` | null) => set({ wallet }),
 				setIsSettingsOpen: (isSettingsOpen: boolean) => set({ isSettingsOpen }),
 				setIsRelative: (isRelative: boolean) => set({ isRelative }),
+				setHasFirstLoadCompleted: (hasFirstLoadCompleted: boolean) =>
+					set({ hasFirstLoadCompleted }),
 				setIsRefreshing: (isRefreshing: boolean) => set({ isRefreshing }),
 				setScrollState: (isScrollingUp: boolean, lastScrollY: number) =>
 					set({ isScrollingUp, lastScrollY }),

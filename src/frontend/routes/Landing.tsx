@@ -4,7 +4,7 @@ import { RefreshFeedStatus } from "../components/RefreshFeedStatus";
 import { useKeccersFeed, useRefreshFeed } from "../hooks/queries/useShimQuery";
 import { useFrameSDK } from "../hooks/use-frame-sdk";
 import { useThemes } from "../hooks/use-themes";
-import { useLocalStorageZustand } from "../hooks/use-zustand";
+import { useLocalStorageZustand , useZustand} from "../hooks/use-zustand";
 
 const TOUCH_PULL_THRESHOLD = 60; // Standard pull-to-refresh threshold for touch
 const MOUSE_PULL_THRESHOLD = 10; // Lower threshold for mouse interactions
@@ -20,6 +20,14 @@ const Landing = () => {
 	const [isPulling, setIsPulling] = useState(false);
 	const [isMouseInteraction, setIsMouseInteraction] = useState(false);
 	const startYRef = useRef<number | null>(null);
+
+	const { hasFirstLoadCompleted, setHasFirstLoadCompleted } = useZustand();
+	useEffect(() => {
+		if (keccersFeedQuery.isFetchedAfterMount) {
+			setHasFirstLoadCompleted(true);
+		}
+
+	}, [keccersFeedQuery.isFetchedAfterMount, setHasFirstLoadCompleted]);
 
 	const loadMoreRef = useCallback(
 		(node: HTMLDivElement | null) => {

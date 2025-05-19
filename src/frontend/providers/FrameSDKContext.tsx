@@ -2,6 +2,7 @@ import { type Context, sdk } from "@farcaster/frame-sdk";
 import { createContext } from "preact";
 import type { ReactNode } from "preact/compat";
 import { useCallback, useEffect, useState } from "preact/hooks";
+import { useZustand } from "../hooks/use-zustand";
 
 const LOCAL_DEBUGGING = import.meta.env.DEV;
 
@@ -28,6 +29,8 @@ export function FrameSDKProvider({ children }: { children: ReactNode }) {
 	const [isSDKLoaded, setIsSDKLoaded] = useState(false);
 	const [context, setContext] = useState<Context.FrameContext>();
 
+	const { hasFirstLoadCompleted } = useZustand();
+
 	const contextName =
 		context?.user?.displayName ?? context?.user?.username ?? "Fartcaster";
 	const contextFid = context?.user?.fid ?? (LOCAL_DEBUGGING ? 6546 : null);
@@ -47,11 +50,11 @@ export function FrameSDKProvider({ children }: { children: ReactNode }) {
 			sdk.actions.ready({});
 		};
 
-		if (sdk && !isSDKLoaded) {
+		if (sdk && !isSDKLoaded && hasFirstLoadCompleted) {
 			setIsSDKLoaded(true);
 			load();
 		}
-	}, [isSDKLoaded]);
+	}, [isSDKLoaded, hasFirstLoadCompleted]);
 
 	const openUrl = useCallback(
 		(url: string) => {
