@@ -48,7 +48,7 @@ export const CastContent = ({
 	}
 
 	return (
-		<>
+		<div className="-mt-6">
 			<p
 				className="text-sm text-base-content whitespace-pre-wrap"
 				onClick={() =>
@@ -75,6 +75,6 @@ export const CastContent = ({
 					+ show
 				</button>
 			)}
-		</>
+		</div>
 	);
 };
