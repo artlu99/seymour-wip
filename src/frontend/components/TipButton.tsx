@@ -85,7 +85,7 @@ export function TipButton({
 				await fetch("https://picosub.artlu.xyz/api/log-transaction", {
 					method: "POST",
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
 					},
 					body: JSON.stringify({
 						idempotencyKey: txHash,
@@ -146,12 +146,11 @@ export function TipButton({
 			type="button"
 			onClick={() => handleClick()}
 			disabled={disabled}
-			className={"btn btn-sm btn-soft"}
+			className={"btn btn-circle btn-ghost btn-sm text-base-content/60"} 
 		>
 			{tokenSymbol === "USDC"
 				? `${dollarFormat(tipAmount)} `
 				: `${tipAmount.toLocaleString()} $`}
-			{tokenSymbol} → {username}
 		</button>
 	);
 }

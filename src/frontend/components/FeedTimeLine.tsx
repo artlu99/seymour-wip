@@ -21,20 +21,6 @@ export const FeedTimeLine = ({ casts }: { casts: HydratedCast[] }) => {
 					{casts?.map((cast) => (
 						<>
 							<SimpleCastView key={`cast-${cast.hash}`} cast={cast} />
-							{contextFid &&
-							showTipButtons &&
-							cast.user.username &&
-							cast.user.primaryAddress ? (
-								<TipButton
-									key={`tip-button-${cast.user.fid}-${cast.hash}`}
-									username={cast.user.username}
-									fid={cast.user.fid}
-									recipient={cast.user.primaryAddress}
-									tokenSymbol={"USDC"}
-									amount={1.0}
-									castHash={cast.hash}
-								/>
-							) : null}
 						</>
 					))}
 				</ul>

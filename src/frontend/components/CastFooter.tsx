@@ -1,11 +1,14 @@
 import { useFrameSDK } from "../hooks/use-frame-sdk";
+import { useLocalStorageZustand } from "../hooks/use-zustand";
 import type { HydratedCast } from "../types";
+import { TipButton } from "./TipButton";
 
 interface CastFooterProps {
 	cast: HydratedCast;
 }
 export const CastFooter = ({ cast }: CastFooterProps) => {
-	const { openUrl, composeCast } = useFrameSDK();
+	const { contextFid, openUrl, composeCast } = useFrameSDK();
+	const { showTipButtons } = useLocalStorageZustand();
 
 	const warpcastUrl = `https://warpcast.com/${cast.user.username}/${cast.hash.slice(0, 10)}`;
 
@@ -33,6 +36,20 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 				>
 					<i className="ri-heart-line" />
 				</button>
+				{contextFid &&
+							showTipButtons &&
+							cast.user.username &&
+							cast.user.primaryAddress ? (
+								<TipButton
+									key={`tip-button-${cast.user.fid}-${cast.hash}`}
+									username={cast.user.username}
+									fid={cast.user.fid}
+									recipient={cast.user.primaryAddress}
+									tokenSymbol={"USDC"}
+									amount={1.0}
+									castHash={cast.hash}
+								/>
+							) : null}
 				<button
 					type="button"
 					className="btn btn-sm btn-ghost text-sm text-base-content/50"
