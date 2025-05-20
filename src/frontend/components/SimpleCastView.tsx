@@ -37,7 +37,7 @@ export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 	const renderCast = (cast: HydratedCast, verb: string) => (
 		<li className="relative pl-6">
 			<article className="flex flex-col flex-1 gap-2 text-base-content">
-				<span className="absolute z-10 inline-flex items-center justify-center w-6 h-6 text-base-content rounded-full -left-3 ring-2 ring-base-100">
+				<div className="flex items-center gap-2">
 					<img
 						src={cast.user.pfpUrl ?? fallbackPfp}
 						alt={cast.user.username ?? "user name"}
@@ -46,7 +46,7 @@ export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 						}
 						width="48"
 						height="48"
-						className="max-w-full rounded-full aspect-square"
+						className="w-6 h-6 rounded-full ring-2 ring-base-100 -translate-x-9 z-10 opacity-100"
 						onClick={() => viewProfile(cast.user.fid)}
 						onKeyDown={(e) => {
 							if (e.key === "Enter") {
@@ -54,8 +54,8 @@ export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 							}
 						}}
 					/>
-				</span>
-				<CastHeader cast={cast} verb={verb} onProfileClick={viewProfile} />
+					<CastHeader cast={cast} verb={verb} onProfileClick={viewProfile} />
+				</div>
 				<CastContent
 					cast={cast}
 					onUrlClick={openUrl}
