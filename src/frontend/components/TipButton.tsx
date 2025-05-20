@@ -60,7 +60,7 @@ export function TipButton({
 		try {
 			await ensureBaseChain();
 
-			const from = await connectedWallet();
+			const from = await connectedWallet() ?? undefined;
 			const to = `0x${tokenAddress.replace("0x", "")}` as `0x${string}`;
 
 			const amountHex = formatAmount(amt, decimals);
