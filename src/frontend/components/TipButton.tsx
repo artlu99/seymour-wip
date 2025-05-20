@@ -108,7 +108,7 @@ export function TipButton({
 				});
 			} catch (error) {
 				console.error(
-					"Failed to log transaction:",
+					"Unable to log transaction:",
 					error instanceof Error ? error.message : String(error),
 				);
 			}
@@ -117,7 +117,7 @@ export function TipButton({
 			return txHash;
 		} catch (error) {
 			throw new Error(
-				`Failed to send ${tokenSymbol}: ${error instanceof Error ? error.message : String(error)}`,
+				`Did not send ${tokenSymbol}: ${error instanceof Error ? error.message : String(error)}`,
 			);
 		}
 	}
