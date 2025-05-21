@@ -8,7 +8,7 @@ export const useZustand = create(
 				wallet: null as `0x${string}` | null,
 				isSettingsOpen: false,
 				isRelative: true,
-				hasFirstLoadCompleted: false,
+				hasFirstLoadCompleted: true,
 				isRefreshing: false,
 				isScrollingUp: true,
 				lastScrollY: 0,

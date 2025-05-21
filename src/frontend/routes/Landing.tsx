@@ -17,6 +17,22 @@ const TOUCH_PULL_THRESHOLD = 60; // Standard pull-to-refresh threshold for touch
 const MOUSE_PULL_THRESHOLD = 10; // Lower threshold for mouse interactions
 
 const Landing = () => {
+	return (
+		<div className="flex flex-col text-center gap-4 pb-128">
+			<article className="prose dark:prose-invert">
+				Oops, it appears you are not
+				<br /> a paid subscriber.
+				<br />
+				<br />
+				This mini app will return for public,
+				<br />
+				free use next month.
+			</article>
+		</div>
+	);
+};
+
+const Landing2 = () => {
 	const { contextName, contextFid, viewProfile } = useFrameSDK();
 	const { name } = useThemes();
 	const { feedFids: fids } = useLocalStorageZustand();
