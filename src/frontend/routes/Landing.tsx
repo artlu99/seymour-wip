@@ -190,9 +190,9 @@ const Landing = () => {
 				<br /> a paid subscriber.
 				<br />
 				<br />
-				The mini app is back
+				The mini app is free to the public
 				<br />
-				for limited public, free use.
+				for a limited time.
 			</article>
 
 			<article className="prose dark:prose-invert">
