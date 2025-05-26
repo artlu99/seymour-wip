@@ -67,7 +67,7 @@ export function FrameSDKProvider({ children }: { children: ReactNode }) {
 	const viewProfile = useCallback(
 		(fid: number, username?: string) => {
 			const profileUrl = username
-				? `https://warpcast.com/${username}`
+				? `https://farcaster.xyz/${username}`
 				: `https://vasco.wtf/fid/${fid}`;
 
 			isWarpcast
@@ -92,7 +92,7 @@ export function FrameSDKProvider({ children }: { children: ReactNode }) {
 	const composeCast = useCallback(
 		async (fid: number, hash: `0x${string}`) => {
 			if (!isWarpcast) {
-				return openUrl(`https://warpcast.com/${fid}/${hash.slice(0, 10)}`);
+				return openUrl(`https://farcaster.xyz/${fid}/${hash.slice(0, 10)}`);
 			}
 			await sdk.actions.composeCast({
 				parent: { type: "cast", hash },

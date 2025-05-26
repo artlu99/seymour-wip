@@ -1,7 +1,7 @@
 import { fetcher } from "itty-fetcher";
 import { z } from "zod";
 
-const warpcastApi = fetcher({ base: "https://api.warpcast.com" });
+const warpcastApi = fetcher({ base: "https://api.farcaster.xyz" });
 
 const VerificationSchema = z.object({
 	fid: z.number(),
