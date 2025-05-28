@@ -23,7 +23,7 @@ export const CastHeader = ({ cast, verb, onProfileClick }: CastHeaderProps) => (
 			>
 				{cast.user.displayName ?? cast.user.username ?? "display name"}
 			</span>{" "}
-			{cast.user.proNftAt ? (
+			{(cast.user.proNftOrder ?? 0) > 0 ? (
 				<span className="font-bold text-lg text-purple-700 dark:text-purple-500">
 					✓{" "}
 				</span>
