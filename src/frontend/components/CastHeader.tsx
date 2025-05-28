@@ -23,6 +23,11 @@ export const CastHeader = ({ cast, verb, onProfileClick }: CastHeaderProps) => (
 			>
 				{cast.user.displayName ?? cast.user.username ?? "display name"}
 			</span>{" "}
+			{cast.user.proNftAt ? (
+				<span className="font-bold text-lg text-purple-700 dark:text-purple-500">
+					✓{" "}
+				</span>
+			) : null}
 			{verb} {cast.channel ? ` in ${cast.channel.name}` : ""}
 			{cast.channel && (
 				<img
@@ -30,7 +35,8 @@ export const CastHeader = ({ cast, verb, onProfileClick }: CastHeaderProps) => (
 					alt={cast.channel?.name ?? "channel name"}
 					className="w-4 h-4 rounded-sm inline align-text-bottom mx-1 translate-y-7 opacity-50"
 				/>
-			)}{" "}{cast.sentBy && `(via ${cast.sentBy})`}
+			)}{" "}
+			{cast.sentBy && `(via ${cast.sentBy})`}
 		</span>
 		<span className="text-xs font-normal text-base-content/50">
 			<ClickableDateSpan timestamp={cast.timestamp} />
