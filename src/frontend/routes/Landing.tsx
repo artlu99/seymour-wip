@@ -186,16 +186,6 @@ const Landing = () => {
 	return (
 		<div className="flex flex-col text-center gap-4 pb-128" data-theme={name}>
 			<article className="prose dark:prose-invert">
-				It appears you are not
-				<br /> a paid subscriber.
-				<br />
-				<br />
-				The mini app is free to the public
-				<br />
-				for a limited time.
-			</article>
-
-			<article className="prose dark:prose-invert">
 				{contextFid ? (
 					<div className="p-4 text-sm">
 						GM,
