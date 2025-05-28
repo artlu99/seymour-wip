@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { combine, createJSONStorage, persist } from "zustand/middleware";
 
+const MAX_FEED_LENGTH = 69;
+
 export const useZustand = create(
 	persist(
 		combine(
@@ -49,7 +51,7 @@ export const useLocalStorageZustand = create(
 			(set) => ({
 				setThemeName: (themeName: string | null) => set({ themeName }),
 				setFeedFids: (fids: number[]) =>
-					set({ feedFids: (fids ?? []).slice(0, 37) }),
+					set({ feedFids: (fids ?? []).slice(0, MAX_FEED_LENGTH) }),
 				setShowCardView: (showCardView: boolean) => set({ showCardView }),
 				setShowNavigationCaptions: (showNavigationCaptions: boolean) =>
 					set({ showNavigationCaptions }),
