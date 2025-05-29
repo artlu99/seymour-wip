@@ -35,10 +35,10 @@ export const CastHeader = ({ cast, verb, onProfileClick }: CastHeaderProps) => (
 					alt={cast.channel?.name ?? "channel name"}
 					className="w-4 h-4 rounded-sm inline align-text-bottom mx-1 translate-y-7 opacity-50"
 				/>
-			)}{" "}
-			{cast.sentBy && `(via ${cast.sentBy})`}
+			)}
+			{cast.sentBy && ` (via ${cast.sentBy}) `}
 		</span>
-		<span className="text-xs font-normal text-base-content/50">
+		<span className="mx-2 text-xs font-normal text-base-content/50">
 			<ClickableDateSpan timestamp={cast.timestamp} />
 		</span>
 	</h4>
