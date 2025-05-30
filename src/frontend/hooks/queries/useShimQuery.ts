@@ -36,7 +36,7 @@ export const useKeccersFeed = (fids: number[]) => {
 		},
 		initialPageParam: "",
 		getNextPageParam: (lastPage) => lastPage.nextCursor || undefined,
-		refetchInterval: 60 * 1000, // Auto-refresh every 60 seconds
+		refetchInterval: 2 * 60 * 1000, // Auto-refresh every 2 minutes
 		placeholderData: (previousData) => previousData,
 	});
 };
