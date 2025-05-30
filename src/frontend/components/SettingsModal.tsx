@@ -89,6 +89,7 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 										<input
 											type="checkbox"
 											className="toggle toggle-primary"
+											disabled={showCardView}
 											checked={showTipButtons}
 											onChange={(e) =>
 												setShowTipButtons(e.currentTarget.checked)
