@@ -48,6 +48,7 @@ export const useLocalStorageZustand = create(
 				showPfpAndDisplayName: true as boolean,
 				showNavigationCaptions: false as boolean,
 				showTipButtons: true as boolean,
+				showPurpleCheck: true as boolean,
 			},
 			(set) => ({
 				setThemeName: (themeName: string | null) => set({ themeName }),
@@ -59,6 +60,8 @@ export const useLocalStorageZustand = create(
 				setShowNavigationCaptions: (showNavigationCaptions: boolean) =>
 					set({ showNavigationCaptions }),
 				setShowTipButtons: (showTipButtons: boolean) => set({ showTipButtons }),
+				setShowPurpleCheck: (showPurpleCheck: boolean) =>
+					set({ showPurpleCheck }),
 			}),
 		),
 		{

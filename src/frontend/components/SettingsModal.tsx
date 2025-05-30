@@ -20,6 +20,8 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 		setShowPfpAndDisplayName,
 		showTipButtons,
 		setShowTipButtons,
+		showPurpleCheck,
+		setShowPurpleCheck,
 		showNavigationCaptions,
 		setShowNavigationCaptions,
 	} = useLocalStorageZustand();
@@ -93,6 +95,25 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 											}
 										/>
 										<span className="label-text">Show Tip Buttons</span>
+									</label>
+								</div>
+							</div>
+						) : null}
+
+						{contextFid ? (
+							<div className="mt-4">
+								<div className="form-control">
+									<label className="label cursor-pointer justify-start gap-4">
+										<input
+											type="checkbox"
+											className="toggle toggle-primary"
+											disabled={showCardView}
+											checked={showPurpleCheck}
+											onChange={(e) =>
+												setShowPurpleCheck(e.currentTarget.checked)
+											}
+										/>
+										<span className="label-text">Show Purple Check</span>
 									</label>
 								</div>
 							</div>
