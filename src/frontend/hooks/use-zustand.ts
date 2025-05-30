@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { combine, createJSONStorage, persist } from "zustand/middleware";
 
-const MAX_FEED_LENGTH = 69;
+const MAX_FEED_LENGTH = 42;
 
 export const useZustand = create(
 	persist(
