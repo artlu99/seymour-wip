@@ -45,6 +45,7 @@ export const useLocalStorageZustand = create(
 				] as number[],
 				themeName: null as string | null,
 				showCardView: false as boolean,
+				showPfpAndDisplayName: true as boolean,
 				showNavigationCaptions: false as boolean,
 				showTipButtons: true as boolean,
 			},
@@ -53,6 +54,8 @@ export const useLocalStorageZustand = create(
 				setFeedFids: (fids: number[]) =>
 					set({ feedFids: (fids ?? []).slice(0, MAX_FEED_LENGTH) }),
 				setShowCardView: (showCardView: boolean) => set({ showCardView }),
+				setShowPfpAndDisplayName: (showPfpAndDisplayName: boolean) =>
+					set({ showPfpAndDisplayName }),
 				setShowNavigationCaptions: (showNavigationCaptions: boolean) =>
 					set({ showNavigationCaptions }),
 				setShowTipButtons: (showTipButtons: boolean) => set({ showTipButtons }),

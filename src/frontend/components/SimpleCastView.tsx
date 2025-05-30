@@ -16,7 +16,7 @@ interface SimpleCastViewProps {
 
 export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 	const [showCard, setShowCard] = useState(false);
-	const { showCardView } = useLocalStorageZustand();
+	const { showCardView, showPfpAndDisplayName } = useLocalStorageZustand();
 	const { openUrl, viewProfile } = useFrameSDK();
 
 	const { data: parentCast } = useCastIdQuery(
@@ -38,7 +38,7 @@ export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 		<li className="relative pl-6">
 			<article className="flex flex-col flex-1 text-base-content">
 				<div className="flex items-center">
-					<img
+					{showPfpAndDisplayName ? <img
 						src={cast.user.pfpUrl ?? fallbackPfp}
 						alt={cast.user.username ?? "user name"}
 						title={
@@ -53,7 +53,7 @@ export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 								viewProfile(cast.user.fid);
 							}
 						}}
-					/>
+					/> : null}
 					<CastHeader cast={cast} verb={verb} onProfileClick={viewProfile} />
 				</div>
 				<CastContent

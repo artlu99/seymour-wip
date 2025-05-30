@@ -16,6 +16,8 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 	const {
 		showCardView,
 		setShowCardView,
+		showPfpAndDisplayName,
+		setShowPfpAndDisplayName,
 		showTipButtons,
 		setShowTipButtons,
 		showNavigationCaptions,
@@ -61,6 +63,22 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 							</div>
 						</div>
 
+						<div className="mt-4">
+							<div className="form-control">
+								<label className="label cursor-pointer justify-start gap-4">
+									<input
+										type="checkbox"
+										className="toggle toggle-primary"
+										checked={showPfpAndDisplayName}
+										onChange={(e) =>
+											setShowPfpAndDisplayName(e.currentTarget.checked)
+										}
+									/>
+									<span className="label-text">Show Colorful Avatars</span>
+								</label>
+							</div>
+						</div>
+
 						{contextFid ? (
 							<div className="mt-4">
 								<div className="form-control">
@@ -86,7 +104,9 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 										type="checkbox"
 										className="toggle toggle-primary"
 										checked={showNavigationCaptions}
-										onChange={(e) => setShowNavigationCaptions(e.currentTarget.checked)}
+										onChange={(e) =>
+											setShowNavigationCaptions(e.currentTarget.checked)
+										}
 									/>
 									<span className="label-text">Show Navigation Labels</span>
 								</label>
@@ -104,8 +124,8 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 								src={
 									"https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYWQ2YWRuN2g1aXVmZmhmbmV3Zml2OHpxZDRhM3N0NWtheDIwN2UxdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/fIJKug8WuncQV50F1j/giphy.gif"
 								}
-								alt="pull-to-refresh"
-								className="w-full"
+								alt="Audrey 2"
+								className="mx-auto w-64 h-64"
 							/>
 						</div>
 					</div>

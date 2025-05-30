@@ -1,14 +1,8 @@
-import { useFrameSDK } from "../hooks/use-frame-sdk";
-import { useLocalStorageZustand } from "../hooks/use-zustand";
 import type { HydratedCast } from "../types";
 import { SimpleCastView } from "./SimpleCastView";
-import { TipButton } from "./TipButton";
 import SpringTransition from "./effects/SpringTransition";
 
 export const FeedTimeLine = ({ casts }: { casts: HydratedCast[] }) => {
-	const { contextFid } = useFrameSDK();
-	const { showTipButtons } = useLocalStorageZustand();
-
 	return (
 		<SpringTransition isActive={true}>
 			<div className="text-left">

@@ -1,3 +1,4 @@
+import { useLocalStorageZustand } from "../hooks/use-zustand";
 import type { HydratedCast } from "../types";
 import { ClickableDateSpan } from "./ClickableDateSpan";
 
@@ -9,37 +10,47 @@ interface CastHeaderProps {
 	onProfileClick: (fid: number) => void;
 }
 
-export const CastHeader = ({ cast, verb, onProfileClick }: CastHeaderProps) => (
-	<h4 className="flex flex-col items-start text-sm font-normal text-base-content/80 md:flex-row lg:items-center">
-		<span className="flex-1">
+export const CastHeader = ({ cast, verb, onProfileClick }: CastHeaderProps) => {
+	const { showPfpAndDisplayName } = useLocalStorageZustand();
+	const displayName =
+		cast.user.displayName ?? cast.user.username ?? "display name";
+
+	return (
+		<h4 className="flex flex-col items-start text-sm font-normal text-base-content/80 md:flex-row lg:items-center">
 			<span
-				className="text-base font-medium leading-6 text-base-content/90"
-				onClick={() => onProfileClick(cast.user.fid)}
-				onKeyDown={(e) => {
-					if (e.key === "Enter") {
-						onProfileClick(cast.user.fid);
-					}
-				}}
+				className={`flex-1 ${showPfpAndDisplayName ? "" : "text-base-content/50"}`}
 			>
-				{cast.user.displayName ?? cast.user.username ?? "display name"}
-			</span>{" "}
-			{(cast.user.proNftOrder ?? 0) > 0 ? (
-				<span className="font-bold text-lg text-purple-700 dark:text-purple-500">
-					✓{" "}
+				<span
+					className={`leading-6 ${showPfpAndDisplayName ? "font-medium text-base-content/90" : "text-base-content/50"}`}
+					onClick={() => onProfileClick(cast.user.fid)}
+					onKeyDown={(e) => {
+						if (e.key === "Enter") {
+							onProfileClick(cast.user.fid);
+						}
+					}}
+				>
+					{showPfpAndDisplayName ? displayName : cast.user.username}
+				</span>{" "}
+				{(cast.user.proNftOrder ?? 0) > 0 ? (
+					<span className="font-bold text-lg text-purple-700 dark:text-purple-500">
+						✓{" "}
+					</span>
+				) : null}
+				{verb} {cast.channel ? ` in ${cast.channel.name}` : ""}
+				{showPfpAndDisplayName && cast.channel && (
+					<div className="inline-flex items-center h-4 mx-1">
+						<img
+							src={cast.channel?.imageUrl ?? fallbackPfp}
+							alt={cast.channel?.name ?? "channel name"}
+							className="w-4 h-4 rounded-sm opacity-50"
+						/>
+					</div>
+				)}
+				{cast.sentBy && ` (via ${cast.sentBy}) `} :
+				<span className="mx-2 text-xs font-normal text-base-content/50">
+					<ClickableDateSpan timestamp={cast.timestamp} />
 				</span>
-			) : null}
-			{verb} {cast.channel ? ` in ${cast.channel.name}` : ""}
-			{cast.channel && (
-				<img
-					src={cast.channel?.imageUrl ?? fallbackPfp}
-					alt={cast.channel?.name ?? "channel name"}
-					className="w-4 h-4 rounded-sm inline align-text-bottom mx-1 translate-y-7 opacity-50"
-				/>
-			)}
-			{cast.sentBy && ` (via ${cast.sentBy}) `}
-		</span>
-		<span className="mx-2 text-xs font-normal text-base-content/50">
-			<ClickableDateSpan timestamp={cast.timestamp} />
-		</span>
-	</h4>
-);
+			</span>
+		</h4>
+	);
+};

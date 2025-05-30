@@ -50,16 +50,16 @@ export const CastContent = ({
 	return (
 		<div className="-mt-6">
 			<p
-				className="text-sm text-base-content whitespace-pre-wrap"
+				className="text-sm text-base-content whitespace-pre-wrap leading-tight"
 				onClick={() =>
 					onUrlClick(
-						`https://farcaster.xyz/${cast.user.username}/${cast.hash.slice(0, 10)}`,
+						`https://warpcast.com/${cast.user.username}/${cast.hash.slice(0, 10)}`,
 					)
 				}
 				onKeyDown={(e) => {
 					if (e.key === "Enter") {
 						onUrlClick(
-							`https://farcaster.xyz/${cast.user.username}/${cast.hash.slice(0, 10)}`,
+							`https://warpcast.com/${cast.user.username}/${cast.hash.slice(0, 10)}`,
 						);
 					}
 				}}
