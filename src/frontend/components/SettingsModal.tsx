@@ -69,12 +69,13 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 									<input
 										type="checkbox"
 										className="toggle toggle-primary"
-										checked={showPfpAndDisplayName}
+										disabled={showCardView}
+										checked={!showPfpAndDisplayName}
 										onChange={(e) =>
-											setShowPfpAndDisplayName(e.currentTarget.checked)
+											setShowPfpAndDisplayName(!e.currentTarget.checked)
 										}
 									/>
-									<span className="label-text">Show Colorful Avatars</span>
+									<span className="label-text">Display Feed in Zen Mode</span>
 								</label>
 							</div>
 						</div>
@@ -120,13 +121,17 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 						</div>
 
 						<div className="mt-4">
-							<img
-								src={
-									"https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYWQ2YWRuN2g1aXVmZmhmbmV3Zml2OHpxZDRhM3N0NWtheDIwN2UxdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/fIJKug8WuncQV50F1j/giphy.gif"
-								}
-								alt="Audrey 2"
-								className="mx-auto w-64 h-64"
-							/>
+							{showPfpAndDisplayName ? (
+								<img
+									src={
+										"https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYWQ2YWRuN2g1aXVmZmhmbmV3Zml2OHpxZDRhM3N0NWtheDIwN2UxdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/fIJKug8WuncQV50F1j/giphy.gif"
+									}
+									alt="Audrey 2"
+									className="mx-auto w-64 h-64"
+								/>
+							) : (
+								<div className="mx-auto w-64 h-64 bg-base-100 rounded-full" />
+							)}
 						</div>
 					</div>
 				</TransitionChild>
