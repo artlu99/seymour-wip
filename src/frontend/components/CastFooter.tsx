@@ -12,7 +12,7 @@ interface CastFooterProps {
 }
 export const CastFooter = ({ cast }: CastFooterProps) => {
 	const { contextFid, openUrl, composeCast } = useFrameSDK();
-	const { showTipButtons } = useLocalStorageZustand();
+	const { showPfpAndDisplayName, showTipButtons } = useLocalStorageZustand();
 
 	const warpcastUrl = `https://farcaster.xyz/${cast.user.username}/${cast.hash.slice(0, 10)}`;
 
@@ -27,12 +27,16 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 	const repliesQuery = useRepliesQuery(cast.user.fid, cast.hash);
 	const numReplies = repliesQuery.data ?? 0;
 
+	const textColor = showPfpAndDisplayName
+		? "text-base-content/50"
+		: "text-base-content/30";
+		
 	return (
 		<div className="card-footer bg-base-100 text-center mr-8">
 			<div className="flex justify-between items-center">
 				<button
 					type="button"
-					className="btn btn-sm btn-ghost text-sm text-base-content/50"
+					className={`btn btn-sm btn-ghost text-sm ${textColor}`}
 					onClick={() => composeCast(cast.user.fid, cast.hash)}
 				>
 					<i className="ri-chat-4-line">
@@ -43,7 +47,7 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 				</button>
 				<button
 					type="button"
-					className="btn btn-sm btn-ghost text-sm text-base-content/50"
+					className={`btn btn-sm btn-ghost text-sm ${textColor}`}
 					onClick={() => openUrl(warpcastUrl)}
 				>
 					<i className="ri-loop-left-line">
@@ -54,7 +58,7 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 				</button>
 				<button
 					type="button"
-					className="btn btn-sm btn-ghost text-sm text-base-content/50"
+					className={`btn btn-sm btn-ghost text-sm ${textColor}`}
 					onClick={() => openUrl(warpcastUrl)}
 				>
 					<i className="ri-heart-line">
@@ -79,7 +83,7 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 				) : null}
 				<button
 					type="button"
-					className="btn btn-sm btn-ghost text-sm text-base-content/50"
+					className={`btn btn-sm btn-ghost text-sm ${textColor}`}
 					onClick={() => openUrl(warpcastUrl)}
 				>
 					<i className="ri-share-2-line" />

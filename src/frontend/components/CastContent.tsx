@@ -69,7 +69,7 @@ export const CastContent = ({
 			{cast.embeds.length > 0 && onShowCardClick && (
 				<button
 					type="button"
-					className="btn btn-sm btn-outline text-content-primary"
+					className="btn btn-sm btn-outline text-base-content/50"
 					onClick={onShowCardClick}
 				>
 					+ show
