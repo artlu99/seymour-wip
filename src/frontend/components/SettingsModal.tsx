@@ -7,6 +7,8 @@ import {
 import { Fragment } from "preact/compat";
 import { useFrameSDK } from "../hooks/use-frame-sdk";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
+import { SignerPrivateKey } from "./SignerPrivateKey";
+
 interface SettingsModalProps {
 	isOpen: boolean;
 	onClose: () => void;
@@ -154,6 +156,10 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 							) : (
 								<div className="mx-auto w-64 h-64 bg-base-100 rounded-full" />
 							)}
+						</div>
+
+						<div className="mt-4 w-full">
+							<SignerPrivateKey />
 						</div>
 					</div>
 				</TransitionChild>

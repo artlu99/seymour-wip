@@ -49,6 +49,7 @@ export const useLocalStorageZustand = create(
 				showNavigationCaptions: false as boolean,
 				showTipButtons: true as boolean,
 				showPurpleCheck: true as boolean,
+				signerPrivateKey: null as string | null,
 			},
 			(set) => ({
 				setThemeName: (themeName: string | null) => set({ themeName }),
@@ -62,6 +63,8 @@ export const useLocalStorageZustand = create(
 				setShowTipButtons: (showTipButtons: boolean) => set({ showTipButtons }),
 				setShowPurpleCheck: (showPurpleCheck: boolean) =>
 					set({ showPurpleCheck }),
+				setSignerPrivateKey: (signerPrivateKey: string | null) =>
+					set({ signerPrivateKey }),
 			}),
 		),
 		{
