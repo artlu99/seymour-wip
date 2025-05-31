@@ -31,7 +31,7 @@ export const CastHeader = ({ cast, verb, onProfileClick }: CastHeaderProps) => {
 				>
 					{showPfpAndDisplayName ? displayName : cast.user.username}
 				</span>{" "}
-				{showPurpleCheck && (cast.user.proNftOrder ?? 0) > 0 ? (
+				{showPurpleCheck && (cast.user.proNft?.order ?? 0) > 0 ? (
 					<span className="font-bold text-lg text-purple-700 dark:text-purple-500">
 						✓{" "}
 					</span>

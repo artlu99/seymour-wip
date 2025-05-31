@@ -25,7 +25,7 @@ interface User {
 	displayName: string | null;
 	pfpUrl: string | null;
 	primaryAddress: `0x${string}` | null;
-	proNftOrder: number | null;
+	proNft: { order: number; timestamp: number } | null;
 }
 
 export interface Channel {
