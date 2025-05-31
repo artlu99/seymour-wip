@@ -25,7 +25,21 @@ export const useTimeQuery = () => {
 	});
 };
 
-export const useBlocksQuery = (fid: number|null) => {
+export const useHubQuery = (pk: string | null) => {
+	if (!pk) {
+		return null;
+	}
+	return useQuery({
+		queryKey: ["hub"],
+		queryFn: async () => {
+			const res = await api.hub.$get();
+			return res.json();
+		},
+		enabled: !!pk,
+	});
+};
+
+export const useBlocksQuery = (fid: number | null) => {
 	return useQuery({
 		queryKey: ["blocks", fid],
 		queryFn: async () => {

@@ -3,6 +3,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { csrf } from "hono/csrf";
 import { secureHeaders } from "hono/secure-headers";
+import invariant from "tiny-invariant";
 import { z } from "zod";
 import { FrameContextSchema } from "./lib/farcasterTypes";
 import {
@@ -25,6 +26,14 @@ const routes = app
 	.use(secureHeaders())
 	.get("/name", (c) => c.json({ name: c.env.NAME }))
 	.get("/time", (c) => c.json({ time: new Date().toISOString() }))
+	.get("/hub", (c) => {
+		invariant(c.env.NEYNAR_API_KEY, "NEYNAR_API_KEY is not set");
+		const ret: { url: string; k: string } = {
+			url: "hub-api.neynar.com",
+			k: c.env.NEYNAR_API_KEY,
+		};
+		return c.json(ret);
+	})
 	.get(
 		"/blocks/:fid",
 		zValidator(
