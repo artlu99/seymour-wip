@@ -17,7 +17,7 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 	const { contextFid, openUrl, composeCast } = useFrameSDK();
 	const { showPfpAndDisplayName, showTipButtons, signerPrivateKey } =
 		useLocalStorageZustand();
-	const [optimisticLike, setOptimisticLike] = useState(false);
+	const [optimisticLike, setOptimisticLike] = useState(0);
 	const [isLiking, setIsLiking] = useState(false);
 
 	const hubQuery = useHubQuery(signerPrivateKey);
@@ -31,14 +31,19 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 		signerPrivateKey && hub && likes.length > 0
 			? likes.includes(contextFid ?? 0)
 			: false;
-	const likeIndicator = optimisticLike || haveILikedFrfr;
-	const optimisticCount = optimisticLike && !haveILikedFrfr ? 1 : 0;
+	const optimisticCount =
+		optimisticLike > 0 && !haveILikedFrfr
+			? 1
+			: optimisticLike < 0 && haveILikedFrfr
+				? -1
+				: 0;
 	const numLikes = likes.length + optimisticCount;
+	const likeIndicator = optimisticLike >= 0 && haveILikedFrfr;
 
 	// Reset optimistic state when server data updates or on error
 	useEffect(() => {
 		if (likesQuery.data || likesQuery.isError) {
-			setOptimisticLike(false);
+			setOptimisticLike(0);
 			setIsLiking(false);
 		}
 	}, [likesQuery.data, likesQuery.isError]);
@@ -46,7 +51,7 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 	const handleLike = async () => {
 		if (contextFid && signerPrivateKey && hub && !isLiking) {
 			setIsLiking(true);
-			setOptimisticLike(true);
+			setOptimisticLike(1);
 			try {
 				await likeCast(
 					contextFid,
@@ -55,12 +60,39 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 						fid: cast.user.fid,
 						hash: cast.hash,
 					},
+					"Like",
 					hub,
 				);
 				void likesQuery.refetch();
 			} catch (error) {
 				console.error("Failed to like cast:", error);
-				setOptimisticLike(false);
+				setOptimisticLike(0);
+				setIsLiking(false);
+			}
+		} else {
+			openUrl(warpcastUrl);
+		}
+	};
+
+	const handleUnlike = async () => {
+		if (contextFid && signerPrivateKey && hub && !isLiking) {
+			setIsLiking(true);
+			setOptimisticLike(-1);
+			try {
+				await likeCast(
+					contextFid,
+					`0x${signerPrivateKey.replace("0x", "")}`,
+					{
+						fid: cast.user.fid,
+						hash: cast.hash,
+					},
+					"Unlike",
+					hub,
+				);
+				void likesQuery.refetch();
+			} catch (error) {
+				console.error("Failed to unlike cast:", error);
+				setOptimisticLike(0);
 				setIsLiking(false);
 			}
 		} else {
@@ -107,7 +139,7 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 				<button
 					type="button"
 					className={`btn btn-sm btn-ghost text-sm ${textColor}`}
-					onClick={handleLike}
+					onClick={haveILikedFrfr ? handleUnlike : handleLike}
 					disabled={isLiking}
 				>
 					<i

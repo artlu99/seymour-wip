@@ -4,6 +4,7 @@ import {
 	NobleEd25519Signer,
 	ReactionType,
 	makeReactionAdd,
+	makeReactionRemove,
 } from "@farcaster/core";
 import { Buffer } from "buffer";
 import { fetcher } from "itty-fetcher";
@@ -16,6 +17,7 @@ export async function likeCast(
 		fid: number;
 		hash: `0x${string}`;
 	},
+	action: "Like" | "Unlike",
 	hub: { url: string; k: string },
 ) {
 	const client = fetcher({
@@ -33,17 +35,30 @@ export async function likeCast(
 		fid,
 		network: FarcasterNetwork.MAINNET,
 	};
-	const result = await makeReactionAdd(
-		{
-			targetCastId: {
-				fid: targetCast.fid,
-				hash: hexToBytes(targetCast.hash),
-			},
-			type: ReactionType.LIKE,
-		},
-		dataOptions,
-		signer,
-	);
+	const result =
+		action === "Like"
+			? await makeReactionAdd(
+					{
+						targetCastId: {
+							fid: targetCast.fid,
+							hash: hexToBytes(targetCast.hash),
+						},
+						type: ReactionType.LIKE,
+					},
+					dataOptions,
+					signer,
+				)
+			: await makeReactionRemove(
+					{
+						targetCastId: {
+							fid: targetCast.fid,
+							hash: hexToBytes(targetCast.hash),
+						},
+						type: ReactionType.LIKE,
+					},
+					dataOptions,
+					signer,
+				);
 
 	if (result.isErr()) {
 		throw new Error(`Error creating message: ${result.error}`);
@@ -58,7 +73,7 @@ export async function likeCast(
 			"/v1/submitMessage",
 			messageBytes,
 		);
-		console.log("Cast liked successfully");
+		console.log(`Cast ${action}d successfully`);
 		return response;
 	} catch (e) {
 		console.error("Error liking cast:", e);
