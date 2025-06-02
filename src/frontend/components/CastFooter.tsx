@@ -15,7 +15,7 @@ interface CastFooterProps {
 }
 export const CastFooter = ({ cast }: CastFooterProps) => {
 	const { contextFid, openUrl, composeCast } = useFrameSDK();
-	const { showPfpAndDisplayName, showTipButtons, signerPrivateKey } =
+	const { showPfpAndDisplayName, showTipButtons, signerFid, signerPrivateKey } =
 		useLocalStorageZustand();
 	const [optimisticLike, setOptimisticLike] = useState(0);
 	const [isLiking, setIsLiking] = useState(false);
@@ -25,11 +25,12 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 
 	const warpcastUrl = `https://farcaster.xyz/${cast.user.username}/${cast.hash.slice(0, 10)}`;
 
+	const fidForLike = signerFid ?? contextFid;
 	const likesQuery = useReactionsQuery(cast.user.fid, cast.hash, "Like");
 	const likes = likesQuery.data?.allReactionsData[cast.hash] ?? [];
 	const haveILikedFrfr =
 		signerPrivateKey && hub && likes.length > 0
-			? likes.includes(contextFid ?? 0)
+			? likes.includes(fidForLike ?? 0)
 			: false;
 	const optimisticCount =
 		optimisticLike > 0 && !haveILikedFrfr
@@ -53,12 +54,12 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 	}, [likesQuery.data, likesQuery.isError]);
 
 	const handleLike = async () => {
-		if (contextFid && signerPrivateKey && hub && !isLiking) {
+		if (fidForLike && signerPrivateKey && hub && !isLiking) {
 			setIsLiking(true);
 			setOptimisticLike(1);
 			try {
 				await likeCast(
-					contextFid,
+					fidForLike,
 					`0x${signerPrivateKey.replace("0x", "")}`,
 					{
 						fid: cast.user.fid,
@@ -79,12 +80,12 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 	};
 
 	const handleUnlike = async () => {
-		if (contextFid && signerPrivateKey && hub && !isLiking) {
+		if (fidForLike && signerPrivateKey && hub && !isLiking) {
 			setIsLiking(true);
 			setOptimisticLike(-1);
 			try {
 				await likeCast(
-					contextFid,
+					fidForLike,
 					`0x${signerPrivateKey.replace("0x", "")}`,
 					{
 						fid: cast.user.fid,

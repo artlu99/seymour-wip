@@ -3,12 +3,23 @@ import toast from "react-hot-toast";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
 import { PkModal } from "./PkModal";
 
+const fidRegex = /^[0-9]+$/;
 const privateKeyRegex = /^0x[0-9a-fA-F]{64}$/;
 
 export const SignerPrivateKey = () => {
-	const { signerPrivateKey, setSignerPrivateKey } = useLocalStorageZustand();
+	const { signerFid, signerPrivateKey, setSignerFid, setSignerPrivateKey } =
+		useLocalStorageZustand();
 	const [inputValue, setInputValue] = useState("");
 	const [showModal, setShowModal] = useState(false);
+
+	const handleFidInputChange = useCallback(
+		(e: Event) => {
+			const target = e.target as HTMLInputElement;
+			const value = target.value ? Number(target.value) : null;
+			setSignerFid(value);
+		},
+		[setSignerFid],
+	);
 
 	const handleInputChange = useCallback((e: Event) => {
 		const target = e.target as HTMLInputElement;
@@ -48,6 +59,20 @@ export const SignerPrivateKey = () => {
 		<>
 			{signerPrivateKey ? (
 				<div className="space-y-2">
+					<div className="flex items-center justify-between">
+						<form>
+							<input
+								type="tel"
+								placeholder="signer FID"
+								value={signerFid ?? ""}
+								autoComplete="off"
+								pattern={fidRegex.source}
+								onChange={handleFidInputChange}
+								className="input validator input-bordered join-item w-full min-w-[260px] focus:outline-none"
+							/>
+							<p className="validator validator-hint">must be a numeric FID</p>
+						</form>
+					</div>
 					<div className="flex items-center justify-between">
 						Private Key stored in browser only!
 						<div className="join">
