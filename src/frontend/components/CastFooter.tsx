@@ -38,7 +38,11 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 				? -1
 				: 0;
 	const numLikes = likes.length + optimisticCount;
-	const likeIndicator = optimisticLike >= 0 && haveILikedFrfr;
+	const likeIndicator =
+		// has not unliked
+		optimisticLike >= 0 &&
+		// has liked
+		(optimisticLike > 0 || haveILikedFrfr);
 
 	// Reset optimistic state when server data updates or on error
 	useEffect(() => {
