@@ -53,13 +53,13 @@ export const CastContent = ({
 				className="text-sm text-base-content whitespace-pre-wrap leading-tight"
 				onClick={() =>
 					onUrlClick(
-						`https://warpcast.com/${cast.user.username}/${cast.hash.slice(0, 10)}`,
+						`https://farcaster.xyz/${cast.user.username}/${cast.hash.slice(0, 10)}`,
 					)
 				}
 				onKeyDown={(e) => {
 					if (e.key === "Enter") {
 						onUrlClick(
-							`https://warpcast.com/${cast.user.username}/${cast.hash.slice(0, 10)}`,
+							`https://farcaster.xyz/${cast.user.username}/${cast.hash.slice(0, 10)}`,
 						);
 					}
 				}}
