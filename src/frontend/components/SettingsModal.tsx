@@ -28,7 +28,7 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 		setShowNavigationCaptions,
 	} = useLocalStorageZustand();
 
-	const { contextFid } = useFrameSDK();
+	const { contextFid, selectionChanged } = useFrameSDK();
 
 	return (
 		<Transition appear show={isOpen} as={Fragment}>
@@ -60,7 +60,10 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 										type="checkbox"
 										className="toggle toggle-primary"
 										checked={showCardView}
-										onChange={(e) => setShowCardView(e.currentTarget.checked)}
+										onChange={async (e) => {
+											setShowCardView(e.currentTarget.checked);
+											await selectionChanged();
+										}}
 									/>
 									<span className="label-text">Show Card View</span>
 								</label>
@@ -75,9 +78,10 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 										className="toggle toggle-primary"
 										disabled={showCardView}
 										checked={!showPfpAndDisplayName}
-										onChange={(e) =>
-											setShowPfpAndDisplayName(!e.currentTarget.checked)
-										}
+										onChange={async (e) => {
+											setShowPfpAndDisplayName(!e.currentTarget.checked);
+											await selectionChanged();
+										}}
 									/>
 									<span className="label-text">Display Feed in Zen Mode</span>
 								</label>
@@ -93,9 +97,10 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 											className="toggle toggle-primary"
 											disabled={showCardView}
 											checked={showTipButtons}
-											onChange={(e) =>
-												setShowTipButtons(e.currentTarget.checked)
-											}
+											onChange={async (e) => {
+												setShowTipButtons(e.currentTarget.checked);
+												await selectionChanged();
+											}}
 										/>
 										<span className="label-text">Show Tip Buttons</span>
 									</label>
@@ -112,9 +117,10 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 											className="toggle toggle-primary"
 											disabled={showCardView}
 											checked={showPurpleCheck}
-											onChange={(e) =>
-												setShowPurpleCheck(e.currentTarget.checked)
-											}
+											onChange={async (e) => {
+												setShowPurpleCheck(e.currentTarget.checked);
+												await selectionChanged();
+											}}
 										/>
 										<span className="label-text">Show Purple Check</span>
 									</label>
@@ -129,9 +135,10 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 										type="checkbox"
 										className="toggle toggle-primary"
 										checked={showNavigationCaptions}
-										onChange={(e) =>
-											setShowNavigationCaptions(e.currentTarget.checked)
-										}
+										onChange={async (e) => {
+											setShowNavigationCaptions(e.currentTarget.checked);
+											await selectionChanged();
+										}}
 									/>
 									<span className="label-text">Show Navigation Labels</span>
 								</label>

@@ -1,7 +1,7 @@
 import { type Context, sdk } from "@farcaster/frame-sdk";
 import { createContext } from "preact";
 import type { ReactNode } from "preact/compat";
-import { useCallback, useEffect, useState } from "preact/hooks";
+import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
 import { useZustand } from "../hooks/use-zustand";
 
 const LOCAL_DEBUGGING = import.meta.env.DEV;
@@ -16,10 +16,15 @@ export interface FrameSDKContextType {
 	isWarpcast: boolean;
 	isInstalled: boolean;
 	openUrl: (url: string) => void;
+	viewCast: (hash: `0x${string}`) => void;
 	viewProfile: (fid: number, username?: string) => void;
 	ethProvider: typeof sdk.wallet.ethProvider;
 	connectedWallet: () => Promise<`0x${string}` | null>;
-	composeCast: (fid: number, hash: `0x${string}`) => void;
+	composeCast: (fid: number, hash: `0x${string}`, channelKey?: string) => void;
+	selectionChanged: () => Promise<void>;
+	impactOccurred: (
+		impact: "light" | "medium" | "heavy" | "soft" | "rigid",
+	) => Promise<void>;
 }
 
 export const FrameSDKContext = createContext<FrameSDKContextType | undefined>(
@@ -44,6 +49,9 @@ export function FrameSDKProvider({ children }: { children: ReactNode }) {
 
 	const isWarpcast = context?.client?.clientFid === 9152;
 	const isInstalled = context?.client?.added ?? false;
+	const capabilities = useMemo(async () => {
+		return await sdk.getCapabilities();
+	}, []);
 
 	useEffect(() => {
 		const load = async () => {
@@ -63,6 +71,10 @@ export function FrameSDKProvider({ children }: { children: ReactNode }) {
 		},
 		[context],
 	);
+
+	const viewCast = useCallback((hash: `0x${string}`) => {
+		sdk.actions.viewCast({ hash });
+	}, []);
 
 	const viewProfile = useCallback(
 		(fid: number, username?: string) => {
@@ -90,15 +102,33 @@ export function FrameSDKProvider({ children }: { children: ReactNode }) {
 	}, [isWarpcast]);
 
 	const composeCast = useCallback(
-		async (fid: number, hash: `0x${string}`) => {
+		async (fid: number, hash: `0x${string}`, channelKey?: string) => {
 			if (!isWarpcast) {
 				return openUrl(`https://farcaster.xyz/${fid}/${hash.slice(0, 10)}`);
 			}
 			await sdk.actions.composeCast({
 				parent: { type: "cast", hash },
+				channelKey,
 			});
 		},
 		[isWarpcast, openUrl],
+	);
+
+	const selectionChanged = useCallback(async () => {
+		const caps = await sdk.getCapabilities();
+		if (caps.includes("haptics.selectionChanged")) {
+			return sdk.haptics.selectionChanged();
+		}
+	}, []);
+
+	const impactOccurred = useCallback(
+		async (impact: "light" | "medium" | "heavy" | "soft" | "rigid") => {
+			const caps = await sdk.getCapabilities();
+			if (caps.includes("haptics.impactOccurred")) {
+				return sdk.haptics.impactOccurred(impact);
+			}
+		},
+		[],
 	);
 
 	return (
@@ -113,10 +143,13 @@ export function FrameSDKProvider({ children }: { children: ReactNode }) {
 				isWarpcast,
 				isInstalled,
 				openUrl,
+				viewCast,
 				viewProfile,
 				ethProvider: sdk.wallet.ethProvider,
 				connectedWallet,
 				composeCast,
+				selectionChanged,
+				impactOccurred,
 			}}
 		>
 			{children}

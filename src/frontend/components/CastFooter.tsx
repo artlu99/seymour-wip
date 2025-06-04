@@ -17,6 +17,7 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 	const { contextFid, openUrl, composeCast } = useFrameSDK();
 	const { showPfpAndDisplayName, showTipButtons, signerFid, signerPrivateKey } =
 		useLocalStorageZustand();
+	const { impactOccurred } = useFrameSDK();
 	const [optimisticLike, setOptimisticLike] = useState(0);
 	const [isLiking, setIsLiking] = useState(false);
 
@@ -57,6 +58,7 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 		if (fidForLike && signerPrivateKey && hub && !isLiking) {
 			setIsLiking(true);
 			setOptimisticLike(1);
+			await impactOccurred("light");
 			try {
 				await likeCast(
 					fidForLike,
@@ -83,6 +85,7 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 		if (fidForLike && signerPrivateKey && hub && !isLiking) {
 			setIsLiking(true);
 			setOptimisticLike(-1);
+			await impactOccurred("heavy");
 			try {
 				await likeCast(
 					fidForLike,
