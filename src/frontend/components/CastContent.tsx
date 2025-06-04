@@ -1,18 +1,16 @@
 import type { VNode } from "preact";
 import type { HydratedCast } from "../types";
 import { MentionSpan } from "./MentionSpan";
+import { useFrameSDK } from "../hooks/use-frame-sdk";
 
 interface CastContentProps {
 	cast: HydratedCast;
-	onUrlClick: (url: string) => void;
 	onShowCardClick?: () => void;
 }
 
-export const CastContent = ({
-	cast,
-	onUrlClick,
-	onShowCardClick,
-}: CastContentProps) => {
+export const CastContent = ({ cast, onShowCardClick }: CastContentProps) => {
+	const { isWarpcast, openUrl, viewCast } = useFrameSDK();
+
 	const textInBytes = new TextEncoder().encode(cast.text ?? "");
 	const pieces: (string | VNode)[] = [];
 	let lastIndex = 0;
@@ -52,15 +50,19 @@ export const CastContent = ({
 			<p
 				className="text-sm text-base-content whitespace-pre-wrap leading-tight"
 				onClick={() =>
-					onUrlClick(
-						`https://farcaster.xyz/${cast.user.username}/${cast.hash.slice(0, 10)}`,
-					)
+					isWarpcast
+						? viewCast(cast.hash)
+						: openUrl(
+								`https://farcaster.xyz/${cast.user.username}/${cast.hash.slice(0, 10)}`,
+							)
 				}
 				onKeyDown={(e) => {
 					if (e.key === "Enter") {
-						onUrlClick(
-							`https://farcaster.xyz/${cast.user.username}/${cast.hash.slice(0, 10)}`,
-						);
+						isWarpcast
+							? viewCast(cast.hash)
+							: openUrl(
+									`https://farcaster.xyz/${cast.user.username}/${cast.hash.slice(0, 10)}`,
+								);
 					}
 				}}
 			>

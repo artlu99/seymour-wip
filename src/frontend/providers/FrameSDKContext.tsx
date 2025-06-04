@@ -117,7 +117,7 @@ export function FrameSDKProvider({ children }: { children: ReactNode }) {
 	const selectionChanged = useCallback(async () => {
 		const caps = await sdk.getCapabilities();
 		if (caps.includes("haptics.selectionChanged")) {
-			return sdk.haptics.selectionChanged();
+			return await sdk.haptics.selectionChanged();
 		}
 	}, []);
 
@@ -125,7 +125,7 @@ export function FrameSDKProvider({ children }: { children: ReactNode }) {
 		async (impact: "light" | "medium" | "heavy" | "soft" | "rigid") => {
 			const caps = await sdk.getCapabilities();
 			if (caps.includes("haptics.impactOccurred")) {
-				return sdk.haptics.impactOccurred(impact);
+				return await sdk.haptics.impactOccurred(impact);
 			}
 		},
 		[],
