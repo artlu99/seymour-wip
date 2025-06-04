@@ -26,7 +26,7 @@ export const useKeccersFeed = (fids: number[]) => {
 				cursor: string;
 			}>("/reverse-chron", {
 				fids,
-				limit: 10,
+				limit: 25,
 				cursor: pageParam,
 			});
 			return {
@@ -36,7 +36,7 @@ export const useKeccersFeed = (fids: number[]) => {
 		},
 		initialPageParam: "",
 		getNextPageParam: (lastPage) => lastPage.nextCursor || undefined,
-		refetchInterval: 2 * 60 * 1000, // Auto-refresh every 2 minutes
+		refetchInterval: 3 * 60 * 1000, // Auto-refresh every 3 minutes
 		placeholderData: (previousData) => previousData,
 	});
 };
