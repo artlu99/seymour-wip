@@ -7,11 +7,12 @@ const fallbackPfp = "https://i.pravatar.cc/48?img=1";
 interface CastHeaderProps {
 	cast: HydratedCast;
 	verb: string;
-	onProfileClick: (fid: number) => void;
 }
 
-export const CastHeader = ({ cast, verb, onProfileClick }: CastHeaderProps) => {
-	const { showPfpAndDisplayName, showPurpleCheck } = useLocalStorageZustand();
+export const CastHeader = ({ cast, verb }: CastHeaderProps) => {
+	const { showPfpAndDisplayName, showPurpleCheck, setFeedFids } =
+		useLocalStorageZustand();
+
 	const displayName =
 		cast.user.displayName ?? cast.user.username ?? "display name";
 
@@ -22,10 +23,10 @@ export const CastHeader = ({ cast, verb, onProfileClick }: CastHeaderProps) => {
 			>
 				<span
 					className={`leading-6 ${showPfpAndDisplayName ? "font-medium text-base-content/90" : "text-base-content/50"}`}
-					onClick={() => onProfileClick(cast.user.fid)}
+					onClick={() => setFeedFids([cast.user.fid])}
 					onKeyDown={(e) => {
 						if (e.key === "Enter") {
-							onProfileClick(cast.user.fid);
+							setFeedFids([cast.user.fid]);
 						}
 					}}
 				>

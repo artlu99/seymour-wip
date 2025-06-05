@@ -56,7 +56,7 @@ export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 							}}
 						/>
 					) : null}
-					<CastHeader cast={cast} verb={verb} onProfileClick={viewProfile} />
+					<CastHeader cast={cast} verb={verb} />
 				</div>
 				<CastContent cast={cast} onShowCardClick={() => setShowCard(true)} />
 				<CastFooter cast={cast} />

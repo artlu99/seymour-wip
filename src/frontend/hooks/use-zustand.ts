@@ -37,16 +37,12 @@ export const useLocalStorageZustand = create(
 	persist(
 		combine(
 			{
-				feedFids: [
-					2210, 475488, 527771, 4407, 814040, 528, 273442, 9933, 15983, 199989,
-					6546, 243139, 6945, 4513, 12048, 4163, 4895, 2802, 10144, 270504,
-					284324, 9166, 10174, 192702, 276562, 2210, 2904, 440352, 14364, 5708,
-					227242, 535389, 2441, 356241, 327165, 3, 644823,
-				] as number[],
+				// 0xen cameron kenny keccers king accountless
+				feedFids: [528, 617, 2210, 4407, 6596, 880] as number[], 
 				themeName: null as string | null,
 				showCardView: false as boolean,
 				showPfpAndDisplayName: true as boolean,
-				showNavigationCaptions: false as boolean,
+				showNavigationCaptions: true as boolean,
 				showTipButtons: true as boolean,
 				showPurpleCheck: true as boolean,
 				signerFid: null as number | null,
