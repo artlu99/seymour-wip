@@ -11,9 +11,7 @@ import { useLocalStorageZustand, useZustand } from "../use-zustand";
 const LOCAL_DEBUGGING = import.meta.env.DEV;
 
 export const api = fetcher({
-	base: LOCAL_DEBUGGING
-		? "http://localhost:3000"
-		: "https://elysia-shim.onrender.com",
+	base: LOCAL_DEBUGGING ? "http://localhost:3000" : "https://shim.artlu.xyz",
 });
 
 export const useKeccersFeed = (fids: number[]) => {

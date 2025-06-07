@@ -1,7 +1,7 @@
 import type { VNode } from "preact";
+import { useFrameSDK } from "../hooks/use-frame-sdk";
 import type { HydratedCast } from "../types";
 import { MentionSpan } from "./MentionSpan";
-import { useFrameSDK } from "../hooks/use-frame-sdk";
 
 interface CastContentProps {
 	cast: HydratedCast;

@@ -38,7 +38,7 @@ export const useLocalStorageZustand = create(
 		combine(
 			{
 				// 0xen cameron kenny keccers king accountless
-				feedFids: [528, 617, 2210, 4407, 6596, 880] as number[], 
+				feedFids: [528, 617, 2210, 4407, 6596, 880] as number[],
 				themeName: null as string | null,
 				showCardView: false as boolean,
 				showPfpAndDisplayName: true as boolean,

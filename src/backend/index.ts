@@ -5,7 +5,6 @@ import { csrf } from "hono/csrf";
 import { secureHeaders } from "hono/secure-headers";
 import invariant from "tiny-invariant";
 import { z } from "zod";
-
 import { getBlocks, getStarterPackMembers } from "./lib/warpcast";
 
 const app = new Hono<{ Bindings: Cloudflare.Env }>().basePath("/api");

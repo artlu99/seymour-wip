@@ -16,9 +16,12 @@ const Feeds = () => {
 	const primaryFeeds = useMemo(() => {
 		const contextFidStr = contextFid?.toString() ?? "";
 		return (
-			(individualFeeds as unknown as Record<string, (typeof individualFeeds)["6546"]>)[
-				contextFidStr
-			] ?? []
+			(
+				individualFeeds as unknown as Record<
+					string,
+					(typeof individualFeeds)["6546"]
+				>
+			)[contextFidStr] ?? []
 		);
 	}, [contextFid]);
 
@@ -83,7 +86,6 @@ const Feeds = () => {
 								className="btn btn-square btn-ghost"
 								onClick={() => {
 									setFids(feed.fids);
-									// mutation.mutate({ fids: feed.fids });
 									navigate("/");
 								}}
 							>

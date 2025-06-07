@@ -1,6 +1,6 @@
+import type { Message } from "@farcaster/core";
 import { useQuery } from "@tanstack/react-query";
 import { fetcher } from "itty-fetcher";
-import type { Message } from "@farcaster/core";
 
 const client = fetcher({ base: "https://pop.farcaster.xyz:3381" });
 const MAX_REACTIONS_PAGE_SIZE = 100;
