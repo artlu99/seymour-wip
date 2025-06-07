@@ -11,7 +11,7 @@ interface CastContentProps {
 export const CastContent = ({ cast, onShowCardClick }: CastContentProps) => {
 	const { isWarpcast, openUrl, viewCast } = useFrameSDK();
 
-	const textInBytes = new TextEncoder().encode(cast.text ?? "");
+	const textInBytes = new TextEncoder().encode(cast.rawText ?? "");
 	const pieces: (string | VNode)[] = [];
 	let lastIndex = 0;
 

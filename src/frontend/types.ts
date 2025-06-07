@@ -2,6 +2,7 @@ interface Cast {
 	fid: number;
 	hash: `0x${string}`;
 	text: string | null;
+	rawText: string | null;
 	embeds: {
 		url?: string;
 		castId?: {
@@ -24,6 +25,7 @@ interface User {
 	username: string | null;
 	displayName: string | null;
 	pfpUrl: string | null;
+	bio: string | null;
 	primaryAddress: `0x${string}` | null;
 	proNft: { order: number; timestamp: number } | null;
 }
