@@ -5,11 +5,7 @@ import { csrf } from "hono/csrf";
 import { secureHeaders } from "hono/secure-headers";
 import invariant from "tiny-invariant";
 import { z } from "zod";
-import { FrameContextSchema } from "./lib/farcasterTypes";
-import {
-	insertFrameContext,
-	listLastNFrameContextEvents,
-} from "./lib/postgres";
+
 import { getBlocks, getStarterPackMembers } from "./lib/warpcast";
 
 const app = new Hono<{ Bindings: Cloudflare.Env }>().basePath("/api");
@@ -52,26 +48,7 @@ const routes = app
 		const id = c.req.param("id");
 		const members = await getStarterPackMembers(id);
 		return c.json(members);
-	})
-	.get("/frame-events", async (c) => {
-		const events = await listLastNFrameContextEvents(c.env);
-		return c.json(events);
-	})
-	.post(
-		"/context",
-		zValidator(
-			"json",
-			z.object({
-				fid: z.number(),
-				context: FrameContextSchema,
-			}),
-		),
-		async (c) => {
-			const { fid, context } = c.req.valid("json");
-			await insertFrameContext(c.env, fid, context);
-			return c.json({ ok: true });
-		},
-	);
+	});
 
 export type AppType = typeof routes;
 
