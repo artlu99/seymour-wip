@@ -46,11 +46,10 @@ export const useUsernameQuery = (fid: number | undefined) => {
 			if (!fid) {
 				return null;
 			}
-			const res = await api.get<{
-				success: boolean;
-				username: string;
-			}>(`/u/${fid}`);
-			return res.username ?? null;
+			const res = await api.get<{ success: boolean; username: string }>(
+				`/u/${fid}`,
+			);
+			return res?.success ? res.username : null;
 		},
 		enabled: !!fid,
 	});
@@ -63,11 +62,10 @@ export const useFidQuery = (username: string | undefined) => {
 			if (!username) {
 				return null;
 			}
-			const res = await api.get<{
-				success: boolean;
-				fid: number;
-			}>(`/f/${username}`);
-			return res.fid ?? null;
+			const res = await api.get<{ success: boolean; fid: number }>(
+				`/f/${username}`,
+			);
+			return res?.success ? res.fid : null;
 		},
 		enabled: !!username,
 	});

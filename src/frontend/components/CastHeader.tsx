@@ -1,3 +1,4 @@
+import { Link } from "wouter";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
 import type { HydratedCast } from "../types";
 import { ClickableDateSpan } from "./ClickableDateSpan";
@@ -10,8 +11,7 @@ interface CastHeaderProps {
 }
 
 export const CastHeader = ({ cast, verb }: CastHeaderProps) => {
-	const { showPfpAndDisplayName, showPurpleCheck, setFeedFids } =
-		useLocalStorageZustand();
+	const { showPfpAndDisplayName, showPurpleCheck } = useLocalStorageZustand();
 
 	const displayName =
 		cast.user.displayName ?? cast.user.username ?? "display name";
@@ -21,17 +21,12 @@ export const CastHeader = ({ cast, verb }: CastHeaderProps) => {
 			<span
 				className={`flex-1 ${showPfpAndDisplayName ? "" : "text-base-content/50"}`}
 			>
-				<span
-					className={`leading-6 ${showPfpAndDisplayName ? "font-medium text-base-content/90" : "text-base-content/50"}`}
-					onClick={() => setFeedFids([cast.user.fid])}
-					onKeyDown={(e) => {
-						if (e.key === "Enter") {
-							setFeedFids([cast.user.fid]);
-						}
-					}}
+				<Link
+					to={`/${cast.user.username}`}
+					className={`no-underline leading-6 ${showPfpAndDisplayName ? "font-medium text-base-content/90" : "text-base-content/50"}`}
 				>
 					{showPfpAndDisplayName ? displayName : cast.user.username}
-				</span>{" "}
+				</Link>{" "}
 				{showPurpleCheck && (cast.user.proNft?.order ?? 0) > 0 ? (
 					<span className="font-bold text-lg text-purple-700 dark:text-purple-500">
 						✓{" "}
