@@ -20,7 +20,8 @@ function App() {
 						<main className="flex-grow pb-16">
 							<Switch>
 								<Route path="/" component={Landing} />
-								<Route path="/feeds" component={Feeds} />
+								<Route path="/~/feeds" component={Feeds} />
+								<Route path="/:username" component={Landing} />
 								<Route>404: Not Found</Route>
 							</Switch>
 						</main>

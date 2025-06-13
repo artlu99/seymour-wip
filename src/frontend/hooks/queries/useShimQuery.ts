@@ -56,6 +56,23 @@ export const useUsernameQuery = (fid: number | undefined) => {
 	});
 };
 
+export const useFidQuery = (username: string | undefined) => {
+	return useQuery({
+		queryKey: ["fid", username],
+		queryFn: async () => {
+			if (!username) {
+				return null;
+			}
+			const res = await api.get<{
+				success: boolean;
+				fid: number;
+			}>(`/f/${username}`);
+			return res.fid ?? null;
+		},
+		enabled: !!username,
+	});
+};
+
 export const useCastIdQuery = (fid: number, hash: `0x${string}`) => {
 	return useQuery({
 		queryKey: ["cast-id", fid, hash],

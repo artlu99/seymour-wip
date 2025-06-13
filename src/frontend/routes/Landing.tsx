@@ -5,10 +5,15 @@ import {
 	useRef,
 	useState,
 } from "preact/hooks";
+import { useParams } from "wouter";
 import { FeedTimeLine } from "../components/FeedTimeLine";
 import { RefreshFeedStatus } from "../components/RefreshFeedStatus";
 import { useBlocksQuery } from "../hooks/queries/useOpenQuery";
-import { useKeccersFeed, useRefreshFeed } from "../hooks/queries/useShimQuery";
+import {
+	useFidQuery,
+	useKeccersFeed,
+	useRefreshFeed,
+} from "../hooks/queries/useShimQuery";
 import { useFrameSDK } from "../hooks/use-frame-sdk";
 import { useThemes } from "../hooks/use-themes";
 import { useLocalStorageZustand, useZustand } from "../hooks/use-zustand";
@@ -17,12 +22,13 @@ const TOUCH_PULL_THRESHOLD = 60; // Standard pull-to-refresh threshold for touch
 const MOUSE_PULL_THRESHOLD = 10; // Lower threshold for mouse interactions
 
 const Landing = () => {
+	const { username } = useParams();
+	const { data: fid } = useFidQuery(username);
 	const { contextName, contextFid, viewProfile } = useFrameSDK();
 	const { name } = useThemes();
-	const { feedFids: fids } = useLocalStorageZustand();
-
-	const keccersFeedQuery = useKeccersFeed(fids);
+	const { feedFids, setFeedFids } = useLocalStorageZustand();
 	const { data: blocks } = useBlocksQuery(contextFid);
+	const keccersFeedQuery = useKeccersFeed(feedFids);
 	const refreshMutation = useRefreshFeed();
 
 	const observerRef = useRef<IntersectionObserver | null>(null);
@@ -32,6 +38,10 @@ const Landing = () => {
 	const startYRef = useRef<number | null>(null);
 
 	const { setHasFirstLoadCompleted } = useZustand();
+
+	useEffect(() => {
+		if (fid) setFeedFids([fid]);
+	}, [fid, setFeedFids]);
 
 	useEffect(() => {
 		if (keccersFeedQuery.isFetchedAfterMount) {
@@ -81,7 +91,7 @@ const Landing = () => {
 			? MOUSE_PULL_THRESHOLD
 			: TOUCH_PULL_THRESHOLD;
 		if (pullDistance > threshold) {
-			refreshMutation.mutate({ fids });
+			refreshMutation.mutate({ fids: feedFids });
 			window.scrollTo({ top: 0, behavior: "smooth" });
 		}
 
@@ -89,7 +99,7 @@ const Landing = () => {
 		setIsPulling(false);
 		setIsMouseInteraction(false);
 		startYRef.current = null;
-	}, [isPulling, pullDistance, refreshMutation, fids, isMouseInteraction]);
+	}, [isPulling, pullDistance, refreshMutation, feedFids, isMouseInteraction]);
 
 	// Touch event handlers
 	const handleTouchStart = useCallback(

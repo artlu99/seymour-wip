@@ -46,9 +46,9 @@ export const Dock = () => {
 
 				<button
 					type="button"
-					className={isActive("/feeds") ? "dock-active" : ""}
+					className={isActive("/~/feeds") ? "dock-active" : ""}
 				>
-					<Link to="/feeds">
+					<Link to="/~/feeds">
 						<i class="ri-inbox-line text-xl" />
 						{showNavigationCaptions && <div className="dock-label">Feeds</div>}
 					</Link>
