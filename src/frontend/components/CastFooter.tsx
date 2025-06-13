@@ -6,6 +6,7 @@ import {
 import { useHubQuery } from "../hooks/queries/useOpenQuery";
 import { useFrameSDK } from "../hooks/use-frame-sdk";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
+import { warpcastUrl } from "../lib/common";
 import { likeCast } from "../lib/hubs";
 import type { HydratedCast } from "../types";
 import { TipButton } from "./TipButton";
@@ -23,8 +24,6 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 
 	const hubQuery = useHubQuery(signerPrivateKey);
 	const hub = hubQuery?.data;
-
-	const warpcastUrl = `https://farcaster.xyz/${cast.user.username}/${cast.hash.slice(0, 10)}`;
 
 	const fidForLike = signerFid ?? contextFid;
 	const likesQuery = useReactionsQuery(cast.user.fid, cast.hash, "Like");
@@ -77,7 +76,7 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 				setIsLiking(false);
 			}
 		} else {
-			openUrl(warpcastUrl);
+			openUrl(warpcastUrl(cast));
 		}
 	};
 
@@ -104,7 +103,7 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 				setIsLiking(false);
 			}
 		} else {
-			openUrl(warpcastUrl);
+			openUrl(warpcastUrl(cast));
 		}
 	};
 
@@ -136,7 +135,7 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 				<button
 					type="button"
 					className={`btn btn-sm btn-ghost text-sm ${textColor}`}
-					onClick={() => openUrl(warpcastUrl)}
+					onClick={() => openUrl(warpcastUrl(cast))}
 				>
 					<i className="ri-loop-left-line">
 						<span className="font-mono ml-1">
@@ -177,7 +176,7 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 				<button
 					type="button"
 					className={`btn btn-sm btn-ghost text-sm ${textColor}`}
-					onClick={() => openUrl(warpcastUrl)}
+					onClick={() => openUrl(warpcastUrl(cast))}
 				>
 					<i className="ri-share-2-line" />
 				</button>
