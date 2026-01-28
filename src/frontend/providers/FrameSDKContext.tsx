@@ -80,7 +80,7 @@ export function FrameSDKProvider({ children }: { children: ReactNode }) {
 		(fid: number, username?: string) => {
 			const profileUrl = username
 				? `https://farcaster.xyz/${username}`
-				: `https://vasco.wtf/fid/${fid}`;
+				: `https://dev.neynar.com/explorer/search?q=${fid}`;
 
 			isWarpcast
 				? sdk.actions.viewProfile({ fid })
