@@ -13,14 +13,3 @@ export const useNameQuery = () => {
 		},
 	});
 };
-
-export const useTimeQuery = () => {
-	return useQuery({
-		queryKey: ["time"],
-		queryFn: async () => {
-			const res = await api.time.$get();
-			return res.json();
-		},
-		refetchInterval: 5000, // Auto-refresh every 5 seconds
-	});
-};

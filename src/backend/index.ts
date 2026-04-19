@@ -17,7 +17,6 @@ const routes = app
 	.use(csrf())
 	.use(secureHeaders())
 	.get("/name", (c) => c.json({ name: c.env.NAME }))
-	.get("/time", (c) => c.json({ time: new Date().toISOString() }))
 	.get("/starter-pack/:id", async (c) => {
 		const id = c.req.param("id");
 		const members = await getStarterPackMembers(id);
