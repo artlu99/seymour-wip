@@ -3,7 +3,6 @@ import {
 	useReactionsQuery,
 	useRepliesQuery,
 } from "../hooks/queries/useHubQuery";
-import { useHubQuery } from "../hooks/queries/useOpenQuery";
 import { useProfiles } from "../hooks/use-profiles";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
 import { warpcastUrl } from "../lib/common";
@@ -20,14 +19,11 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 	const [optimisticLike, setOptimisticLike] = useState(0);
 	const [isLiking, setIsLiking] = useState(false);
 
-	const hubQuery = useHubQuery(signerPrivateKey);
-	const hub = hubQuery?.data;
-
 	const fidForLike = signerFid;
 	const likesQuery = useReactionsQuery(cast.user.fid, cast.hash, "Like");
 	const likes = likesQuery.data?.allReactionsData[cast.hash] ?? [];
 	const haveILikedFrfr =
-		signerPrivateKey && hub && likes.length > 0
+		signerPrivateKey && likes.length > 0
 			? likes.includes(fidForLike ?? 0)
 			: false;
 	const optimisticCount =
@@ -52,7 +48,7 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 	}, [likesQuery.data, likesQuery.isError]);
 
 	const handleLike = async () => {
-		if (fidForLike && signerPrivateKey && hub && !isLiking) {
+		if (fidForLike && signerPrivateKey && !isLiking) {
 			setIsLiking(true);
 			setOptimisticLike(1);
 			try {
@@ -64,7 +60,6 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 						hash: cast.hash,
 					},
 					"Like",
-					hub,
 				);
 				void likesQuery.refetch();
 			} catch (error) {
@@ -78,7 +73,7 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 	};
 
 	const handleUnlike = async () => {
-		if (fidForLike && signerPrivateKey && hub && !isLiking) {
+		if (fidForLike && signerPrivateKey && !isLiking) {
 			setIsLiking(true);
 			setOptimisticLike(-1);
 			try {
@@ -90,7 +85,6 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 						hash: cast.hash,
 					},
 					"Unlike",
-					hub,
 				);
 				void likesQuery.refetch();
 			} catch (error) {

@@ -4,11 +4,13 @@ import {
 	makeReactionAdd,
 	makeReactionRemove,
 	NobleEd25519Signer,
-	ReactionType
+	ReactionType,
 } from "@farcaster/core";
 import { Buffer } from "buffer";
 import { fetcher } from "itty-fetcher";
 import { hexToBytes } from "viem";
+
+const HUB_URL = "https://haatz.quilibrium.com";
 
 export async function likeCast(
 	fid: number,
@@ -18,14 +20,12 @@ export async function likeCast(
 		hash: `0x${string}`;
 	},
 	action: "Like" | "Unlike",
-	hub: { url: string; k: string },
 ) {
 	const client = fetcher({
-		base: `https://${hub.url}`,
+		base: HUB_URL,
 		headers: {
 			Accept: "application/json",
 			"Content-Type": "application/octet-stream",
-			"x-api-key": hub.k,
 		},
 	});
 	const signer = new NobleEd25519Signer(hexToBytes(pk));
@@ -72,6 +72,7 @@ export async function likeCast(
 		const response = await client.post<Buffer, Response>(
 			"/v1/submitMessage",
 			messageBytes,
+			{ encode: false },
 		);
 		console.log(`Cast ${action}d successfully`);
 		return response;

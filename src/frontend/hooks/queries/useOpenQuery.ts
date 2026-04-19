@@ -24,17 +24,3 @@ export const useTimeQuery = () => {
 		refetchInterval: 5000, // Auto-refresh every 5 seconds
 	});
 };
-
-export const useHubQuery = (pk: string | null) => {
-	if (!pk) {
-		return null;
-	}
-	return useQuery({
-		queryKey: ["hub"],
-		queryFn: async () => {
-			const res = await api.hub.$get();
-			return res.json();
-		},
-		enabled: !!pk,
-	});
-};

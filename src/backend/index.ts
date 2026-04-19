@@ -18,14 +18,6 @@ const routes = app
 	.use(secureHeaders())
 	.get("/name", (c) => c.json({ name: c.env.NAME }))
 	.get("/time", (c) => c.json({ time: new Date().toISOString() }))
-	.get("/hub", (c) => {
-		invariant(c.env.NEYNAR_API_KEY, "NEYNAR_API_KEY is not set");
-		const ret: { url: string; k: string } = {
-			url: "hub-api.neynar.com",
-			k: c.env.NEYNAR_API_KEY,
-		};
-		return c.json(ret);
-	})
 	.get("/starter-pack/:id", async (c) => {
 		const id = c.req.param("id");
 		const members = await getStarterPackMembers(id);
