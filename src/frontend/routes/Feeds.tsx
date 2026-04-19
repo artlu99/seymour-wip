@@ -1,20 +1,18 @@
 import { useMemo } from "preact/hooks";
 import { navigate } from "wouter/use-browser-location";
 import { RefreshFeedStatus } from "../components/RefreshFeedStatus";
-import { useFrameSDK } from "../hooks/use-frame-sdk";
 import { useThemes } from "../hooks/use-themes";
 import { useLocalStorageZustand, useZustand } from "../hooks/use-zustand";
 import { individualFeeds, knownFeeds } from "../static";
 import { pluralize } from "../utils";
 
 const Feeds = () => {
-	const { contextName, contextFid, viewProfile } = useFrameSDK();
 	const { name } = useThemes();
 	const { setFeedFids: setFids } = useLocalStorageZustand();
 	const { setIsSettingsOpen } = useZustand();
 
 	const primaryFeeds = useMemo(() => {
-		const contextFidStr = contextFid?.toString() ?? "";
+		const contextFidStr = "";
 		return (
 			(
 				individualFeeds as unknown as Record<
@@ -23,24 +21,12 @@ const Feeds = () => {
 				>
 			)[contextFidStr] ?? []
 		);
-	}, [contextFid]);
+	}, []);
 
 	return (
 		<div className="flex flex-col text-center pb-32" data-theme={name}>
 			<article className="prose dark:prose-invert">
 				<div className="flex justify-between items-center p-4">
-					{contextFid ? (
-						<div className="text-sm">
-							GM,
-							<button
-								type="button"
-								className="btn btn-link"
-								onClick={() => viewProfile(contextFid)}
-							>
-								{contextName}
-							</button>
-						</div>
-					) : null}
 					<button
 						type="button"
 						className="btn btn-ghost btn-circle"

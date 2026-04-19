@@ -4,6 +4,5 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
 
 export default defineConfig({
-	plugins: [preact({}), cloudflare(), tailwindcss()],
-	ssr: { noExternal: ["@farcaster/frame-sdk"] },
+	plugins: [preact({}), cloudflare(), tailwindcss()]
 });

@@ -1,13 +1,11 @@
-import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { csrf } from "hono/csrf";
 import { secureHeaders } from "hono/secure-headers";
 import invariant from "tiny-invariant";
-import { z } from "zod";
-import { getBlocks, getStarterPackMembers } from "./lib/warpcast";
+import { getStarterPackMembers } from "./lib/warpcast";
 
-const app = new Hono<{ Bindings: Cloudflare.Env }>().basePath("/api");
+const app = new Hono<{ Bindings: Env }>().basePath("/api");
 
 const routes = app
 	.post("/webhook", async (c) => {
@@ -15,7 +13,6 @@ const routes = app
 		console.log(body);
 		return c.json({ success: true });
 	})
-
 	.use(cors())
 	.use(csrf())
 	.use(secureHeaders())
@@ -29,20 +26,6 @@ const routes = app
 		};
 		return c.json(ret);
 	})
-	.get(
-		"/blocks/:fid",
-		zValidator(
-			"param",
-			z.object({
-				fid: z.string().transform((s) => Number(s)),
-			}),
-		),
-		async (c) => {
-			const { fid } = c.req.valid("param");
-			const response = await getBlocks(fid);
-			return c.json(response);
-		},
-	)
 	.get("/starter-pack/:id", async (c) => {
 		const id = c.req.param("id");
 		const members = await getStarterPackMembers(id);

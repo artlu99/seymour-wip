@@ -1,22 +1,19 @@
 import {
 	useCallback,
 	useEffect,
-	useMemo,
 	useRef,
 	useState,
 } from "preact/hooks";
 import { useParams } from "wouter";
 import { FeedTimeLine } from "../components/FeedTimeLine";
 import { RefreshFeedStatus } from "../components/RefreshFeedStatus";
-import { useBlocksQuery } from "../hooks/queries/useOpenQuery";
 import {
 	useFidQuery,
 	useKeccersFeed,
 	useRefreshFeed,
 } from "../hooks/queries/useShimQuery";
-import { useFrameSDK } from "../hooks/use-frame-sdk";
 import { useThemes } from "../hooks/use-themes";
-import { useLocalStorageZustand, useZustand } from "../hooks/use-zustand";
+import { useLocalStorageZustand } from "../hooks/use-zustand";
 
 const TOUCH_PULL_THRESHOLD = 60; // Standard pull-to-refresh threshold for touch
 const MOUSE_PULL_THRESHOLD = 10; // Lower threshold for mouse interactions
@@ -24,10 +21,8 @@ const MOUSE_PULL_THRESHOLD = 10; // Lower threshold for mouse interactions
 const Landing = () => {
 	const { username } = useParams();
 	const { data: fid } = useFidQuery(username);
-	const { contextName, contextFid, viewProfile } = useFrameSDK();
 	const { name } = useThemes();
 	const { feedFids, setFeedFids } = useLocalStorageZustand();
-	const { data: blocks } = useBlocksQuery(contextFid);
 	const keccersFeedQuery = useKeccersFeed(feedFids);
 	const refreshMutation = useRefreshFeed();
 
@@ -37,17 +32,9 @@ const Landing = () => {
 	const [isMouseInteraction, setIsMouseInteraction] = useState(false);
 	const startYRef = useRef<number | null>(null);
 
-	const { setHasFirstLoadCompleted } = useZustand();
-
 	useEffect(() => {
 		if (fid) setFeedFids([fid]);
 	}, [fid, setFeedFids]);
-
-	useEffect(() => {
-		if (keccersFeedQuery.isFetchedAfterMount) {
-			setHasFirstLoadCompleted(true);
-		}
-	}, [keccersFeedQuery.isFetchedAfterMount, setHasFirstLoadCompleted]);
 
 	const loadMoreRef = useCallback(
 		(node: HTMLDivElement | null) => {
@@ -165,28 +152,8 @@ const Landing = () => {
 		handleEnd,
 	]);
 
-	const rawCasts =
+	const allCasts =
 		keccersFeedQuery.data?.pages.flatMap((page) => page.casts) ?? [];
-
-	const allCasts = useMemo(() => {
-		return rawCasts.filter((c) => {
-			const isBlocked = (blocks?.blockedFids ?? []).includes(c.user.fid);
-			const repliesToBlockedUser =
-				c.parentCastId?.fid && blocks?.blockedFids.includes(c.parentCastId.fid);
-			const quotesBlockedUser =
-				c.embeds.filter(
-					(e) => e.castId?.fid && blocks?.blockedFids.includes(e.castId.fid),
-				).length > 0;
-			const mentionsBlockedUser =
-				c.mentions.filter((m) => blocks?.blockedFids.includes(m)).length > 0;
-			return (
-				!isBlocked &&
-				!repliesToBlockedUser &&
-				!quotesBlockedUser &&
-				!mentionsBlockedUser
-			);
-		});
-	}, [rawCasts, blocks]);
 
 	const threshold = isMouseInteraction
 		? MOUSE_PULL_THRESHOLD
@@ -196,19 +163,6 @@ const Landing = () => {
 	return (
 		<div className="flex flex-col text-center gap-4 pb-128" data-theme={name}>
 			<article className="prose dark:prose-invert">
-				{contextFid ? (
-					<div className="p-4 text-sm">
-						GM,
-						<button
-							type="button"
-							className="btn btn-link"
-							onClick={() => viewProfile(contextFid)}
-						>
-							{contextName}
-						</button>
-					</div>
-				) : null}
-
 				<div
 					className="relative"
 					style={{

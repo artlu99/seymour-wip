@@ -3,7 +3,7 @@ import { Toaster } from "react-hot-toast";
 import { Route, Switch } from "wouter";
 import { Dock } from "./components/Dock";
 import NavBar from "./components/NavBar";
-import { FrameSDKProvider } from "./providers/FrameSDKContext";
+import { ProfileProvider } from "./providers/ProfileContext";
 import { ThemesProvider } from "./providers/ThemesProvider";
 import Feeds from "./routes/Feeds";
 import Landing from "./routes/Landing";
@@ -15,7 +15,7 @@ function App() {
 		<div className="min-h-screen bg-base-100 flex flex-col" data-theme="dark">
 			<QueryClientProvider client={queryClient}>
 				<ThemesProvider>
-					<FrameSDKProvider>
+					<ProfileProvider>
 						<NavBar />
 						<main className="flex-grow pb-16">
 							<Switch>
@@ -26,7 +26,7 @@ function App() {
 							</Switch>
 						</main>
 						<Dock />
-					</FrameSDKProvider>
+					</ProfileProvider>
 				</ThemesProvider>
 			</QueryClientProvider>
 			<div>

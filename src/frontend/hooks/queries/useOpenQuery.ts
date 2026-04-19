@@ -38,16 +38,3 @@ export const useHubQuery = (pk: string | null) => {
 		enabled: !!pk,
 	});
 };
-
-export const useBlocksQuery = (fid: number | null) => {
-	return useQuery({
-		queryKey: ["blocks", fid],
-		queryFn: async () => {
-			const res = await api.blocks[":fid"].$get({
-				param: { fid: String(fid) },
-			});
-			return res.json();
-		},
-		enabled: !!fid,
-	});
-};

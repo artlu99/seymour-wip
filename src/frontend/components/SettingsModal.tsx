@@ -5,7 +5,6 @@ import {
 	TransitionChild,
 } from "@headlessui/react";
 import { Fragment } from "preact/compat";
-import { useFrameSDK } from "../hooks/use-frame-sdk";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
 import { SignerPrivateKey } from "./SignerPrivateKey";
 
@@ -20,19 +19,14 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 		setShowCardView,
 		showPfpAndDisplayName,
 		setShowPfpAndDisplayName,
-		showTipButtons,
-		setShowTipButtons,
-		showPurpleCheck,
-		setShowPurpleCheck,
 		showNavigationCaptions,
 		setShowNavigationCaptions,
 	} = useLocalStorageZustand();
 
-	const { contextFid, selectionChanged } = useFrameSDK();
-
 	return (
 		<Transition appear show={isOpen} as={Fragment}>
 			<Dialog as="div" className="modal modal-open" onClose={onClose}>
+				{/** biome-ignore lint/a11y/noStaticElementInteractions: standard model concept */}
 				<div
 					className="modal-backdrop backdrop-blur-sm"
 					onClick={onClose}
@@ -60,10 +54,9 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 										type="checkbox"
 										className="toggle toggle-primary"
 										checked={showCardView}
-										onChange={async (e) => {
-											setShowCardView(e.currentTarget.checked);
-											await selectionChanged();
-										}}
+										onChange={async (e) =>
+											setShowCardView(e.currentTarget.checked)
+										}
 									/>
 									<span className="label-text">Show Card View</span>
 								</label>
@@ -78,55 +71,14 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 										className="toggle toggle-primary"
 										disabled={showCardView}
 										checked={!showPfpAndDisplayName}
-										onChange={async (e) => {
-											setShowPfpAndDisplayName(!e.currentTarget.checked);
-											await selectionChanged();
-										}}
+										onChange={async (e) =>
+											setShowPfpAndDisplayName(!e.currentTarget.checked)
+										}
 									/>
 									<span className="label-text">Display Feed in Zen Mode</span>
 								</label>
 							</div>
 						</div>
-
-						{contextFid ? (
-							<div className="mt-4">
-								<div className="form-control">
-									<label className="label cursor-pointer justify-start gap-4">
-										<input
-											type="checkbox"
-											className="toggle toggle-primary"
-											disabled={showCardView}
-											checked={showTipButtons}
-											onChange={async (e) => {
-												setShowTipButtons(e.currentTarget.checked);
-												await selectionChanged();
-											}}
-										/>
-										<span className="label-text">Show Tip Buttons</span>
-									</label>
-								</div>
-							</div>
-						) : null}
-
-						{contextFid ? (
-							<div className="mt-4">
-								<div className="form-control">
-									<label className="label cursor-pointer justify-start gap-4">
-										<input
-											type="checkbox"
-											className="toggle toggle-primary"
-											disabled={showCardView}
-											checked={showPurpleCheck}
-											onChange={async (e) => {
-												setShowPurpleCheck(e.currentTarget.checked);
-												await selectionChanged();
-											}}
-										/>
-										<span className="label-text">Show Purple Check</span>
-									</label>
-								</div>
-							</div>
-						) : null}
 
 						<div className="mt-4">
 							<div className="form-control">
@@ -135,10 +87,9 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 										type="checkbox"
 										className="toggle toggle-primary"
 										checked={showNavigationCaptions}
-										onChange={async (e) => {
-											setShowNavigationCaptions(e.currentTarget.checked);
-											await selectionChanged();
-										}}
+										onChange={async (e) =>
+											setShowNavigationCaptions(e.currentTarget.checked)
+										}
 									/>
 									<span className="label-text">Show Navigation Labels</span>
 								</label>

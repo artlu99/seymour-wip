@@ -18,19 +18,6 @@ const VerificationsResponseSchema = z.object({
 	cursor: z.string().optional(),
 });
 
-const BlockSchema = z.object({
-	blockerFid: z.number(),
-	blockedFid: z.number(),
-	createdAt: z.number(),
-});
-
-const BlockResponseSchema = z.object({
-	result: z.object({
-		blockedUsers: z.array(BlockSchema),
-	}),
-	cursor: z.string().optional(),
-});
-
 const StarterPackMemberSchema = z.object({
 	fid: z.number(),
 	memberAt: z.number(),
@@ -70,24 +57,6 @@ export const getVerifications = async (
 			message: `Failed to fetch verifications for fid ${fid}: ${error}`,
 		};
 	}
-};
-
-interface GetBlocksResponse {
-	ok: boolean;
-	blockedFids: number[];
-	message?: string;
-}
-
-export const getBlocks = async (fid: number): Promise<GetBlocksResponse> => {
-	const response = await warpcastApi.get(`/fc/blocked-users?blockerFid=${fid}`);
-	const data = BlockResponseSchema.parse(response);
-	return {
-		ok: true,
-		blockedFids: data.result.blockedUsers
-			.filter((b) => b.blockerFid === fid)
-			.sort((a, b) => a.createdAt - b.createdAt) // ascending (oldest to newest)
-			.map((b) => b.blockedFid),
-	};
 };
 
 interface GetStarterPackMembersResponse {

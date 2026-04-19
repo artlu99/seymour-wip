@@ -1,9 +1,9 @@
 import { useUsernameQuery } from "../hooks/queries/useShimQuery";
-import { useFrameSDK } from "../hooks/use-frame-sdk";
+import { useProfiles } from "../hooks/use-profiles";
 
 export const MentionSpan = ({ fid }: { fid: number }) => {
 	const { data: username } = useUsernameQuery(fid);
-	const { viewProfile } = useFrameSDK();
+	const { viewProfile } = useProfiles();
 
 	return (
 		<button

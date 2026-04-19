@@ -1,5 +1,5 @@
 import type { VNode } from "preact";
-import { useFrameSDK } from "../hooks/use-frame-sdk";
+import { useProfiles } from "../hooks/use-profiles";
 import { warpcastUrl } from "../lib/common";
 import type { HydratedCast } from "../types";
 import { MentionSpan } from "./MentionSpan";
@@ -10,7 +10,7 @@ interface CastContentProps {
 }
 
 export const CastContent = ({ cast, onShowCardClick }: CastContentProps) => {
-	const { isWarpcast, openUrl, viewCast } = useFrameSDK();
+	const { openUrl } = useProfiles();
 
 	const textInBytes = new TextEncoder().encode(cast.rawText ?? "");
 	const pieces: (string | VNode)[] = [];
@@ -50,12 +50,10 @@ export const CastContent = ({ cast, onShowCardClick }: CastContentProps) => {
 		<div className="-mt-6">
 			<p
 				className="text-sm text-base-content whitespace-pre-wrap leading-tight"
-				onClick={() =>
-					isWarpcast ? viewCast(cast.hash) : openUrl(warpcastUrl(cast))
-				}
+				onClick={() => openUrl(warpcastUrl(cast))}
 				onKeyDown={(e) => {
 					if (e.key === "Enter") {
-						isWarpcast ? viewCast(cast.hash) : openUrl(warpcastUrl(cast));
+						openUrl(warpcastUrl(cast));
 					}
 				}}
 			>

@@ -10,7 +10,6 @@ export const useZustand = create(
 				wallet: null as `0x${string}` | null,
 				isSettingsOpen: false,
 				isRelative: true,
-				hasFirstLoadCompleted: true,
 				isRefreshing: false,
 				isScrollingUp: true,
 				lastScrollY: 0,
@@ -19,8 +18,6 @@ export const useZustand = create(
 				setWallet: (wallet: `0x${string}` | null) => set({ wallet }),
 				setIsSettingsOpen: (isSettingsOpen: boolean) => set({ isSettingsOpen }),
 				setIsRelative: (isRelative: boolean) => set({ isRelative }),
-				setHasFirstLoadCompleted: (hasFirstLoadCompleted: boolean) =>
-					set({ hasFirstLoadCompleted }),
 				setIsRefreshing: (isRefreshing: boolean) => set({ isRefreshing }),
 				setScrollState: (isScrollingUp: boolean, lastScrollY: number) =>
 					set({ isScrollingUp, lastScrollY }),
@@ -43,7 +40,6 @@ export const useLocalStorageZustand = create(
 				showCardView: false as boolean,
 				showPfpAndDisplayName: true as boolean,
 				showNavigationCaptions: true as boolean,
-				showTipButtons: true as boolean,
 				showPurpleCheck: true as boolean,
 				signerFid: null as number | null,
 				signerPrivateKey: null as string | null,
@@ -57,7 +53,6 @@ export const useLocalStorageZustand = create(
 					set({ showPfpAndDisplayName }),
 				setShowNavigationCaptions: (showNavigationCaptions: boolean) =>
 					set({ showNavigationCaptions }),
-				setShowTipButtons: (showTipButtons: boolean) => set({ showTipButtons }),
 				setShowPurpleCheck: (showPurpleCheck: boolean) =>
 					set({ showPurpleCheck }),
 				setSignerFid: (signerFid: number | null) => set({ signerFid }),

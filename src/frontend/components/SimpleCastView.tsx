@@ -1,6 +1,6 @@
 import { useState } from "preact/hooks";
 import { useCastIdQuery } from "../hooks/queries/useShimQuery";
-import { useFrameSDK } from "../hooks/use-frame-sdk";
+import { useProfiles } from "../hooks/use-profiles";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
 import type { HydratedCast } from "../types";
 import { CastContent } from "./CastContent";
@@ -17,7 +17,7 @@ interface SimpleCastViewProps {
 export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 	const [showCard, setShowCard] = useState(false);
 	const { showCardView, showPfpAndDisplayName } = useLocalStorageZustand();
-	const { viewProfile } = useFrameSDK();
+	const { viewProfile } = useProfiles();
 
 	const { data: parentCast } = useCastIdQuery(
 		cast?.parentCastId?.fid,

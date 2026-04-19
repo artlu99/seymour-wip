@@ -4,28 +4,26 @@ import {
 	useRepliesQuery,
 } from "../hooks/queries/useHubQuery";
 import { useHubQuery } from "../hooks/queries/useOpenQuery";
-import { useFrameSDK } from "../hooks/use-frame-sdk";
+import { useProfiles } from "../hooks/use-profiles";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
 import { warpcastUrl } from "../lib/common";
 import { likeCast } from "../lib/hubs";
 import type { HydratedCast } from "../types";
-import { TipButton } from "./TipButton";
 
 interface CastFooterProps {
 	cast: HydratedCast;
 }
 export const CastFooter = ({ cast }: CastFooterProps) => {
-	const { contextFid, openUrl, composeCast } = useFrameSDK();
-	const { showPfpAndDisplayName, showTipButtons, signerFid, signerPrivateKey } =
+	const { openUrl } = useProfiles();
+	const { showPfpAndDisplayName, signerFid, signerPrivateKey } =
 		useLocalStorageZustand();
-	const { impactOccurred } = useFrameSDK();
 	const [optimisticLike, setOptimisticLike] = useState(0);
 	const [isLiking, setIsLiking] = useState(false);
 
 	const hubQuery = useHubQuery(signerPrivateKey);
 	const hub = hubQuery?.data;
 
-	const fidForLike = signerFid ?? contextFid;
+	const fidForLike = signerFid;
 	const likesQuery = useReactionsQuery(cast.user.fid, cast.hash, "Like");
 	const likes = likesQuery.data?.allReactionsData[cast.hash] ?? [];
 	const haveILikedFrfr =
@@ -57,7 +55,6 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 		if (fidForLike && signerPrivateKey && hub && !isLiking) {
 			setIsLiking(true);
 			setOptimisticLike(1);
-			await impactOccurred("light");
 			try {
 				await likeCast(
 					fidForLike,
@@ -84,7 +81,6 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 		if (fidForLike && signerPrivateKey && hub && !isLiking) {
 			setIsLiking(true);
 			setOptimisticLike(-1);
-			await impactOccurred("heavy");
 			try {
 				await likeCast(
 					fidForLike,
@@ -121,17 +117,12 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 	return (
 		<div className="card-footer bg-base-100 text-center mr-8">
 			<div className="flex justify-between items-center">
-				<button
-					type="button"
-					className={`btn btn-sm btn-ghost text-sm ${textColor}`}
-					onClick={() => composeCast(cast.user.fid, cast.hash)}
-				>
-					<i className="ri-chat-4-line">
-						<span className="font-mono ml-1">
-							{numReplies > 99 ? "99+" : numReplies > 0 ? numReplies : ""}
-						</span>
-					</i>
-				</button>
+				<i className="ri-chat-4-line">
+					<span className="font-mono ml-1">
+						{numReplies > 99 ? "99+" : numReplies > 0 ? numReplies : ""}
+					</span>
+				</i>
+
 				<button
 					type="button"
 					className={`btn btn-sm btn-ghost text-sm ${textColor}`}
@@ -159,20 +150,7 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 						</span>
 					</i>
 				</button>
-				{contextFid &&
-				showTipButtons &&
-				cast.user.username &&
-				cast.user.primaryAddress ? (
-					<TipButton
-						key={`tip-button-${cast.user.fid}-${cast.hash}`}
-						username={cast.user.username}
-						fid={cast.user.fid}
-						recipient={cast.user.primaryAddress}
-						tokenSymbol={"USDC"}
-						amount={1.0}
-						castHash={cast.hash}
-					/>
-				) : null}
+
 				<button
 					type="button"
 					className={`btn btn-sm btn-ghost text-sm ${textColor}`}

@@ -1,10 +1,13 @@
-import { useFrameSDK } from "../hooks/use-frame-sdk";
+import { useProfiles } from "../hooks/use-profiles";
 
 export const PkModal = ({
 	showModal,
 	toggleModal,
-}: { showModal: boolean; toggleModal: () => void }) => {
-	const { openUrl } = useFrameSDK();
+}: {
+	showModal: boolean;
+	toggleModal: () => void;
+}) => {
+	const { openUrl } = useProfiles();
 	return (
 		<dialog className="modal" open={showModal}>
 			<div className="modal-box">
