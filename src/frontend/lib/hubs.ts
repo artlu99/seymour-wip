@@ -1,10 +1,10 @@
 import {
 	FarcasterNetwork,
 	Message,
-	NobleEd25519Signer,
-	ReactionType,
 	makeReactionAdd,
 	makeReactionRemove,
+	NobleEd25519Signer,
+	ReactionType
 } from "@farcaster/core";
 import { Buffer } from "buffer";
 import { fetcher } from "itty-fetcher";
@@ -69,7 +69,7 @@ export async function likeCast(
 	console.log("encoded message, sending via Neynar HTTPS Hubs API...");
 
 	try {
-		const response = await client.post<Response>(
+		const response = await client.post<Buffer, Response>(
 			"/v1/submitMessage",
 			messageBytes,
 		);

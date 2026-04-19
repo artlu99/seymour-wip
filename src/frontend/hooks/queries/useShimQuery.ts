@@ -18,11 +18,18 @@ export const useKeccersFeed = (fids: number[]) => {
 	return useInfiniteQuery({
 		queryKey: ["keccers-feed", fids],
 		queryFn: async ({ pageParam = "" }) => {
-			const res = await api.post<{
-				success: boolean;
-				casts: HydratedCast[];
-				cursor: string;
-			}>("/reverse-chron", {
+			const res = await api.post<
+				{
+					fids: number[];
+					limit: number;
+					cursor: string;
+				},
+				{
+					success: boolean;
+					casts: HydratedCast[];
+					cursor: string;
+				}
+			>("/reverse-chron", {
 				fids,
 				limit: 25,
 				cursor: pageParam,
@@ -91,21 +98,24 @@ export const useRefreshFeed = () => {
 
 	return useMutation({
 		mutationKey: ["refresh-feed"],
-		mutationFn: async (body: {
-			username?: string;
-			fids: number[];
-		}) => {
+		mutationFn: async (body: { username?: string; fids: number[] }) => {
 			setIsRefreshing(true);
 			try {
-				const response = await api.post<{
-					success: boolean;
-					message: string;
-					stats: {
-						totalFids: number;
-						totalNewCasts: number;
-						totalCasts: number;
-					};
-				}>("/refresh", body);
+				const response = await api.post<
+					{
+						username?: string;
+						fids: number[];
+					},
+					{
+						success: boolean;
+						message: string;
+						stats: {
+							totalFids: number;
+							totalNewCasts: number;
+							totalCasts: number;
+						};
+					}
+				>("/refresh", body);
 
 				if (!response.success) {
 					throw new Error(response.message);
