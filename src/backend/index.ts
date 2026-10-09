@@ -2,8 +2,6 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { csrf } from "hono/csrf";
 import { secureHeaders } from "hono/secure-headers";
-import invariant from "tiny-invariant";
-import { getStarterPackMembers } from "./lib/warpcast";
 
 const app = new Hono<{ Bindings: Env }>().basePath("/api");
 
@@ -16,12 +14,7 @@ const routes = app
 	.use(cors())
 	.use(csrf())
 	.use(secureHeaders())
-	.get("/name", (c) => c.json({ name: c.env.NAME }))
-	.get("/starter-pack/:id", async (c) => {
-		const id = c.req.param("id");
-		const members = await getStarterPackMembers(id);
-		return c.json(members);
-	});
+	.get("/name", (c) => c.json({ name: c.env.NAME }));
 
 export type AppType = typeof routes;
 

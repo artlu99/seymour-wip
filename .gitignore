@@ -6,3 +6,6 @@ bun.lock
 .wrangler
 worker-configuration.d.ts
 .dev.vars*
+
+AGENTS.md
+TODO.md
