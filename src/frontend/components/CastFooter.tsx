@@ -111,14 +111,22 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 	return (
 		<div className="card-footer bg-base-100 text-center mr-8">
 			<div className="flex justify-between items-center">
-				<i className="ri-chat-4-line">
-					<span className="font-mono ml-1">
-						{numReplies > 99 ? "99+" : numReplies > 0 ? numReplies : ""}
-					</span>
-				</i>
+				<button
+					type="button"
+					aria-label="Reply to cast"
+					className={`btn btn-sm btn-ghost text-sm ${textColor}`}
+					onClick={() => openUrl(warpcastUrl(cast))}
+				>
+					<i className="ri-chat-4-line">
+						<span className="font-mono ml-1">
+							{numReplies > 99 ? "99+" : numReplies > 0 ? numReplies : ""}
+						</span>
+					</i>
+				</button>
 
 				<button
 					type="button"
+					aria-label="Recast"
 					className={`btn btn-sm btn-ghost text-sm ${textColor}`}
 					onClick={() => openUrl(warpcastUrl(cast))}
 				>
@@ -130,6 +138,7 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 				</button>
 				<button
 					type="button"
+					aria-label={likeIndicator ? "Unlike" : "Like"}
 					className={`btn btn-sm btn-ghost text-sm ${textColor}`}
 					onClick={haveILikedFrfr ? handleUnlike : handleLike}
 					disabled={isLiking}
@@ -147,6 +156,7 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 
 				<button
 					type="button"
+					aria-label="Share cast"
 					className={`btn btn-sm btn-ghost text-sm ${textColor}`}
 					onClick={() => openUrl(warpcastUrl(cast))}
 				>

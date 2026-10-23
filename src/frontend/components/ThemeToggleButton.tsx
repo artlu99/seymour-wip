@@ -1,8 +1,8 @@
 import { useThemes } from "../hooks/use-themes";
 
 enum THEMES {
-	DARK = "dark",
-	LIGHT = "corporate",
+	SEYMOUR = "seymour",
+	LIGHT = "light",
 }
 
 interface ThemeSelectorToggleProps {
@@ -15,7 +15,7 @@ export const ThemeSelectorToggle = ({
 	const { name, setTheme } = useThemes();
 
 	const toggleTheme = () => {
-		setTheme(name === THEMES.DARK ? THEMES.LIGHT : THEMES.DARK);
+		setTheme(name === THEMES.SEYMOUR ? THEMES.LIGHT : THEMES.SEYMOUR);
 	};
 
 	return (

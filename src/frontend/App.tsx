@@ -12,7 +12,10 @@ const queryClient = new QueryClient();
 
 function App() {
 	return (
-		<div className="min-h-screen bg-base-100 flex flex-col" data-theme="dark">
+		<div
+			className="min-h-screen bg-base-100 flex flex-col"
+			data-theme="seymour"
+		>
 			<QueryClientProvider client={queryClient}>
 				<ThemesProvider>
 					<ProfileProvider>

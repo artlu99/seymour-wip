@@ -34,43 +34,43 @@ export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 		return <CastOrReply cast={cast} />;
 	}
 
-	const renderCast = (cast: HydratedCast, verb: string) => (
-		<li className="relative pl-6">
-			<article className="flex flex-col flex-1 text-base-content">
-				<div className="flex items-center">
-					{showPfpAndDisplayName ? (
-						<img
-							src={cast.user.pfpUrl ?? fallbackPfp}
-							alt={cast.user.username ?? "user name"}
-							title={
-								cast.user.displayName ?? cast.user.username ?? "display name"
+	const renderCastInner = (cast: HydratedCast, verb: string) => (
+		<article className="flex flex-col flex-1 text-base-content">
+			<div className="flex items-center">
+				{showPfpAndDisplayName ? (
+					<img
+						src={cast.user.pfpUrl ?? fallbackPfp}
+						alt={cast.user.username ?? "user name"}
+						title={
+							cast.user.displayName ?? cast.user.username ?? "display name"
+						}
+						width="48"
+						height="48"
+						className="w-6 h-6 rounded-full ring-2 ring-base-100 -translate-x-9 z-10 opacity-100"
+						onClick={() => viewProfile(cast.user.fid)}
+						onKeyDown={(e) => {
+							if (e.key === "Enter") {
+								viewProfile(cast.user.fid);
 							}
-							width="48"
-							height="48"
-							className="w-6 h-6 rounded-full ring-2 ring-base-100 -translate-x-9 z-10 opacity-100"
-							onClick={() => viewProfile(cast.user.fid)}
-							onKeyDown={(e) => {
-								if (e.key === "Enter") {
-									viewProfile(cast.user.fid);
-								}
-							}}
-						/>
-					) : null}
-					<CastHeader cast={cast} verb={verb} />
-				</div>
-				<CastContent cast={cast} onShowCardClick={() => setShowCard(true)} />
-				<CastFooter cast={cast} />
-			</article>
-		</li>
+						}}
+					/>
+				) : null}
+				<CastHeader cast={cast} verb={verb} />
+			</div>
+			<CastContent cast={cast} onShowCardClick={() => setShowCard(true)} />
+			<CastFooter cast={cast} />
+		</article>
 	);
 
 	return (
 		<>
-			{renderCast(firstCast, verb)}
+			<li key={`cast-parent-${cast.hash}`} className="relative pl-6">
+				{renderCastInner(firstCast, verb)}
+			</li>
 			{readyToRenderReply && (
-				<li className="relative pl-6">
+				<li key={`cast-reply-${cast.hash}`} className="relative pl-6">
 					<ul className="relative flex flex-col pl-6 before:absolute before:top-6 before:left-6 before:bottom-6 before:-translate-x-1/2 before:border before:border-dashed before:border-base-content/10 after:absolute after:top-12 after:left-6 after:bottom-12 after:-translate-x-1/2 after:border after:border-base-content/10 list-none">
-						{renderCast(cast, "replied")}
+						{renderCastInner(cast, "replied")}
 					</ul>
 				</li>
 			)}
