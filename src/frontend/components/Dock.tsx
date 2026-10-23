@@ -30,11 +30,14 @@ export const Dock = () => {
 	return (
 		<>
 			<div
-				className="dock dock-xl z-50 transition-all duration-300"
+				className="dock dock-xl z-50 border-t border-base-content/10"
 				style={{
-					backgroundColor: isScrollingUp
-						? "rgba(0, 0, 0, 0.85)"
-						: "rgba(0, 0, 0, 0.15)",
+					backgroundColor: `color-mix(in oklab, var(--color-base-100) ${
+						isScrollingUp ? 85 : 20
+					}%, transparent)`,
+					backdropFilter: "blur(12px)",
+					WebkitBackdropFilter: "blur(12px)",
+					transition: "background-color 300ms ease-out",
 				}}
 			>
 				<button type="button" className={isActive("/") ? "dock-active" : ""}>

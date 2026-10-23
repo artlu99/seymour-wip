@@ -4,6 +4,7 @@ import {
 	Transition,
 	TransitionChild,
 } from "@headlessui/react";
+import type { ReactNode } from "preact/compat";
 import { Fragment } from "preact/compat";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
 import { SignerPrivateKey } from "./SignerPrivateKey";
@@ -12,6 +13,40 @@ interface SettingsModalProps {
 	isOpen: boolean;
 	onClose: () => void;
 }
+
+interface ToggleRowProps {
+	label: string;
+	checked: boolean;
+	disabled?: boolean;
+	onChange: (checked: boolean) => void;
+}
+
+const ToggleRow = ({ label, checked, disabled, onChange }: ToggleRowProps) => (
+	<label className="flex items-center justify-between py-2.5 cursor-pointer gap-4">
+		<span className="text-sm">{label}</span>
+		<input
+			type="checkbox"
+			className="toggle toggle-primary"
+			disabled={disabled}
+			checked={checked}
+			onChange={(e) => onChange(e.currentTarget.checked)}
+		/>
+	</label>
+);
+
+interface GroupProps {
+	title: string;
+	children: ReactNode;
+}
+
+const Group = ({ title, children }: GroupProps) => (
+	<section className="py-3 border-t border-base-content/10 first:border-t-0">
+		<h4 className="text-xs font-semibold uppercase tracking-wider text-base-content/45 mb-1">
+			{title}
+		</h4>
+		{children}
+	</section>
+);
 
 export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 	const {
@@ -42,82 +77,58 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 					leaveFrom="opacity-100"
 					leaveTo="opacity-0"
 				>
-					<div className="modal-box">
+					<div className="modal-box bg-base-200">
 						<DialogTitle as="h3" className="text-lg font-medium leading-6">
 							Settings
 						</DialogTitle>
 
-						<div className="mt-4">
-							<div className="form-control">
-								<label className="label cursor-pointer justify-start gap-4">
-									<input
-										type="checkbox"
-										className="toggle toggle-primary"
-										checked={showCardView}
-										onChange={async (e) =>
-											setShowCardView(e.currentTarget.checked)
-										}
-									/>
-									<span className="label-text">Show Card View</span>
-								</label>
-							</div>
-						</div>
+						<div className="mt-2">
+							<Group title="Feed">
+								<ToggleRow
+									label="Card view (inline embeds)"
+									checked={showCardView}
+									onChange={setShowCardView}
+								/>
+								<ToggleRow
+									label="Zen mode (no avatars or names)"
+									disabled={showCardView}
+									checked={!showPfpAndDisplayName}
+									onChange={(v) => setShowPfpAndDisplayName(!v)}
+								/>
+								<div className="flex justify-center py-1">
+									{showPfpAndDisplayName ? (
+										<img
+											src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYWQ2YWRuN2g1aXVmZmhmbmV3Zml2OHpxZDRhM3N0NWtheDIwN2UxdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/fIJKug8WuncQV50F1j/giphy.gif"
+											alt="Audrey 2"
+											className="w-32 h-32 rounded-box"
+										/>
+									) : (
+										<div className="w-32 h-32 rounded-box bg-base-300" />
+									)}
+								</div>
+							</Group>
 
-						<div className="mt-4">
-							<div className="form-control">
-								<label className="label cursor-pointer justify-start gap-4">
-									<input
-										type="checkbox"
-										className="toggle toggle-primary"
-										disabled={showCardView}
-										checked={!showPfpAndDisplayName}
-										onChange={async (e) =>
-											setShowPfpAndDisplayName(!e.currentTarget.checked)
-										}
-									/>
-									<span className="label-text">Display Feed in Zen Mode</span>
-								</label>
-							</div>
-						</div>
+							<Group title="Navigation">
+								<ToggleRow
+									label="Show navigation labels"
+									checked={showNavigationCaptions}
+									onChange={setShowNavigationCaptions}
+								/>
+							</Group>
 
-						<div className="mt-4">
-							<div className="form-control">
-								<label className="label cursor-pointer justify-start gap-4">
-									<input
-										type="checkbox"
-										className="toggle toggle-primary"
-										checked={showNavigationCaptions}
-										onChange={async (e) =>
-											setShowNavigationCaptions(e.currentTarget.checked)
-										}
-									/>
-									<span className="label-text">Show Navigation Labels</span>
-								</label>
-							</div>
+							<Group title="Signer">
+								<SignerPrivateKey />
+							</Group>
 						</div>
 
 						<div className="modal-action">
-							<button type="button" className="btn btn-ghost" onClick={onClose}>
-								Close
+							<button
+								type="button"
+								className="btn btn-primary btn-sm"
+								onClick={onClose}
+							>
+								Done
 							</button>
-						</div>
-
-						<div className="mt-4">
-							{showPfpAndDisplayName ? (
-								<img
-									src={
-										"https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYWQ2YWRuN2g1aXVmZmhmbmV3Zml2OHpxZDRhM3N0NWtheDIwN2UxdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/fIJKug8WuncQV50F1j/giphy.gif"
-									}
-									alt="Audrey 2"
-									className="mx-auto w-64 h-64"
-								/>
-							) : (
-								<div className="mx-auto w-64 h-64 bg-base-100 rounded-full" />
-							)}
-						</div>
-
-						<div className="mt-4 w-full">
-							<SignerPrivateKey />
 						</div>
 					</div>
 				</TransitionChild>

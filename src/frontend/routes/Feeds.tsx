@@ -8,7 +8,7 @@ import { pluralize } from "../utils";
 
 const Feeds = () => {
 	const { name } = useThemes();
-	const { setFeedFids: setFids } = useLocalStorageZustand();
+	const { feedFids, setFeedFids: setFids } = useLocalStorageZustand();
 	const { setIsSettingsOpen } = useZustand();
 
 	const primaryFeeds = useMemo(() => {
@@ -23,10 +23,15 @@ const Feeds = () => {
 		);
 	}, []);
 
+	const isCurrent = (fids: number[]) =>
+		fids.length === feedFids.length &&
+		fids.every((fid) => feedFids.includes(fid));
+
 	return (
 		<div className="flex flex-col text-center pb-32" data-theme={name}>
 			<article className="prose dark:prose-invert">
 				<div className="flex justify-between items-center p-4">
+					<h2 className="m-0 text-lg font-semibold">Pick a feed</h2>
 					<button
 						type="button"
 						className="btn btn-ghost btn-circle"
@@ -38,48 +43,46 @@ const Feeds = () => {
 
 				<RefreshFeedStatus />
 
-				<ul className="list bg-base-100 rounded-box">
-					<li className="p-4 pb-2 text-xs opacity-60 tracking-wide">
-						Pick a Feed
-					</li>
-
-					{[...primaryFeeds, ...knownFeeds].map((feed, idx) => (
-						<li className="list-row" key={`${feed.name}-${idx}`}>
-							<div className="text-4xl font-thin opacity-30 tabular-nums">
-								{(idx + 1).toString().padStart(2, "0")}
-							</div>
-
-							<span className="btn btn-square btn-ghost">
-								<img
-									className="size-10 rounded-box"
-									src={feed.image}
-									alt={feed.name}
-								/>
-							</span>
-
-							<div className="list-col-grow text-left">
-								<div className="uppercase">{feed.name}</div>
-								<div className="text-xs font-semibold opacity-60">
-									{feed.description}
-								</div>
-								<div className="text-xs italic text-info">
-									{pluralize(feed.fids.length, "member")}
-								</div>
-							</div>
-
+				<div className="grid gap-3 px-4 sm:grid-cols-2">
+					{[...primaryFeeds, ...knownFeeds].map((feed, idx) => {
+						const current = isCurrent(feed.fids);
+						return (
 							<button
 								type="button"
-								className="btn btn-square btn-ghost"
+								key={`${feed.name}-${idx}`}
 								onClick={() => {
 									setFids(feed.fids);
 									navigate("/");
 								}}
+								className={`card card-border bg-base-200 text-left items-start overflow-hidden hover:bg-base-300/60 transition-colors ${
+									current ? "ring-1 ring-primary/50 border-primary/40" : ""
+								}`}
 							>
-								<i class="ri-play-large-line text-2xl" />
+								<div className="relative h-24 w-full overflow-hidden">
+									<img
+										className="w-full h-full object-cover"
+										src={feed.image}
+										alt={feed.name}
+									/>
+									{current && (
+										<span className="badge badge-primary badge-sm absolute top-2 right-2">
+											▶ playing
+										</span>
+									)}
+								</div>
+								<div className="card-body p-4 gap-1.5">
+									<div className="font-semibold">{feed.name}</div>
+									<p className="text-xs text-base-content/60 line-clamp-2 m-0">
+										{feed.description}
+									</p>
+									<span className="text-xs italic text-info">
+										{pluralize(feed.fids.length, "member")}
+									</span>
+								</div>
 							</button>
-						</li>
-					))}
-				</ul>
+						);
+					})}
+				</div>
 			</article>
 		</div>
 	);
