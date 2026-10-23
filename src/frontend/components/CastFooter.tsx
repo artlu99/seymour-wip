@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useEffect, useState } from "preact/hooks";
 import {
 	useReactionsQuery,
@@ -109,8 +110,8 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 		: "text-base-content/30";
 
 	return (
-		<div className="card-footer bg-base-100 text-center mr-8">
-			<div className="flex justify-between items-center">
+		<div className="card-footer bg-base-100 mt-1">
+			<div className="flex justify-start gap-5 items-center">
 				<button
 					type="button"
 					aria-label="Reply to cast"
@@ -143,15 +144,17 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 					onClick={haveILikedFrfr ? handleUnlike : handleLike}
 					disabled={isLiking}
 				>
-					<i
+					<motion.i
 						className={
-							likeIndicator ? "ri-heart-fill text-red-500" : "ri-heart-line"
+							likeIndicator ? "ri-heart-fill text-error" : "ri-heart-line"
 						}
+						animate={likeIndicator ? { scale: [1, 1.4, 1] } : { scale: 1 }}
+						transition={{ type: "spring", stiffness: 400, damping: 12 }}
 					>
 						<span className="font-mono ml-1">
 							{numLikes > 99 ? "99+" : numLikes > 0 ? numLikes : ""}
 						</span>
-					</i>
+					</motion.i>
 				</button>
 
 				<button

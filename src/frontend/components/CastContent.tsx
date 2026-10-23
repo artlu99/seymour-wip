@@ -47,9 +47,9 @@ export const CastContent = ({ cast, onShowCardClick }: CastContentProps) => {
 	}
 
 	return (
-		<div className="-mt-6">
+		<div className="mt-1">
 			<p
-				className="text-sm text-base-content whitespace-pre-wrap leading-tight"
+				className="text-sm text-base-content/90 whitespace-pre-wrap leading-snug"
 				onClick={() => openUrl(warpcastUrl(cast))}
 				onKeyDown={(e) => {
 					if (e.key === "Enter") {
@@ -62,10 +62,11 @@ export const CastContent = ({ cast, onShowCardClick }: CastContentProps) => {
 			{cast.embeds.length > 0 && onShowCardClick && (
 				<button
 					type="button"
-					className="btn btn-sm btn-outline text-base-content/50"
+					className="btn btn-xs btn-ghost text-base-content/50 border-base-content/15 mt-1"
 					onClick={onShowCardClick}
 				>
-					+ show
+					<i className="ri-attachment-line" />
+					{cast.embeds.length} embed{cast.embeds.length > 1 ? "s" : ""} · show
 				</button>
 			)}
 		</div>

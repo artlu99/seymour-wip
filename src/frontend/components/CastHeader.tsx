@@ -7,46 +7,59 @@ const fallbackPfp = "https://i.pravatar.cc/48?img=1";
 
 interface CastHeaderProps {
 	cast: HydratedCast;
-	verb: string;
 }
 
-export const CastHeader = ({ cast, verb }: CastHeaderProps) => {
+export const CastHeader = ({ cast }: CastHeaderProps) => {
 	const { showPfpAndDisplayName, showPurpleCheck } = useLocalStorageZustand();
 
 	const displayName =
 		cast.user.displayName ?? cast.user.username ?? "display name";
+	const handle = cast.user.username ?? cast.user.displayName ?? "fid";
 
 	return (
-		<h4 className="flex flex-col items-start text-sm font-normal text-base-content/80 md:flex-row lg:items-center">
-			<span
-				className={`flex-1 ${showPfpAndDisplayName ? "" : "text-base-content/50"}`}
-			>
+		<h4 className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-sm leading-6 min-w-0">
+			{showPfpAndDisplayName && (
 				<Link
 					to={`/${cast.user.username}`}
-					className={`no-underline leading-6 ${showPfpAndDisplayName ? "font-medium text-base-content/90" : "text-base-content/50"}`}
+					className="no-underline font-semibold text-base-content/90"
 				>
-					{showPfpAndDisplayName ? displayName : cast.user.username}
+					{displayName}
+				</Link>
+			)}
+			{showPurpleCheck && (cast.user.proNft?.order ?? 0) > 0 && (
+				<span
+					role="img"
+					aria-label="verified"
+					className="text-secondary font-bold text-base"
+				>
+					✓
+				</span>
+			)}
+			<span className="text-xs text-base-content/45 truncate">
+				<Link
+					to={`/${cast.user.username}`}
+					className="no-underline hover:text-base-content/70"
+				>
+					@{handle}
 				</Link>{" "}
-				{showPurpleCheck && (cast.user.proNft?.order ?? 0) > 0 ? (
-					<span className="font-bold text-lg text-purple-700 dark:text-purple-500">
-						✓{" "}
-					</span>
-				) : null}
-				{verb} {cast.channel ? ` in ${cast.channel.name}` : ""}
-				{showPfpAndDisplayName && cast.channel && (
-					<div className="inline-flex items-center h-4 mx-1">
-						<img
-							src={cast.channel?.imageUrl ?? fallbackPfp}
-							alt={cast.channel?.name ?? "channel name"}
-							className="w-4 h-4 rounded-sm opacity-50"
-						/>
-					</div>
-				)}
-				{cast.sentBy && ` (via ${cast.sentBy}) `} :
-				<span className="mx-2 text-xs font-normal text-base-content/50">
+				·{" "}
+				<span className="whitespace-nowrap">
 					<ClickableDateSpan timestamp={cast.timestamp} />
 				</span>
 			</span>
+			{cast.channel && (
+				<span className="badge badge-accent badge-soft badge-xs gap-1 max-w-36">
+					<img
+						src={cast.channel.imageUrl ?? fallbackPfp}
+						alt={cast.channel.name ?? "channel name"}
+						className="w-3 h-3 rounded-sm"
+					/>
+					<span className="truncate font-medium">{cast.channel.name}</span>
+				</span>
+			)}
+			{cast.sentBy && (
+				<span className="text-xs text-base-content/35">via {cast.sentBy}</span>
+			)}
 		</h4>
 	);
 };

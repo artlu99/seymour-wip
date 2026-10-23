@@ -1,22 +1,32 @@
+import { motion } from "framer-motion";
 import type { HydratedCast } from "../types";
-import SpringTransition from "./effects/SpringTransition";
 import { SimpleCastView } from "./SimpleCastView";
 
 export const FeedTimeLine = ({ casts }: { casts: HydratedCast[] }) => {
 	return (
-		<SpringTransition isActive={true}>
-			<div className="text-left">
-				{/*<!-- WindUI Component: Nested user feed --> */}
-				<ul
-					aria-label="Nested sm user feed"
-					role="feed"
-					className="relative flex flex-col pl-6 before:absolute before:top-0 before:left-6 before:h-full before:-translate-x-1/2 before:border before:border-dashed before:border-slate-200 after:absolute after:top-6 after:left-6 after:bottom-6 after:-translate-x-1/2 after:border after:border-slate-200 list-none"
-				>
-					{casts?.map((cast) => (
-						<SimpleCastView key={`cast-${cast.hash}`} cast={cast} />
-					))}
-				</ul>
-			</div>
-		</SpringTransition>
+		<div className="text-left">
+			<ul
+				aria-label="Feed"
+				role="feed"
+				className="relative flex flex-col list-none before:absolute before:top-2 before:bottom-2 before:left-4 before:w-px before:bg-base-content/10"
+			>
+				{casts?.map((cast, idx) => (
+					<motion.li
+						key={`cast-${cast.hash}`}
+						className="relative"
+						initial={{ opacity: 0, y: 16 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{
+							type: "spring",
+							stiffness: 260,
+							damping: 26,
+							delay: Math.min(idx * 0.04, 0.4),
+						}}
+					>
+						<SimpleCastView cast={cast} />
+					</motion.li>
+				))}
+			</ul>
+		</div>
 	);
 };
