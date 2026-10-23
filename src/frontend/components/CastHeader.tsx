@@ -7,14 +7,34 @@ const fallbackPfp = "https://i.pravatar.cc/48?img=1";
 
 interface CastHeaderProps {
 	cast: HydratedCast;
+	zen?: boolean;
 }
 
-export const CastHeader = ({ cast }: CastHeaderProps) => {
+export const CastHeader = ({ cast, zen = false }: CastHeaderProps) => {
 	const { showPfpAndDisplayName, showPurpleCheck } = useLocalStorageZustand();
 
 	const displayName =
 		cast.user.displayName ?? cast.user.username ?? "display name";
 	const handle = cast.user.username ?? cast.user.displayName ?? "fid";
+	const verified = showPurpleCheck && (cast.user.proNft?.order ?? 0) > 0;
+
+	if (zen) {
+		return (
+			<h4 className="flex flex-wrap items-baseline gap-x-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-base-content/40 mb-1">
+				<span className="text-base-content/90">{displayName}</span>
+				{verified && (
+					<span role="img" aria-label="verified" className="text-secondary">
+						✓
+					</span>
+				)}
+				<span className="whitespace-nowrap">
+					· <ClickableDateSpan timestamp={cast.timestamp} />
+				</span>
+				{cast.channel && <span>· {cast.channel.name}</span>}
+				{cast.sentBy && <span>· via {cast.sentBy}</span>}
+			</h4>
+		);
+	}
 
 	return (
 		<h4 className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-sm leading-6 min-w-0">
@@ -26,7 +46,7 @@ export const CastHeader = ({ cast }: CastHeaderProps) => {
 					{displayName}
 				</Link>
 			)}
-			{showPurpleCheck && (cast.user.proNft?.order ?? 0) > 0 && (
+			{verified && (
 				<span
 					role="img"
 					aria-label="verified"

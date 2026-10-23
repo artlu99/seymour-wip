@@ -12,8 +12,9 @@ import type { HydratedCast } from "../types";
 
 interface CastFooterProps {
 	cast: HydratedCast;
+	zen?: boolean;
 }
-export const CastFooter = ({ cast }: CastFooterProps) => {
+export const CastFooter = ({ cast, zen: zenProp }: CastFooterProps) => {
 	const { openUrl } = useProfiles();
 	const { showPfpAndDisplayName, signerFid, signerPrivateKey } =
 		useLocalStorageZustand();
@@ -105,66 +106,112 @@ export const CastFooter = ({ cast }: CastFooterProps) => {
 	const repliesQuery = useRepliesQuery(cast.user.fid, cast.hash);
 	const numReplies = repliesQuery.data ?? 0;
 
-	const textColor = showPfpAndDisplayName
-		? "text-base-content/50"
-		: "text-base-content/30";
+	const zen = zenProp ?? !showPfpAndDisplayName;
+	const textColor = zen ? "text-base-content/30" : "text-base-content/50";
+	const fmtCount = (n: number) => (n > 99 ? "99+" : n > 0 ? String(n) : "");
+
+	const replyBtn = (
+		<button
+			type="button"
+			aria-label="Reply to cast"
+			className={
+				zen
+					? `font-mono text-xs ${textColor}`
+					: `btn btn-sm btn-ghost text-sm ${textColor}`
+			}
+			onClick={() => openUrl(warpcastUrl(cast))}
+		>
+			{zen ? (
+				<span aria-hidden="true">↩ {fmtCount(numReplies)}</span>
+			) : (
+				<i className="ri-chat-4-line">
+					<span className="font-mono ml-1">{fmtCount(numReplies)}</span>
+				</i>
+			)}
+		</button>
+	);
+
+	const recastBtn = (
+		<button
+			type="button"
+			aria-label="Recast"
+			className={
+				zen
+					? `font-mono text-xs ${textColor}`
+					: `btn btn-sm btn-ghost text-sm ${textColor}`
+			}
+			onClick={() => openUrl(warpcastUrl(cast))}
+		>
+			{zen ? (
+				<span aria-hidden="true">⇄ {fmtCount(numRecasts)}</span>
+			) : (
+				<i className="ri-loop-left-line">
+					<span className="font-mono ml-1">{fmtCount(numRecasts)}</span>
+				</i>
+			)}
+		</button>
+	);
+
+	const likeBtn = (
+		<button
+			type="button"
+			aria-label={likeIndicator ? "Unlike" : "Like"}
+			className={
+				zen
+					? `font-mono text-xs ${textColor}`
+					: `btn btn-sm btn-ghost text-sm ${textColor}`
+			}
+			onClick={haveILikedFrfr ? handleUnlike : handleLike}
+			disabled={isLiking}
+		>
+			{zen ? (
+				<motion.span
+					className={likeIndicator ? "text-error" : ""}
+					animate={likeIndicator ? { scale: [1, 1.4, 1] } : { scale: 1 }}
+					transition={{ type: "spring", stiffness: 400, damping: 12 }}
+				>
+					{likeIndicator ? "♥" : "♡"} {fmtCount(numLikes)}
+				</motion.span>
+			) : (
+				<motion.i
+					className={
+						likeIndicator ? "ri-heart-fill text-error" : "ri-heart-line"
+					}
+					animate={likeIndicator ? { scale: [1, 1.4, 1] } : { scale: 1 }}
+					transition={{ type: "spring", stiffness: 400, damping: 12 }}
+				>
+					<span className="font-mono ml-1">{fmtCount(numLikes)}</span>
+				</motion.i>
+			)}
+		</button>
+	);
+
+	const shareBtn = (
+		<button
+			type="button"
+			aria-label="Share cast"
+			className={
+				zen
+					? `font-mono text-xs ${textColor}`
+					: `btn btn-sm btn-ghost text-sm ${textColor}`
+			}
+			onClick={() => openUrl(warpcastUrl(cast))}
+		>
+			{zen ? (
+				<span aria-hidden="true">↗</span>
+			) : (
+				<i className="ri-share-2-line" />
+			)}
+		</button>
+	);
 
 	return (
-		<div className="card-footer bg-base-100 mt-1">
+		<div className={zen ? "mt-1.5" : "card-footer bg-base-100 mt-1"}>
 			<div className="flex justify-start gap-5 items-center">
-				<button
-					type="button"
-					aria-label="Reply to cast"
-					className={`btn btn-sm btn-ghost text-sm ${textColor}`}
-					onClick={() => openUrl(warpcastUrl(cast))}
-				>
-					<i className="ri-chat-4-line">
-						<span className="font-mono ml-1">
-							{numReplies > 99 ? "99+" : numReplies > 0 ? numReplies : ""}
-						</span>
-					</i>
-				</button>
-
-				<button
-					type="button"
-					aria-label="Recast"
-					className={`btn btn-sm btn-ghost text-sm ${textColor}`}
-					onClick={() => openUrl(warpcastUrl(cast))}
-				>
-					<i className="ri-loop-left-line">
-						<span className="font-mono ml-1">
-							{numRecasts > 99 ? "99+" : numRecasts > 0 ? numRecasts : ""}
-						</span>
-					</i>
-				</button>
-				<button
-					type="button"
-					aria-label={likeIndicator ? "Unlike" : "Like"}
-					className={`btn btn-sm btn-ghost text-sm ${textColor}`}
-					onClick={haveILikedFrfr ? handleUnlike : handleLike}
-					disabled={isLiking}
-				>
-					<motion.i
-						className={
-							likeIndicator ? "ri-heart-fill text-error" : "ri-heart-line"
-						}
-						animate={likeIndicator ? { scale: [1, 1.4, 1] } : { scale: 1 }}
-						transition={{ type: "spring", stiffness: 400, damping: 12 }}
-					>
-						<span className="font-mono ml-1">
-							{numLikes > 99 ? "99+" : numLikes > 0 ? numLikes : ""}
-						</span>
-					</motion.i>
-				</button>
-
-				<button
-					type="button"
-					aria-label="Share cast"
-					className={`btn btn-sm btn-ghost text-sm ${textColor}`}
-					onClick={() => openUrl(warpcastUrl(cast))}
-				>
-					<i className="ri-share-2-line" />
-				</button>
+				{replyBtn}
+				{recastBtn}
+				{likeBtn}
+				{shareBtn}
 			</div>
 		</div>
 	);

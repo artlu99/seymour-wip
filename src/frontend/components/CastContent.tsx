@@ -6,9 +6,10 @@ import { MentionSpan } from "./MentionSpan";
 
 interface CastContentProps {
 	cast: HydratedCast;
+	zen?: boolean;
 }
 
-export const CastContent = ({ cast }: CastContentProps) => {
+export const CastContent = ({ cast, zen = false }: CastContentProps) => {
 	const { openUrl } = useProfiles();
 
 	const textInBytes = new TextEncoder().encode(cast.rawText ?? "");
@@ -48,7 +49,11 @@ export const CastContent = ({ cast }: CastContentProps) => {
 	return (
 		<div className="mt-1">
 			<p
-				className="text-sm text-base-content/90 whitespace-pre-wrap leading-snug"
+				className={`whitespace-pre-wrap ${
+					zen
+						? "font-serif text-[15px] leading-relaxed text-base-content/90"
+						: "text-sm text-base-content/90 leading-snug"
+				}`}
 				onClick={() => openUrl(warpcastUrl(cast))}
 				onKeyDown={(e) => {
 					if (e.key === "Enter") {

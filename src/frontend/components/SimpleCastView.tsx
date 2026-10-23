@@ -25,14 +25,19 @@ export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 		cast?.parentCastId?.hash,
 	);
 
+	const zen = !showPfpAndDisplayName;
 	const isReply = !!cast.parentCastId;
 	const readyToRenderReply = isReply && !!parentCast;
 	const embedsVisible = showCardView || showEmbeds;
 	const hasEmbeds = cast.embeds.length > 0;
 
 	return (
-		<article className="relative py-3 text-base-content">
-			{showPfpAndDisplayName ? (
+		<article
+			className={`relative py-3 text-base-content ${
+				zen ? "border-b border-base-content/10" : ""
+			}`}
+		>
+			{!zen && (
 				<img
 					src={cast.user.pfpUrl ?? fallbackPfp}
 					alt={cast.user.username ?? "user name"}
@@ -47,14 +52,16 @@ export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 						}
 					}}
 				/>
-			) : null}
-			<div className="pl-12">
-				<CastHeader cast={cast} />
+			)}
+			<div className={zen ? "" : "pl-12"}>
+				<CastHeader cast={cast} zen={zen} />
 				{readyToRenderReply && (
 					<button
 						type="button"
 						aria-label="View parent cast"
-						className="mt-1.5 w-full text-left border-l-2 border-base-content/15 rounded-r-lg bg-base-content/5 hover:bg-base-content/10 transition-colors px-2.5 py-1.5"
+						className={`mt-1.5 w-full text-left border-l-2 border-base-content/15 rounded-r-lg bg-base-content/5 hover:bg-base-content/10 transition-colors px-2.5 py-1.5 ${
+							zen ? "font-serif italic" : ""
+						}`}
 						onClick={() => openUrl(warpcastUrl(parentCast))}
 					>
 						<span className="block text-xs font-medium text-base-content/70">
@@ -65,7 +72,7 @@ export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 						</span>
 					</button>
 				)}
-				<CastContent cast={cast} />
+				<CastContent cast={cast} zen={zen} />
 				{hasEmbeds && embedsVisible && <CastEmbeds cast={cast} />}
 				{hasEmbeds && !embedsVisible && (
 					<button
@@ -74,11 +81,10 @@ export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 						onClick={() => setShowEmbeds(true)}
 					>
 						<i className="ri-attachment-line" />
-						{cast.embeds.length} embed{cast.embeds.length > 1 ? "s" : ""} ·
-						show
+						{cast.embeds.length} embed{cast.embeds.length > 1 ? "s" : ""} · show
 					</button>
 				)}
-				<CastFooter cast={cast} />
+				<CastFooter cast={cast} zen={zen} />
 			</div>
 		</article>
 	);
