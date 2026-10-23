@@ -5,9 +5,9 @@ import { useLocalStorageZustand } from "../hooks/use-zustand";
 import { warpcastUrl } from "../lib/common";
 import type { HydratedCast } from "../types";
 import { CastContent } from "./CastContent";
+import { CastEmbeds } from "./CastEmbeds";
 import { CastFooter } from "./CastFooter";
 import { CastHeader } from "./CastHeader";
-import { CastOrReply } from "./CastOrReply";
 
 const fallbackPfp = "https://i.pravatar.cc/48?img=1";
 
@@ -16,7 +16,7 @@ interface SimpleCastViewProps {
 }
 
 export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
-	const [showCard, setShowCard] = useState(false);
+	const [showEmbeds, setShowEmbeds] = useState(false);
 	const { showCardView, showPfpAndDisplayName } = useLocalStorageZustand();
 	const { viewProfile, openUrl } = useProfiles();
 
@@ -27,10 +27,8 @@ export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 
 	const isReply = !!cast.parentCastId;
 	const readyToRenderReply = isReply && !!parentCast;
-
-	if (showCardView || showCard) {
-		return <CastOrReply cast={cast} />;
-	}
+	const embedsVisible = showCardView || showEmbeds;
+	const hasEmbeds = cast.embeds.length > 0;
 
 	return (
 		<article className="relative py-3 text-base-content">
@@ -67,7 +65,19 @@ export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 						</span>
 					</button>
 				)}
-				<CastContent cast={cast} onShowCardClick={() => setShowCard(true)} />
+				<CastContent cast={cast} />
+				{hasEmbeds && embedsVisible && <CastEmbeds cast={cast} />}
+				{hasEmbeds && !embedsVisible && (
+					<button
+						type="button"
+						className="btn btn-xs btn-ghost text-base-content/50 border-base-content/15 mt-1.5"
+						onClick={() => setShowEmbeds(true)}
+					>
+						<i className="ri-attachment-line" />
+						{cast.embeds.length} embed{cast.embeds.length > 1 ? "s" : ""} ·
+						show
+					</button>
+				)}
 				<CastFooter cast={cast} />
 			</div>
 		</article>

@@ -13,7 +13,6 @@
 		"hono": "^4.13.12",
 		"itty-fetcher": "^1.0.10",
 		"preact": "^10.29.8",
-		"react-farcaster-embed": "^1.11.0",
 		"react-hot-toast": "^2.6.1",
 		"remixicon": "^4.9.1",
 		"tailwindcss": "^4.3.3",

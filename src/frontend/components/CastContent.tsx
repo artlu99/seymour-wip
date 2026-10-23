@@ -6,10 +6,9 @@ import { MentionSpan } from "./MentionSpan";
 
 interface CastContentProps {
 	cast: HydratedCast;
-	onShowCardClick?: () => void;
 }
 
-export const CastContent = ({ cast, onShowCardClick }: CastContentProps) => {
+export const CastContent = ({ cast }: CastContentProps) => {
 	const { openUrl } = useProfiles();
 
 	const textInBytes = new TextEncoder().encode(cast.rawText ?? "");
@@ -59,16 +58,6 @@ export const CastContent = ({ cast, onShowCardClick }: CastContentProps) => {
 			>
 				{pieces}
 			</p>
-			{cast.embeds.length > 0 && onShowCardClick && (
-				<button
-					type="button"
-					className="btn btn-xs btn-ghost text-base-content/50 border-base-content/15 mt-1"
-					onClick={onShowCardClick}
-				>
-					<i className="ri-attachment-line" />
-					{cast.embeds.length} embed{cast.embeds.length > 1 ? "s" : ""} · show
-				</button>
-			)}
 		</div>
 	);
 };
