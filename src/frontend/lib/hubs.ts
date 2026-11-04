@@ -66,7 +66,7 @@ export async function likeCast(
 
 	console.log("created message, encoding...");
 	const messageBytes = Buffer.from(Message.encode(result.value).finish());
-	console.log("encoded message, sending via Neynar HTTPS Hubs API...");
+	console.log("encoded message, sending via Haatz HTTPS Hubs API...");
 
 	try {
 		const response = await client.post<Buffer, Response>(
