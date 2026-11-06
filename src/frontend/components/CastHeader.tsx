@@ -1,16 +1,19 @@
 import { Link } from "wouter";
+import type { SpamScores } from "../hooks/queries/useSpamQuery";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
 import type { HydratedCast } from "../types";
 import { ClickableDateSpan } from "./ClickableDateSpan";
+import { SpamPills } from "./SpamPills";
 
 const fallbackPfp = "https://i.pravatar.cc/48?img=1";
 
 interface CastHeaderProps {
 	cast: HydratedCast;
 	zen?: boolean;
+	spam?: SpamScores;
 }
 
-export const CastHeader = ({ cast, zen = false }: CastHeaderProps) => {
+export const CastHeader = ({ cast, zen = false, spam }: CastHeaderProps) => {
 	const { showPfpAndDisplayName, showPurpleCheck } = useLocalStorageZustand();
 
 	const displayName =
@@ -32,6 +35,7 @@ export const CastHeader = ({ cast, zen = false }: CastHeaderProps) => {
 				</span>
 				{cast.channel && <span>· {cast.channel.name}</span>}
 				{cast.sentBy && <span>· via {cast.sentBy}</span>}
+				<SpamPills cast={cast} scores={spam} zen={zen} />
 			</h4>
 		);
 	}
@@ -80,6 +84,7 @@ export const CastHeader = ({ cast, zen = false }: CastHeaderProps) => {
 			{cast.sentBy && (
 				<span className="text-xs text-base-content/35">via {cast.sentBy}</span>
 			)}
+			<SpamPills cast={cast} scores={spam} zen={zen} />
 		</h4>
 	);
 };

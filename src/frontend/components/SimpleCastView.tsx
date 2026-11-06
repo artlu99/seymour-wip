@@ -1,5 +1,6 @@
 import { useState } from "preact/hooks";
 import { useCastIdQuery } from "../hooks/queries/useShimQuery";
+import type { SpamScores } from "../hooks/queries/useSpamQuery";
 import { useProfiles } from "../hooks/use-profiles";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
 import { warpcastUrl } from "../lib/common";
@@ -13,9 +14,10 @@ const fallbackPfp = "https://i.pravatar.cc/48?img=1";
 
 interface SimpleCastViewProps {
 	cast: HydratedCast;
+	spam?: SpamScores;
 }
 
-export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
+export const SimpleCastView = ({ cast, spam }: SimpleCastViewProps) => {
 	const [showEmbeds, setShowEmbeds] = useState(false);
 	const { showCardView, showPfpAndDisplayName } = useLocalStorageZustand();
 	const { viewProfile, openUrl } = useProfiles();
@@ -54,7 +56,7 @@ export const SimpleCastView = ({ cast }: SimpleCastViewProps) => {
 				/>
 			)}
 			<div className={zen ? "" : "pl-12"}>
-				<CastHeader cast={cast} zen={zen} />
+				<CastHeader cast={cast} zen={zen} spam={spam} />
 				{readyToRenderReply && (
 					<button
 						type="button"

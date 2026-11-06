@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "preact/hooks";
 import { navigate } from "wouter/use-browser-location";
+import { useSpamScores } from "../hooks/queries/useSpamQuery";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
 import type { HydratedCast } from "../types";
 import { SimpleCastView } from "./SimpleCastView";
@@ -8,6 +9,7 @@ import { SimpleCastView } from "./SimpleCastView";
 export const FeedTimeLine = ({ casts }: { casts: HydratedCast[] }) => {
 	const { showPfpAndDisplayName } = useLocalStorageZustand();
 	const zen = !showPfpAndDisplayName;
+	const spam = useSpamScores(casts);
 
 	const [currentIdx, setCurrentIdx] = useState(0);
 	const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
@@ -98,7 +100,7 @@ export const FeedTimeLine = ({ casts }: { casts: HydratedCast[] }) => {
 							delay: Math.min(idx * 0.04, 0.4),
 						}}
 					>
-						<SimpleCastView cast={cast} />
+						<SimpleCastView cast={cast} spam={spam.data} />
 					</motion.li>
 				))}
 			</ul>
