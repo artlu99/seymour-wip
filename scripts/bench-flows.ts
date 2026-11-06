@@ -1,7 +1,7 @@
 /**
  * Manual production probe — not a CI test.
  *
- * Hits live seymour.artlu.xyz + shim-potato.artlu.xyz (incl. mutating /refresh and
+ * Hits live seymour.artlu.xyz + shim-potato-2.artlu.xyz (incl. mutating /refresh and
  * /webhook). Run by hand when you want latency/ok-rate numbers; do not wire
  * into CI or deploy pipelines.
  *
@@ -20,7 +20,7 @@
  */
 
 const SEYMOUR = "https://seymour.artlu.xyz";
-const SHIM = "https://shim-potato.artlu.xyz";
+const SHIM = "https://shim-potato-2.artlu.xyz";
 
 export {};
 
