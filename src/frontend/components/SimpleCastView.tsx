@@ -6,9 +6,9 @@ import { useLocalStorageZustand } from "../hooks/use-zustand";
 import { warpcastUrl } from "../lib/common";
 import type { HydratedCast } from "../types";
 import { CastContent } from "./CastContent";
-import { CastEmbeds } from "./CastEmbeds";
 import { CastFooter } from "./CastFooter";
 import { CastHeader } from "./CastHeader";
+import { CastOrReply } from "./CastOrReply";
 
 const fallbackPfp = "https://i.pravatar.cc/48?img=1";
 
@@ -18,7 +18,7 @@ interface SimpleCastViewProps {
 }
 
 export const SimpleCastView = ({ cast, spam }: SimpleCastViewProps) => {
-	const [showEmbeds, setShowEmbeds] = useState(false);
+	const [showCard, setShowCard] = useState(false);
 	const { showCardView, showPfpAndDisplayName } = useLocalStorageZustand();
 	const { viewProfile, openUrl } = useProfiles();
 
@@ -30,8 +30,14 @@ export const SimpleCastView = ({ cast, spam }: SimpleCastViewProps) => {
 	const zen = !showPfpAndDisplayName;
 	const isReply = !!cast.parentCastId;
 	const readyToRenderReply = isReply && !!parentCast;
-	const embedsVisible = showCardView || showEmbeds;
 	const hasEmbeds = cast.embeds.length > 0;
+
+	// Card view swaps the whole row for the library's react-farcaster-embed
+	// card — its native embed handling covers images, videos, link cards and
+	// quoted casts, none of which Seymour re-implements.
+	if (showCardView || showCard) {
+		return <CastOrReply cast={cast} />;
+	}
 
 	return (
 		<article
@@ -75,15 +81,15 @@ export const SimpleCastView = ({ cast, spam }: SimpleCastViewProps) => {
 					</button>
 				)}
 				<CastContent cast={cast} zen={zen} />
-				{hasEmbeds && embedsVisible && <CastEmbeds cast={cast} />}
-				{hasEmbeds && !embedsVisible && (
+				{hasEmbeds && (
 					<button
 						type="button"
 						className="btn btn-xs btn-ghost text-base-content/50 border-base-content/15 mt-1.5"
-						onClick={() => setShowEmbeds(true)}
+						onClick={() => setShowCard(true)}
 					>
 						<i className="ri-attachment-line" />
 						{cast.embeds.length} embed{cast.embeds.length > 1 ? "s" : ""} · show
+						card
 					</button>
 				)}
 				<CastFooter cast={cast} zen={zen} />
