@@ -11,7 +11,7 @@ A Farcaster (social network) feed reader that runs entirely in your browser.
 - **The app** (seymour.artlu.xyz): shows you a custom timeline of casts from people you pick, lets you like posts and reply
 - **The twist**: there's no login system. You paste your own private key into the browser, and it signs your likes/replies locally. The server never sees it
 - **The server** (Cloudflare Worker) is tiny — basically just a webhook catcher and a "what's this app's name" endpoint. It doesn't store data or handle keys
-- The actual feed data comes from a separate external API (`shim-potato-2.artlu.xyz`) that isn't in this repo
+- The actual feed data comes from a separate external API (`shim.artlu.xyz`) that isn't in this repo
 - Spam-score pills next to each cast (cast + author account) are fetched by your browser from the free, public [spam.quilcast.com](https://spam.quilcast.com) API — lookups send that feed's cast hashes and author fids there
 
 Think of it like: a thin webpage + a do-almost-nothing server, where your browser does all the real work.
