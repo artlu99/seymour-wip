@@ -8,9 +8,25 @@
   <meta name="fc:frame"
     content='{"version":"next","imageUrl":"https://seymour.artlu.xyz/cat-meme.gif","aspectRatio": "3:2","button":{"title":"🪴 Seymour Me Feed","action":{"type":"launch_frame","name":"Seymour","url":"https://seymour.artlu.xyz","splashImageUrl": "https://seymour.artlu.xyz/hidden.gif","splashBackgroundColor": "#403D39"}}}' />
   <title>Feed Me, Seymour</title>
+  <!--
+    Resolve the theme before first paint: Seymour is the default, a stored
+    "light" (the toggle's only other value) flips the daisyUI scope on
+    <html> — matching ThemesProvider's effectiveTheme, which re-syncs the
+    attribute after hydration. Without this, a light-theme user eats a dark
+    flash on every cold load. No attribute at all still paints Seymour,
+    because the daisyUI default theme applies to :root.
+  -->
+  <script>
+    try {
+      var state =
+        JSON.parse(localStorage.getItem("zustand-store") || "{}").state || {};
+      document.documentElement.dataset.theme =
+        state.themeName === "light" ? "light" : "seymour";
+    } catch (e) {}
+  </script>
 </head>
 
-<body style="background-color: #000;">
+<body>
   <div id="root"></div>
   <script type="module" src="/src/frontend/main.tsx"></script>
 </body>

@@ -1,9 +1,4 @@
-import {
-	useCallback,
-	useEffect,
-	useRef,
-	useState,
-} from "preact/hooks";
+import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { useParams } from "wouter";
 import { FeedTimeLine } from "../components/FeedTimeLine";
 import { RefreshFeedStatus } from "../components/RefreshFeedStatus";
@@ -12,7 +7,6 @@ import {
 	useKeccersFeed,
 	useRefreshFeed,
 } from "../hooks/queries/useShimQuery";
-import { useThemes } from "../hooks/use-themes";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
 
 const TOUCH_PULL_THRESHOLD = 60; // Standard pull-to-refresh threshold for touch
@@ -21,7 +15,6 @@ const MOUSE_PULL_THRESHOLD = 10; // Lower threshold for mouse interactions
 const Landing = () => {
 	const { username } = useParams();
 	const { data: fid } = useFidQuery(username);
-	const { name } = useThemes();
 	const { feedFids, setFeedFids } = useLocalStorageZustand();
 	const keccersFeedQuery = useKeccersFeed(feedFids);
 	const refreshMutation = useRefreshFeed();
@@ -161,7 +154,7 @@ const Landing = () => {
 	const pullProgress = Math.min(pullDistance / threshold, 1);
 
 	return (
-		<div className="flex flex-col text-center gap-4 pb-128" data-theme={name}>
+		<div className="flex flex-col text-center gap-4 pb-128">
 			<article className="prose dark:prose-invert">
 				<div
 					className="relative"

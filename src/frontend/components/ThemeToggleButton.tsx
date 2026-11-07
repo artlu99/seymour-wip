@@ -1,9 +1,5 @@
 import { useThemes } from "../hooks/use-themes";
-
-enum THEMES {
-	SEYMOUR = "seymour",
-	LIGHT = "light",
-}
+import { effectiveTheme, THEMES } from "../providers/ThemesProvider";
 
 interface ThemeSelectorToggleProps {
 	isScrollingUp: boolean;
@@ -15,7 +11,12 @@ export const ThemeSelectorToggle = ({
 	const { name, setTheme } = useThemes();
 
 	const toggleTheme = () => {
-		setTheme(name === THEMES.SEYMOUR ? THEMES.LIGHT : THEMES.SEYMOUR);
+		// A null themeName IS Seymour (the default) — without the effective-
+		// theme read, a fresh install would need two taps to reach light
+		// (null → seymour → light).
+		setTheme(
+			effectiveTheme(name) === THEMES.SEYMOUR ? THEMES.LIGHT : THEMES.SEYMOUR,
+		);
 	};
 
 	return (

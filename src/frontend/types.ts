@@ -27,7 +27,6 @@ interface User {
 	pfpUrl: string | null;
 	bio: string | null;
 	primaryAddress: `0x${string}` | null;
-	proNft: { order: number; timestamp: number } | null;
 }
 
 export interface Channel {

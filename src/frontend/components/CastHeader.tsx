@@ -14,22 +14,16 @@ interface CastHeaderProps {
 }
 
 export const CastHeader = ({ cast, zen = false, spam }: CastHeaderProps) => {
-	const { showPfpAndDisplayName, showPurpleCheck } = useLocalStorageZustand();
+	const { showPfpAndDisplayName } = useLocalStorageZustand();
 
 	const displayName =
 		cast.user.displayName ?? cast.user.username ?? "display name";
 	const handle = cast.user.username ?? cast.user.displayName ?? "fid";
-	const verified = showPurpleCheck && (cast.user.proNft?.order ?? 0) > 0;
 
 	if (zen) {
 		return (
 			<h4 className="flex flex-wrap items-baseline gap-x-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-base-content/40 mb-1">
 				<span className="text-base-content/90">{displayName}</span>
-				{verified && (
-					<span role="img" aria-label="verified" className="text-secondary">
-						✓
-					</span>
-				)}
 				<span className="whitespace-nowrap">
 					· <ClickableDateSpan timestamp={cast.timestamp} />
 				</span>
@@ -49,15 +43,6 @@ export const CastHeader = ({ cast, zen = false, spam }: CastHeaderProps) => {
 				>
 					{displayName}
 				</Link>
-			)}
-			{verified && (
-				<span
-					role="img"
-					aria-label="verified"
-					className="text-secondary font-bold text-base"
-				>
-					✓
-				</span>
 			)}
 			<span className="text-xs text-base-content/45 truncate">
 				<Link

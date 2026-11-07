@@ -7,7 +7,7 @@
 /*
 	Curated brand theme (see design/feed-glow-up-mockups.html):
 	daisyUI dark neutrals; primary → seymour green, accent → link blue,
-	secondary → verified violet.
+	secondary → violet.
 */
 @plugin "daisyui/theme" {
 	name: "seymour";

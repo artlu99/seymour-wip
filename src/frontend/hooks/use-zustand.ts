@@ -40,7 +40,6 @@ export const useLocalStorageZustand = create(
 				showCardView: false as boolean,
 				showPfpAndDisplayName: true as boolean,
 				showNavigationCaptions: true as boolean,
-				showPurpleCheck: true as boolean,
 				signerFid: null as number | null,
 				signerPrivateKey: null as string | null,
 			},
@@ -53,8 +52,6 @@ export const useLocalStorageZustand = create(
 					set({ showPfpAndDisplayName }),
 				setShowNavigationCaptions: (showNavigationCaptions: boolean) =>
 					set({ showNavigationCaptions }),
-				setShowPurpleCheck: (showPurpleCheck: boolean) =>
-					set({ showPurpleCheck }),
 				setSignerFid: (signerFid: number | null) => set({ signerFid }),
 				setSignerPrivateKey: (signerPrivateKey: string | null) =>
 					set({ signerPrivateKey }),
