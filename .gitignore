@@ -5,6 +5,7 @@ bun.lock
 # wrangler files
 .wrangler
 worker-configuration.d.ts
+worker-env.d.ts
 .dev.vars*
 
 AGENTS.md

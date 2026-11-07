@@ -3,7 +3,7 @@ import { cors } from "hono/cors";
 import { csrf } from "hono/csrf";
 import { secureHeaders } from "hono/secure-headers";
 
-const app = new Hono<{ Bindings: Env }>().basePath("/api");
+const app = new Hono<{ Bindings: Cloudflare.Env }>().basePath("/api");
 
 const routes = app
 	.post("/webhook", async (c) => {
