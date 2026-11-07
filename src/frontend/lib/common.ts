@@ -1,4 +1,4 @@
 import type { HydratedCast } from "../types";
 
 export const warpcastUrl = (cast: HydratedCast) =>
-	`https://firefly.social/post/farcaster/${cast.hash}`;
+	`https://warpcats.com/~/conversations/${cast.hash}`;
