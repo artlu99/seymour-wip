@@ -120,6 +120,29 @@ export const useRefreshFeed = () => {
 		mutationFn: async (body: { username?: string; fids: number[] }) => {
 			setIsRefreshing(true);
 			try {
+				// single-account feeds only: nudge the shim into a full sync of
+				// this fid's whole history (its casts-and-replies upserts what it
+				// fetches). Fire-and-forget — the button answers with the
+				// incremental refresh; the healed history lands in the feed when
+				// the sync finishes. Multi-fid feeds skip this: N full syncs
+				// would hang the press, and the watermark is the right steady
+				// state there.
+				if (body.fids.length === 1) {
+					const fid = body.fids[0];
+					void (async () => {
+						const u = await api
+							.get<{ success: boolean; username: string }>(`/u/${fid}`)
+							.catch(() => null);
+						if (!u?.success) return;
+						await api
+							.get(`/${u.username}/casts-and-replies?limit=10000`)
+							.catch(() => {});
+						queryClient.invalidateQueries({
+							queryKey: ["keccers-feed", body.fids],
+						});
+					})().catch(() => {});
+				}
+
 				const response = await api.post<
 					{
 						username?: string;
