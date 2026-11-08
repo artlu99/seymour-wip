@@ -1,9 +1,8 @@
 import { motion } from "framer-motion";
-import { useEffect, useState } from "preact/hooks";
-import {
-	useReactionsQuery,
-	useRepliesQuery,
-} from "../hooks/queries/useHubQuery";
+import { useState } from "preact/hooks";
+import { useCastCountsQuery } from "../hooks/queries/useCountsQuery";
+import { useReactionsQuery } from "../hooks/queries/useHubQuery";
+import { useInViewOnce } from "../hooks/use-in-view-once";
 import { useProfiles } from "../hooks/use-profiles";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
 import { warpcastUrl } from "../lib/common";
@@ -20,34 +19,60 @@ export const CastFooter = ({ cast, zen: zenProp }: CastFooterProps) => {
 		useLocalStorageZustand();
 	const [optimisticLike, setOptimisticLike] = useState(0);
 	const [isLiking, setIsLiking] = useState(false);
+	const footerRef = useInViewOnce<HTMLDivElement>();
 
+	const zen = zenProp ?? !showPfpAndDisplayName;
+
+	// The hub like-list exists only for the heart's own state
+	// (haveILikedFrfr), which only matters when there's a signer to like
+	// with — counts themselves hydrate below from the public endpoint.
 	const fidForLike = signerFid;
-	const likesQuery = useReactionsQuery(cast.user.fid, cast.hash, "Like");
+	const likesQuery = useReactionsQuery(cast.user.fid, cast.hash, "Like", {
+		enabled: !!signerPrivateKey,
+	});
 	const likes = likesQuery.data?.allReactionsData[cast.hash] ?? [];
 	const haveILikedFrfr =
 		signerPrivateKey && likes.length > 0
 			? likes.includes(fidForLike ?? 0)
 			: false;
+
+	// Like/recast/reply counts hydrate eventually from the public
+	// farcaster.tv endpoint (the one react-farcaster-embed completes its
+	// cards with): deduped per cast, fetched once this footer scrolls near
+	// the viewport, and skipped entirely in Zen mode — Zen hides the
+	// numbers, so nothing is fetched for them.
+	const counts = useCastCountsQuery(
+		cast.user.fid,
+		cast.user.username,
+		cast.hash,
+		{ enabled: !zen && footerRef.inView },
+	);
+
 	const optimisticCount =
 		optimisticLike > 0 && !haveILikedFrfr
 			? 1
 			: optimisticLike < 0 && haveILikedFrfr
 				? -1
 				: 0;
-	const numLikes = likes.length + optimisticCount;
+	const numLikes = (counts.data?.likes ?? 0) + optimisticCount;
 	const likeIndicator =
 		// has not unliked
 		optimisticLike >= 0 &&
 		// has liked
 		(optimisticLike > 0 || haveILikedFrfr);
 
-	// Reset optimistic state when server data updates or on error
-	useEffect(() => {
-		if (likesQuery.data || likesQuery.isError) {
-			setOptimisticLike(0);
-			setIsLiking(false);
-		}
-	}, [likesQuery.data, likesQuery.isError]);
+	// Optimistic state resets deterministically at the end of each action —
+	// not via a data-identity effect, which never fires when a refetch
+	// comes back deep-equal (read hub racing the write hub). The optimistic
+	// delta is held until both refetches settle, so the number never dips
+	// while the heart state (fast hub) and the count (slower indexer)
+	// disagree mid-flight.
+	const settleLike = async () => {
+		await likesQuery.refetch();
+		if (!zen) await counts.refetch();
+		setOptimisticLike(0);
+		setIsLiking(false);
+	};
 
 	const handleLike = async () => {
 		if (fidForLike && signerPrivateKey && !isLiking) {
@@ -63,7 +88,7 @@ export const CastFooter = ({ cast, zen: zenProp }: CastFooterProps) => {
 					},
 					"Like",
 				);
-				void likesQuery.refetch();
+				await settleLike();
 			} catch (error) {
 				console.error("Failed to like cast:", error);
 				setOptimisticLike(0);
@@ -88,7 +113,7 @@ export const CastFooter = ({ cast, zen: zenProp }: CastFooterProps) => {
 					},
 					"Unlike",
 				);
-				void likesQuery.refetch();
+				await settleLike();
 			} catch (error) {
 				console.error("Failed to unlike cast:", error);
 				setOptimisticLike(0);
@@ -99,16 +124,12 @@ export const CastFooter = ({ cast, zen: zenProp }: CastFooterProps) => {
 		}
 	};
 
-	const recastsQuery = useReactionsQuery(cast.user.fid, cast.hash, "Recast");
-	const recasts = recastsQuery.data?.allReactionsData[cast.hash] ?? [];
-	const numRecasts = recasts.length;
-
-	const repliesQuery = useRepliesQuery(cast.user.fid, cast.hash);
-	const numReplies = repliesQuery.data ?? 0;
-
-	const zen = zenProp ?? !showPfpAndDisplayName;
+	const numRecasts = counts.data?.recasts ?? 0;
+	const numReplies = counts.data?.replies ?? 0;
+	// Zen mode is the minimalist read: glyphs only, no numbers at all.
+	const fmtCount = (n: number) =>
+		zen ? "" : n > 99 ? "99+" : n > 0 ? String(n) : "";
 	const textColor = zen ? "text-base-content/30" : "text-base-content/50";
-	const fmtCount = (n: number) => (n > 99 ? "99+" : n > 0 ? String(n) : "");
 
 	const replyBtn = (
 		<button
@@ -206,7 +227,10 @@ export const CastFooter = ({ cast, zen: zenProp }: CastFooterProps) => {
 	);
 
 	return (
-		<div className={zen ? "mt-1.5" : "card-footer bg-base-100 mt-1"}>
+		<div
+			ref={footerRef.ref}
+			className={zen ? "mt-1.5" : "card-footer bg-base-100 mt-1"}
+		>
 			<div className="flex justify-start gap-5 items-center">
 				{replyBtn}
 				{recastBtn}

@@ -46,7 +46,10 @@ export const useKeccersFeed = (fids: number[]) => {
 	});
 };
 
-export const useUsernameQuery = (fid: number | undefined) => {
+export const useUsernameQuery = (
+	fid: number | undefined,
+	opts: { enabled?: boolean } = {},
+) => {
 	return useQuery({
 		queryKey: ["username", fid],
 		queryFn: async () => {
@@ -58,8 +61,24 @@ export const useUsernameQuery = (fid: number | undefined) => {
 			);
 			return res?.success ? res.username : null;
 		},
-		enabled: !!fid,
+		enabled: (opts.enabled ?? true) && !!fid,
 	});
+};
+
+// The shared username dance: prefer the payload's username, fall back to the
+// shim's /u/{fid}. `unresolvable` is true once the lookup finished empty —
+// EmbedCard then degrades to pre-mapped castData, footer counts stay blank.
+export const useResolvedHandle = (
+	username: string | null | undefined,
+	fid: number | undefined,
+	opts: { enabled?: boolean } = {},
+) => {
+	const resolved = useUsernameQuery(username ? undefined : fid, opts);
+	const handle = username || resolved.data || undefined;
+	return {
+		handle,
+		unresolvable: !username && resolved.isSuccess && !resolved.data,
+	};
 };
 
 export const useFidQuery = (username: string | undefined) => {

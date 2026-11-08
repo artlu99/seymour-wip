@@ -1,7 +1,10 @@
 import type { ComponentChildren } from "preact";
 import { useEffect, useRef } from "preact/hooks";
 import { FarcasterEmbed } from "react-farcaster-embed/dist/client";
-import { useUsernameQuery } from "../hooks/queries/useShimQuery";
+import {
+	useResolvedHandle,
+	useUsernameQuery,
+} from "../hooks/queries/useShimQuery";
 import { toCastData } from "../lib/cast-data";
 import type { HydratedCast } from "../types";
 
@@ -88,13 +91,13 @@ const EmbedCardSlot = ({
 
 /** One card: native library embed, fed by whatever identity we can resolve. */
 const EmbedCard = ({ cast }: { cast: HydratedCast }) => {
-	// The library's fetch is keyed on username/hash — when the shim answer
-	// carries no username, ask the shim's /u/{fid} for one before giving up.
-	const username = cast.user.username ?? undefined;
-	const resolved = useUsernameQuery(username ? undefined : cast.user?.fid);
-	const handle = username ?? resolved.data ?? undefined;
-	// The lookup finished and still found nothing — only then fall back.
-	const unresolvable = !username && resolved.isSuccess && !resolved.data;
+	// The library's fetch is keyed on username/hash — the shared dance asks
+	// the shim's /u/{fid} when the payload carries no username, and
+	// unresolvable flips only after that lookup finished empty.
+	const { handle, unresolvable } = useResolvedHandle(
+		cast.user.username,
+		cast.user?.fid,
+	);
 
 	const card =
 		handle !== undefined ? (
