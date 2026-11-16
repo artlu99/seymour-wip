@@ -3,12 +3,14 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import { navigate } from "wouter/use-browser-location";
 import { useSpamScores } from "../hooks/queries/useSpamQuery";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
+import { visibleFeedCasts } from "../lib/article";
 import type { HydratedCast } from "../types";
 import { SimpleCastView } from "./SimpleCastView";
 
 export const FeedTimeLine = ({ casts }: { casts: HydratedCast[] }) => {
 	const { showPfpAndDisplayName } = useLocalStorageZustand();
 	const zen = !showPfpAndDisplayName;
+	const rows = visibleFeedCasts(casts ?? []);
 	const spam = useSpamScores(casts);
 
 	const [currentIdx, setCurrentIdx] = useState(0);
@@ -36,7 +38,7 @@ export const FeedTimeLine = ({ casts }: { casts: HydratedCast[] }) => {
 				e.preventDefault();
 				setCurrentIdx((idx) => {
 					const next = e.key === "j" ? idx + 1 : idx - 1;
-					const clamped = Math.max(0, Math.min(next, (casts?.length ?? 1) - 1));
+					const clamped = Math.max(0, Math.min(next, Math.max(rows.length, 1) - 1));
 					itemRefs.current[clamped]?.scrollIntoView({
 						block: "center",
 						behavior: "smooth",
@@ -68,27 +70,27 @@ export const FeedTimeLine = ({ casts }: { casts: HydratedCast[] }) => {
 
 		window.addEventListener("keydown", handler);
 		return () => window.removeEventListener("keydown", handler);
-	}, [casts?.length, currentIdx]);
+	}, [rows.length, currentIdx]);
 
 	return (
 		<div className="text-left">
 			<ul
 				aria-label="Feed"
 				role="feed"
-				className={`relative flex flex-col list-none ${
+				className={`relative flex min-w-0 flex-col list-none ${
 					zen
 						? ""
 						: "before:absolute before:top-2 before:bottom-2 before:left-4 before:w-px before:bg-base-content/10"
 				}`}
 			>
-				{casts?.map((cast, idx) => (
+				{rows.map((cast, idx) => (
 					<motion.li
 						key={`cast-${cast.hash}`}
 						ref={(el) => {
 							itemRefs.current[idx] = el;
 						}}
 						aria-posinset={idx + 1}
-						className={`relative transition-colors rounded-box ${
+						className={`relative min-w-0 max-w-full transition-colors rounded-box ${
 							idx === currentIdx ? "bg-base-content/5" : ""
 						}`}
 						initial={{ opacity: 0, y: 16 }}

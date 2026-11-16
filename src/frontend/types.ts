@@ -18,6 +18,17 @@ interface Cast {
 	};
 	parentUrl: string;
 	timestamp: number;
+	// FIP "Cast Format and Chained Casts": 1 means article Markdown. Absent on
+	// older shim payloads, which then render as ordinary casts.
+	formatVersion?: number;
+	chain?: {
+		index?: number;
+		count?: number;
+		root?: {
+			fid: number;
+			hash: string;
+		};
+	} | null;
 }
 
 interface User {

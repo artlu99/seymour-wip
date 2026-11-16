@@ -1,14 +1,18 @@
 import { useState } from "preact/hooks";
 import { useCastIdQuery } from "../hooks/queries/useShimQuery";
 import type { SpamScores } from "../hooks/queries/useSpamQuery";
+import { useStickersQuery } from "../hooks/queries/useStickersQuery";
 import { useProfiles } from "../hooks/use-profiles";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
+import { articleKind } from "../lib/article";
 import { warpcastUrl } from "../lib/common";
 import type { HydratedCast } from "../types";
+import { ArticleCast, ArticlePartCast } from "./ArticleCast";
 import { CastContent } from "./CastContent";
 import { CastFooter } from "./CastFooter";
 import { CastHeader } from "./CastHeader";
 import { CastOrReply } from "./CastOrReply";
+import { StickerImg } from "./StickerImg";
 
 const fallbackPfp = "https://i.pravatar.cc/48?img=1";
 
@@ -28,14 +32,23 @@ export const SimpleCastView = ({ cast, spam }: SimpleCastViewProps) => {
 	);
 
 	const zen = !showPfpAndDisplayName;
+	const kind = articleKind(cast);
 	const isReply = !!cast.parentCastId;
 	const readyToRenderReply = isReply && !!parentCast;
-	const hasEmbeds = cast.embeds.length > 0;
+	// sticker embeds render inline, compact — the rest still hide behind the
+	// show-card button. Until the sticker index lands (localStorage on repeat
+	// visits), embeds stay behind the button and upgrade in place after.
+	const { data: stickers } = useStickersQuery();
+	const stickerEmbeds = cast.embeds
+		.map((e) => (e.url ? stickers?.get(e.url) : undefined))
+		.filter((s): s is NonNullable<typeof s> => !!s);
+	const otherEmbedCount = cast.embeds.length - stickerEmbeds.length;
 
 	// Card view swaps the whole row for the library's react-farcaster-embed
 	// card — its native embed handling covers images, videos, link cards and
-	// quoted casts, none of which Seymour re-implements.
-	if (showCardView || showCard) {
+	// quoted casts, none of which Seymour re-implements. An article is drawn
+	// here either way: the library would show the first cast's raw Markdown.
+	if (!kind && (showCardView || showCard)) {
 		return <CastOrReply cast={cast} />;
 	}
 
@@ -61,9 +74,9 @@ export const SimpleCastView = ({ cast, spam }: SimpleCastViewProps) => {
 					}}
 				/>
 			)}
-			<div className={zen ? "" : "pl-12"}>
+			<div className={zen ? "min-w-0" : "min-w-0 pl-12"}>
 				<CastHeader cast={cast} zen={zen} spam={spam} />
-				{readyToRenderReply && (
+				{readyToRenderReply && kind !== "part" && (
 					<button
 						type="button"
 						aria-label="View parent cast"
@@ -76,19 +89,40 @@ export const SimpleCastView = ({ cast, spam }: SimpleCastViewProps) => {
 							@{parentCast.user.username ?? parentCast.user.displayName}
 						</span>
 						<span className="block text-xs text-base-content/50 line-clamp-2">
-							{parentCast.rawText}
+							{parentCast.rawText ?? parentCast.text}
 						</span>
 					</button>
 				)}
-				<CastContent cast={cast} zen={zen} />
-				{hasEmbeds && (
+				{kind === "article" ? (
+					<ArticleCast cast={cast} zen={zen} />
+				) : kind === "part" ? (
+					<ArticlePartCast cast={cast} zen={zen} />
+				) : (
+					<CastContent cast={cast} zen={zen} />
+				)}
+				{kind === null && stickerEmbeds.length > 0 && (
+					<div className="mt-1.5 flex flex-wrap gap-1 items-center">
+						{stickerEmbeds.map((s) => (
+							<a
+								key={s.url}
+								href={s.url}
+								target="_blank"
+								rel="noopener noreferrer nofollow"
+								className="cursor-zoom-in"
+							>
+								<StickerImg src={s.url} sticker={s} />
+							</a>
+						))}
+					</div>
+				)}
+				{kind === null && otherEmbedCount > 0 && (
 					<button
 						type="button"
 						className="btn btn-xs btn-ghost text-base-content/50 border-base-content/15 mt-1.5"
 						onClick={() => setShowCard(true)}
 					>
 						<i className="ri-attachment-line" />
-						{cast.embeds.length} embed{cast.embeds.length > 1 ? "s" : ""} · show
+						{otherEmbedCount} embed{otherEmbedCount > 1 ? "s" : ""} · show
 						card
 					</button>
 				)}

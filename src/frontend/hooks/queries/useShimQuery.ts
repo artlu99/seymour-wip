@@ -97,7 +97,11 @@ export const useFidQuery = (username: string | undefined) => {
 	});
 };
 
-export const useCastIdQuery = (fid: number, hash: `0x${string}`) => {
+export const useCastIdQuery = (
+	fid: number | undefined,
+	hash: `0x${string}` | undefined,
+	opts: { enabled?: boolean } = {},
+) => {
 	return useQuery({
 		queryKey: ["cast-id", fid, hash],
 		queryFn: async () => {
@@ -106,7 +110,7 @@ export const useCastIdQuery = (fid: number, hash: `0x${string}`) => {
 			);
 			return res.cast ?? null;
 		},
-		enabled: !!fid && !!hash,
+		enabled: (opts.enabled ?? true) && !!fid && !!hash,
 	});
 };
 
