@@ -147,6 +147,10 @@ const Landing = () => {
 
 	const allCasts =
 		keccersFeedQuery.data?.pages.flatMap((page) => page.casts) ?? [];
+	const feedErrorMessage =
+		keccersFeedQuery.error instanceof Error
+			? keccersFeedQuery.error.message
+			: "Unknown error";
 
 	const threshold = isMouseInteraction
 		? MOUSE_PULL_THRESHOLD
@@ -192,9 +196,42 @@ const Landing = () => {
 							{keccersFeedQuery.isFetchingNextPage && (
 								<span className="loading loading-spinner loading-md" />
 							)}
+							{keccersFeedQuery.isError &&
+								!keccersFeedQuery.isFetchingNextPage && (
+									<button
+										type="button"
+										className="btn btn-ghost btn-sm text-error"
+										onClick={() => keccersFeedQuery.fetchNextPage()}
+									>
+										<i className="ri-loop-left-line" />
+										Couldn't load more
+									</button>
+								)}
 						</div>
 					</>
-				) : null}
+				) : keccersFeedQuery.isError ? (
+					<div className="flex flex-col items-center gap-3 py-16">
+						<i className="ri-error-warning-line text-4xl text-error" />
+						<p className="m-0 text-sm text-base-content/70">
+							Can't reach the feed server
+						</p>
+						<p className="m-0 max-w-sm text-xs text-base-content/50 break-words">
+							{feedErrorMessage}
+						</p>
+						<button
+							type="button"
+							className="btn btn-sm mt-2"
+							onClick={() => keccersFeedQuery.refetch()}
+						>
+							<i className="ri-loop-left-line" />
+							Retry
+						</button>
+					</div>
+				) : (
+					<div className="py-16 text-sm text-base-content/60">
+						No casts yet — pull down to refresh
+					</div>
+				)}
 			</article>
 		</div>
 	);
