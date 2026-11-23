@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useState } from "preact/hooks";
 import { useCastCountsQuery } from "../hooks/queries/useCountsQuery";
 import { useReactionsQuery } from "../hooks/queries/useHubQuery";
+import { useCastDeletes } from "../hooks/use-cast-deletes";
 import { useInViewOnce } from "../hooks/use-in-view-once";
 import { useProfiles } from "../hooks/use-profiles";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
@@ -17,11 +18,20 @@ export const CastFooter = ({ cast, zen: zenProp }: CastFooterProps) => {
 	const { openUrl } = useProfiles();
 	const { showPfpAndDisplayName, signerFid, signerPrivateKey } =
 		useLocalStorageZustand();
+	const { canDeleteCast, deleteCasts, deletingCastHashes } = useCastDeletes();
 	const [optimisticLike, setOptimisticLike] = useState(0);
 	const [isLiking, setIsLiking] = useState(false);
+	const isDeleting = deletingCastHashes.includes(cast.hash);
+	const canDelete = canDeleteCast(cast);
 	const footerRef = useInViewOnce<HTMLDivElement>();
 
 	const zen = zenProp ?? !showPfpAndDisplayName;
+
+	const handleDelete = async () => {
+		if (!canDelete || isDeleting) return;
+		if (!window.confirm("Delete this cast? This cannot be undone.")) return;
+		await deleteCasts([cast.hash]);
+	};
 
 	// The hub like-list exists only for the heart's own state
 	// (haveILikedFrfr), which only matters when there's a signer to like
@@ -226,6 +236,26 @@ export const CastFooter = ({ cast, zen: zenProp }: CastFooterProps) => {
 		</button>
 	);
 
+	const deleteBtn = canDelete ? (
+		<button
+			type="button"
+			aria-label="Delete cast"
+			className={
+				zen
+					? "font-mono text-xs text-base-content/30 hover:text-error"
+					: "btn btn-sm btn-ghost text-sm text-base-content/30 hover:text-error"
+			}
+			onClick={handleDelete}
+			disabled={isDeleting}
+		>
+			{zen ? (
+				<span aria-hidden="true">✕</span>
+			) : (
+				<i className="ri-delete-bin-line" />
+			)}
+		</button>
+	) : null;
+
 	return (
 		<div
 			ref={footerRef.ref}
@@ -236,6 +266,7 @@ export const CastFooter = ({ cast, zen: zenProp }: CastFooterProps) => {
 				{recastBtn}
 				{likeBtn}
 				{shareBtn}
+				{deleteBtn}
 			</div>
 		</div>
 	);

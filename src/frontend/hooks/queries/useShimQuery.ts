@@ -14,34 +14,80 @@ export const api = fetcher({
 	base: LOCAL_DEBUGGING ? "http://localhost:3000" : "https://shim.artlu.xyz",
 });
 
-export const useKeccersFeed = (fids: number[]) => {
+// Oldest-first mode drains the whole history in one go, so page size leans on
+// what the shim accepts (limit 500 is a 422; 100 is warm-cache fast) and the
+// cap mirrors the shim's own 10000-cast full-sync ceiling.
+const DRAIN_PAGE_SIZE = 100;
+const DRAIN_MAX_PAGES = 100;
+
+export const useKeccersFeed = (
+	fids: number[],
+	opts: { drain?: boolean } = {},
+) => {
+	const { drain = false } = opts;
 	return useInfiniteQuery({
-		queryKey: ["keccers-feed", fids],
+		queryKey: [
+			"keccers-feed",
+			fids,
+			drain ? "oldest-first" : "newest-first",
+		],
 		queryFn: async ({ pageParam = "" }) => {
-			const res = await api.post<
-				{
-					fids: number[];
-					limit: number;
-					cursor: string;
-				},
-				{
-					success: boolean;
-					casts: HydratedCast[];
-					cursor: string;
+			const fetchPage = (cursor: string) =>
+				api.post<
+					{
+						fids: number[];
+						limit: number;
+						cursor: string;
+					},
+					{
+						success: boolean;
+						casts: HydratedCast[];
+						cursor: string;
+					}
+				>("/reverse-chron", {
+					fids,
+					limit: drain ? DRAIN_PAGE_SIZE : 25,
+					cursor,
+				});
+
+			if (!drain) {
+				const res = await fetchPage(pageParam);
+				return {
+					casts: res.casts ?? [],
+					nextCursor: res.cursor,
+				};
+			}
+
+			// The shim only paginates newest-first (cursor walks backward and
+			// exhausts at the account's beginning), so "actually pull
+			// oldest-first" means walking all the way back and handing the
+			// timeline one complete page. Data stays newest-first here on
+			// purpose: visibleFeedCasts assumes arrival order for anchors, and
+			// FeedTimeLine does the reversing for display.
+			let cursor: string | null = pageParam;
+			const seen = new Set<string>();
+			const all: HydratedCast[] = [];
+			for (let i = 0; cursor !== null && i < DRAIN_MAX_PAGES; i++) {
+				const res = await fetchPage(cursor);
+				for (const cast of res.casts ?? []) {
+					if (!seen.has(cast.hash)) {
+						seen.add(cast.hash);
+						all.push(cast);
+					}
 				}
-			>("/reverse-chron", {
-				fids,
-				limit: 25,
-				cursor: pageParam,
-			});
+				cursor = res.cursor || null;
+			}
 			return {
-				casts: res.casts ?? [],
-				nextCursor: res.cursor,
+				casts: all,
+				nextCursor: null,
 			};
 		},
 		initialPageParam: "",
 		getNextPageParam: (lastPage) => lastPage.nextCursor || undefined,
-		refetchInterval: 3 * 60 * 1000, // Auto-refresh every 3 minutes
+		// A drained feed already holds everything; a 3-minute interval would
+		// re-walk the whole history. Pull-to-refresh still invalidates it.
+		refetchInterval: drain ? false : 3 * 60 * 1000, // Auto-refresh every 3 minutes
+		staleTime: drain ? 10 * 60 * 1000 : 0,
 		placeholderData: (previousData) => previousData,
 	});
 };

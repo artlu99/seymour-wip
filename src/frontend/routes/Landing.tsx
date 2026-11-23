@@ -15,8 +15,8 @@ const MOUSE_PULL_THRESHOLD = 10; // Lower threshold for mouse interactions
 const Landing = () => {
 	const { username } = useParams();
 	const { data: fid } = useFidQuery(username);
-	const { feedFids, setFeedFids } = useLocalStorageZustand();
-	const keccersFeedQuery = useKeccersFeed(feedFids);
+	const { feedFids, setFeedFids, reverseSort } = useLocalStorageZustand();
+	const keccersFeedQuery = useKeccersFeed(feedFids, { drain: reverseSort });
 	const refreshMutation = useRefreshFeed();
 
 	const observerRef = useRef<IntersectionObserver | null>(null);
@@ -185,7 +185,14 @@ const Landing = () => {
 				</div>
 
 				{keccersFeedQuery.isLoading ? (
-					<div className="skeleton w-3/4 h-96 mx-auto" />
+					<div className="flex flex-col items-center gap-2">
+						<div className="skeleton w-3/4 h-96 mx-auto" />
+						{reverseSort && (
+							<p className="m-0 font-mono text-[10px] text-base-content/35">
+								loading full history, oldest first…
+							</p>
+						)}
+					</div>
 				) : allCasts.length > 0 ? (
 					<>
 						<FeedTimeLine casts={allCasts} />

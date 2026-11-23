@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "preact/hooks";
 import { navigate } from "wouter/use-browser-location";
+import { useCastDeletes } from "../hooks/use-cast-deletes";
 import { useSpamScores } from "../hooks/queries/useSpamQuery";
 import { useLocalStorageZustand } from "../hooks/use-zustand";
 import { visibleFeedCasts } from "../lib/article";
@@ -8,10 +9,58 @@ import type { HydratedCast } from "../types";
 import { SimpleCastView } from "./SimpleCastView";
 
 export const FeedTimeLine = ({ casts }: { casts: HydratedCast[] }) => {
-	const { showPfpAndDisplayName } = useLocalStorageZustand();
+	const { showPfpAndDisplayName, reverseSort } = useLocalStorageZustand();
 	const zen = !showPfpAndDisplayName;
-	const rows = visibleFeedCasts(casts ?? []);
+	// Reverse only the rendered rows, not the input: visibleFeedCasts assumes
+	// newest-first arrival order to pick article-chain anchors.
+	const visible = visibleFeedCasts(casts ?? []);
+	const rows = reverseSort ? [...visible].reverse() : visible;
 	const spam = useSpamScores(casts);
+
+	const { hasSigner, canDeleteCast, deleteCasts, deletingCastHashes } =
+		useCastDeletes();
+	const [batchMode, setBatchMode] = useState(false);
+	const [selected, setSelected] = useState<Set<string>>(new Set());
+	const [isSending, setIsSending] = useState(false);
+	const [failedCount, setFailedCount] = useState(0);
+
+	const exitBatch = () => {
+		setBatchMode(false);
+		setSelected(new Set());
+		setFailedCount(0);
+	};
+
+	const toggleSelected = (hash: string) => {
+		setSelected((prev) => {
+			const next = new Set(prev);
+			if (next.has(hash)) next.delete(hash);
+			else next.add(hash);
+			return next;
+		});
+	};
+
+	const handleBatchDelete = async () => {
+		if (selected.size === 0 || isSending) return;
+		if (
+			!window.confirm(
+				`Delete ${selected.size} cast${selected.size === 1 ? "" : "s"}? This cannot be undone.`,
+			)
+		) {
+			return;
+		}
+		setIsSending(true);
+		setFailedCount(0);
+		const results = await deleteCasts([...selected]);
+		const failed = results.filter((r) => !r.ok);
+		setIsSending(false);
+		if (failed.length > 0) {
+			// Keep the failed ones selected for a retry; report the damage.
+			setSelected(new Set(failed.map((r) => r.hash)));
+			setFailedCount(failed.length);
+		} else {
+			exitBatch();
+		}
+	};
 
 	const [currentIdx, setCurrentIdx] = useState(0);
 	const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
@@ -74,6 +123,18 @@ export const FeedTimeLine = ({ casts }: { casts: HydratedCast[] }) => {
 
 	return (
 		<div className="text-left">
+			{hasSigner && !batchMode && (
+				<div className="flex justify-end mb-1">
+					<button
+						type="button"
+						className="btn btn-ghost btn-xs text-base-content/40"
+						onClick={() => setBatchMode(true)}
+					>
+						<i className="ri-delete-bin-line" />
+						Select
+					</button>
+				</div>
+			)}
 			<ul
 				aria-label="Feed"
 				role="feed"
@@ -90,8 +151,12 @@ export const FeedTimeLine = ({ casts }: { casts: HydratedCast[] }) => {
 							itemRefs.current[idx] = el;
 						}}
 						aria-posinset={idx + 1}
-						className={`relative min-w-0 max-w-full transition-colors rounded-box ${
+						className={`relative min-w-0 max-w-full transition rounded-box ${
 							idx === currentIdx ? "bg-base-content/5" : ""
+						} ${
+							deletingCastHashes.includes(cast.hash)
+								? "opacity-40 grayscale pointer-events-none"
+								: ""
 						}`}
 						initial={{ opacity: 0, y: 16 }}
 						animate={{ opacity: 1, y: 0 }}
@@ -102,10 +167,55 @@ export const FeedTimeLine = ({ casts }: { casts: HydratedCast[] }) => {
 							delay: Math.min(idx * 0.04, 0.4),
 						}}
 					>
+						{batchMode && canDeleteCast(cast) && (
+							<input
+								type="checkbox"
+								className="checkbox checkbox-sm checkbox-primary absolute top-3 right-3 z-10"
+								aria-label="Select cast for deletion"
+								checked={selected.has(cast.hash)}
+								onChange={() => toggleSelected(cast.hash)}
+							/>
+						)}
 						<SimpleCastView cast={cast} spam={spam.data} />
 					</motion.li>
 				))}
 			</ul>
+			{batchMode && (
+				<div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 rounded-box bg-base-200/95 backdrop-blur-md px-4 py-2 shadow-lg border border-base-content/10">
+					{isSending ? (
+						<>
+							<span className="loading loading-spinner loading-sm" />
+							<span className="text-sm">Deleting…</span>
+						</>
+					) : (
+						<>
+							{failedCount > 0 && (
+								<span className="text-xs text-error">
+									{failedCount} failed
+								</span>
+							)}
+							<span className="font-mono text-sm">
+								{selected.size} selected
+							</span>
+							<button
+								type="button"
+								className="btn btn-error btn-sm"
+								disabled={selected.size === 0}
+								onClick={handleBatchDelete}
+							>
+								Delete
+							</button>
+							<button
+								type="button"
+								className="btn btn-ghost btn-sm"
+								onClick={exitBatch}
+							>
+								Cancel
+							</button>
+						</>
+					)}
+				</div>
+			)}
 			{zen && (
 				<div className="mt-3 flex justify-center gap-3 font-mono text-[10px] text-base-content/35">
 					<span>

@@ -1,6 +1,7 @@
 import {
 	FarcasterNetwork,
 	Message,
+	makeCastRemove,
 	makeReactionAdd,
 	makeReactionRemove,
 	NobleEd25519Signer,
@@ -78,6 +79,49 @@ export async function likeCast(
 		return response;
 	} catch (e) {
 		console.error("Error liking cast:", e);
+		throw e;
+	}
+}
+
+export async function deleteCast(
+	fid: number,
+	pk: `0x${string}`,
+	targetHash: `0x${string}`,
+) {
+	const client = fetcher({
+		base: HUB_URL,
+		headers: {
+			Accept: "application/json",
+			"Content-Type": "application/octet-stream",
+		},
+	});
+	const signer = new NobleEd25519Signer(hexToBytes(pk));
+
+	const result = await makeCastRemove(
+		{ targetHash: hexToBytes(targetHash) },
+		{
+			fid,
+			network: FarcasterNetwork.MAINNET,
+		},
+		signer,
+	);
+
+	if (result.isErr()) {
+		throw new Error(`Error creating message: ${result.error}`);
+	}
+
+	const messageBytes = Buffer.from(Message.encode(result.value).finish());
+
+	try {
+		const response = await client.post<Buffer, Response>(
+			"/v1/submitMessage",
+			messageBytes,
+			{ encode: false },
+		);
+		console.log("Cast removed successfully");
+		return response;
+	} catch (e) {
+		console.error("Error deleting cast:", e);
 		throw e;
 	}
 }

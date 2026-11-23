@@ -40,6 +40,7 @@ export const useLocalStorageZustand = create(
 				showCardView: false as boolean,
 				showPfpAndDisplayName: true as boolean,
 				showNavigationCaptions: true as boolean,
+				reverseSort: false as boolean,
 				signerFid: null as number | null,
 				signerPrivateKey: null as string | null,
 			},
@@ -52,6 +53,7 @@ export const useLocalStorageZustand = create(
 					set({ showPfpAndDisplayName }),
 				setShowNavigationCaptions: (showNavigationCaptions: boolean) =>
 					set({ showNavigationCaptions }),
+				setReverseSort: (reverseSort: boolean) => set({ reverseSort }),
 				setSignerFid: (signerFid: number | null) => set({ signerFid }),
 				setSignerPrivateKey: (signerPrivateKey: string | null) =>
 					set({ signerPrivateKey }),
@@ -62,4 +64,17 @@ export const useLocalStorageZustand = create(
 			storage: createJSONStorage(() => localStorage),
 		},
 	),
+);
+
+// Casts with a delete (CastRemove) currently in flight — the feed grays
+// these rows out. Ephemeral on purpose and NOT persisted: a page reload
+// abandons the send, and graying a resurrected cast forever would be worse
+// than losing this transient state.
+export const useDeletingCasts = create(
+	combine({ hashes: [] as string[] }, (set) => ({
+		addDeletingCastHash: (hash: string) =>
+			set((s) => ({ hashes: [...new Set([...s.hashes, hash])] })),
+		removeDeletingCastHash: (hash: string) =>
+			set((s) => ({ hashes: s.hashes.filter((h) => h !== hash) })),
+	})),
 );

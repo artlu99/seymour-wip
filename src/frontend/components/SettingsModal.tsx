@@ -56,6 +56,8 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 		setShowPfpAndDisplayName,
 		showNavigationCaptions,
 		setShowNavigationCaptions,
+		reverseSort,
+		setReverseSort,
 	} = useLocalStorageZustand();
 
 	return (
@@ -94,6 +96,11 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 									disabled={showCardView}
 									checked={!showPfpAndDisplayName}
 									onChange={(v) => setShowPfpAndDisplayName(!v)}
+								/>
+								<ToggleRow
+									label="Reverse order (oldest first)"
+									checked={reverseSort}
+									onChange={setReverseSort}
 								/>
 								<div className="flex justify-center py-1">
 									{showPfpAndDisplayName ? (
